@@ -1,0 +1,13 @@
+entity_id,dimension,semantic_key,value,coordinate,lens_id
+discogs:release:001,who,artist,Miles Davis,WHO|artist|Miles Davis,discogs_v1
+discogs:release:002,who,artist,Miles Davis,WHO|artist|Miles Davis,discogs_v1
+discogs:release:003,who,artist,Miles Davis,WHO|artist|Miles Davis,discogs_v1
+discogs:release:004,who,artist,Miles Davis,WHO|artist|Miles Davis,discogs_v1
+discogs:release:005,who,artist,John Coltrane,WHO|artist|John Coltrane,discogs_v1
+discogs:release:006,who,artist,John Coltrane,WHO|artist|John Coltrane,discogs_v1
+discogs:release:007,who,artist,Bill Evans,WHO|artist|Bill Evans,discogs_v1
+discogs:release:008,who,artist,Bill Evans,WHO|artist|Bill Evans,discogs_v1
+discogs:release:009,who,artist,Thelonious Monk,WHO|artist|Thelonious Monk,discogs_v1
+discogs:release:010,who,artist,Thelonious Monk,WHO|artist|Thelonious Monk,discogs_v1
+discogs:release:011,who,artist,Charles Mingus,WHO|artist|Charles Mingus,discogs_v1
+discogs:release:012,who,artist,Miles Davis,WHO|artist|Miles Davis,discogs_v1

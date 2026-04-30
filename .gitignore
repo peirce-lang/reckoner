@@ -1,0 +1,60 @@
+# ── Credentials ──────────────────────────────────────────────────────────────
+.env
+*.env
+.env.local
+.env.*.local
+
+# ── Substrates ───────────────────────────────────────────────────────────────
+# .duckdb files may contain sensitive data — users add their own locally.
+# Demo substrates are explicitly included so a fresh clone is immediately queryable.
+substrates/*.duckdb
+substrates/*.db
+!substrates/discogsv1.duckdb
+!substrates/disney.duckdb
+
+# ── Model Builder artifacts ───────────────────────────────────────────────────
+# Compiled artifacts land in the OS temp directory — nothing to ignore here.
+# If output_dir is ever changed to a local folder, add it here.
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+
+# ── Node / Vite ───────────────────────────────────────────────────────────────
+node_modules/
+dist/
+.vite/
+*.local
+
+# ── Saved query sets ─────────────────────────────────────────────────────────
+# .rset.json files are personal saved queries — not committed by default.
+# Remove this line if you want to share saved queries with your team.
+*.rset.json
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ── Editors ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

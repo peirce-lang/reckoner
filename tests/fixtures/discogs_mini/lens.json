@@ -1,0 +1,9 @@
+{
+  "lens_id": "discogs_v1",
+  "declared": true,
+  "source": "discogs",
+  "translator_version": "1.0.0",
+  "dimensions": ["who", "what", "when"],
+  "nucleus_field": "entity_id",
+  "nucleus_prefix": "discogs:release"
+}

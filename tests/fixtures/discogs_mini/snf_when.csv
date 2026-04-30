@@ -1,0 +1,13 @@
+entity_id,dimension,semantic_key,value,coordinate,lens_id
+discogs:release:001,when,year,1959,WHEN|year|1959,discogs_v1
+discogs:release:002,when,year,1960,WHEN|year|1960,discogs_v1
+discogs:release:003,when,year,1970,WHEN|year|1970,discogs_v1
+discogs:release:004,when,year,1957,WHEN|year|1957,discogs_v1
+discogs:release:005,when,year,1965,WHEN|year|1965,discogs_v1
+discogs:release:006,when,year,1960,WHEN|year|1960,discogs_v1
+discogs:release:007,when,year,1961,WHEN|year|1961,discogs_v1
+discogs:release:008,when,year,1959,WHEN|year|1959,discogs_v1
+discogs:release:009,when,year,1963,WHEN|year|1963,discogs_v1
+discogs:release:010,when,year,1956,WHEN|year|1956,discogs_v1
+discogs:release:011,when,year,1959,WHEN|year|1959,discogs_v1
+discogs:release:012,when,year,1969,WHEN|year|1969,discogs_v1

@@ -1,0 +1,25 @@
+entity_id,dimension,semantic_key,value,coordinate,lens_id
+discogs:release:001,what,title,Kind of Blue,WHAT|title|Kind of Blue,discogs_v1
+discogs:release:001,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:002,what,title,Sketches of Spain,WHAT|title|Sketches of Spain,discogs_v1
+discogs:release:002,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:003,what,title,Bitches Brew,WHAT|title|Bitches Brew,discogs_v1
+discogs:release:003,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:004,what,title,Miles Ahead,WHAT|title|Miles Ahead,discogs_v1
+discogs:release:004,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:005,what,title,A Love Supreme,WHAT|title|A Love Supreme,discogs_v1
+discogs:release:005,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:006,what,title,Giant Steps,WHAT|title|Giant Steps,discogs_v1
+discogs:release:006,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:007,what,title,Waltz for Debby,WHAT|title|Waltz for Debby,discogs_v1
+discogs:release:007,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:008,what,title,Portrait in Jazz,WHAT|title|Portrait in Jazz,discogs_v1
+discogs:release:008,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:009,what,title,Monk's Dream,WHAT|title|Monk's Dream,discogs_v1
+discogs:release:009,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:010,what,title,Brilliant Corners,WHAT|title|Brilliant Corners,discogs_v1
+discogs:release:010,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:011,what,title,Mingus Ah Um,WHAT|title|Mingus Ah Um,discogs_v1
+discogs:release:011,what,format,LP,WHAT|format|LP,discogs_v1
+discogs:release:012,what,title,In a Silent Way,WHAT|title|In a Silent Way,discogs_v1
+discogs:release:012,what,format,CD,WHAT|format|CD,discogs_v1
