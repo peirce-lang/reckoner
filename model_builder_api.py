@@ -674,6 +674,15 @@ def _emit_postgres_views(df: pd.DataFrame, spec: Dict) -> Dict:
     for m in mapping:
         dim_cols[m["dimension"]].append(m)
 
+    # Build nucleus expression early — needed for entity_id in every spoke view
+    nucleus_spec_early = spec["nucleus"]
+    nucleus_cols_early = nucleus_spec_early["columns"]
+    sep_early          = nucleus_spec_early.get("separator", "-")
+    pfx_early          = nucleus_spec_early.get("prefix", "")
+    nucleus_expr       = f" || '{sep_early}' || ".join(f"{c}::VARCHAR" for c in nucleus_cols_early)
+    if pfx_early:
+        nucleus_expr   = f"'{pfx_early}:' || {nucleus_expr}"
+
     facts_by_dim = {}
     entity_count = 0
 
@@ -686,14 +695,14 @@ def _emit_postgres_views(df: pd.DataFrame, spec: Dict) -> Dict:
         union_parts = []
         for m in cols:
             col  = m["column"]
-            skey = m["semantic_key"]
+            skey = m["semantic_key"].replace(" ", "_")
             union_parts.append(
                 f"    SELECT\n"
-                f"        {col}::VARCHAR AS entity_id,\n"
-                f"        '{dim}' AS dimension,\n"
+                f"        {nucleus_expr} AS entity_id,\n"
+                f"        '{dim.lower()}' AS dimension,\n"
                 f"        '{skey}' AS semantic_key,\n"
                 f"        {col}::VARCHAR AS value,\n"
-                f"        '{dim}' || '|' || '{skey}' || '|' || {col}::VARCHAR AS coordinate,\n"
+                f"        '{dim.lower()}' || '|' || '{skey}' || '|' || {col}::VARCHAR AS coordinate,\n"
                 f"        '{lens_id}' AS lens_id,\n"
                 f"        '1.0.0' AS translator_version\n"
                 f"    FROM {schema_name}.{table_name}\n"
@@ -747,7 +756,7 @@ def _emit_postgres_views(df: pd.DataFrame, spec: Dict) -> Dict:
             col  = m["column"]
             skey = m["semantic_key"]
             aff_parts.append(
-                f"    SELECT '{dim}' AS dimension, '{skey}' AS field,\n"
+                f"    SELECT '{dim.lower()}' AS dimension, '{skey}' AS field,\n"
                 f"           COUNT(DISTINCT {nucleus_expr}) AS distinct_entities,\n"
                 f"           COUNT(*) AS fact_count\n"
                 f"    FROM {schema_name}.{table_name} WHERE {col} IS NOT NULL"
