@@ -194,7 +194,13 @@ class PostgresAdapter(SubstrateAdapter):
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT column_name FROM information_schema.columns "
-                    "WHERE table_schema = %s AND table_name = 'snf_hub'",
+                    "WHERE table_schema = %s AND table_name = 'snf_hub' "
+                    "UNION "
+                    "SELECT a.attname FROM pg_attribute a "
+                    "JOIN pg_class c ON c.oid = a.attrelid "
+                    "JOIN pg_namespace n ON n.oid = c.relnamespace "
+                    "WHERE n.nspname = %s AND c.relname = 'snf_hub' "
+                    "AND a.attnum > 0 AND NOT a.attisdropped",
                     (schema,)
                 )
                 hub_cols = {row[0] for row in cur.fetchall()}
@@ -259,8 +265,13 @@ class PostgresAdapter(SubstrateAdapter):
         rows = self._execute(
             "SELECT column_name FROM information_schema.columns "
             "WHERE table_schema = %s AND table_name = 'snf_what' "
-            "ORDER BY ordinal_position",
-            (self._schema,)
+            "UNION "
+            "SELECT a.attname FROM pg_attribute a "
+            "JOIN pg_class c ON c.oid = a.attrelid "
+            "JOIN pg_namespace n ON n.oid = c.relnamespace "
+            "WHERE n.nspname = %s AND c.relname = 'snf_what' "
+            "AND a.attnum > 0 AND NOT a.attisdropped",
+            (self._schema, self._schema)
         )
         cols = {row[0] for row in rows}
 
@@ -310,10 +321,14 @@ class PostgresAdapter(SubstrateAdapter):
     def _populated_dimensions(self) -> List[str]:
         populated = []
         for table_name, dim in _TABLE_TO_DIM.items():
-            fq   = f"{self._schema}.{table_name}"
-            rows = self._execute(f"SELECT 1 FROM {fq} LIMIT 1")
-            if rows:
-                populated.append(dim)
+            fq = f"{self._schema}.{table_name}"
+            try:
+                rows = self._execute(f"SELECT 1 FROM {fq} LIMIT 1")
+                if rows:
+                    populated.append(dim)
+            except Exception:
+                # Table or materialized view doesn't exist for this dimension — skip
+                pass
         return populated
 
     @staticmethod
@@ -751,10 +766,13 @@ class PostgresAdapter(SubstrateAdapter):
     def _discover_dimensions(self) -> DiscoverResult:
         rows = []
         for table_name, dim in _TABLE_TO_DIM.items():
-            fq    = f"{self._schema}.{table_name}"
-            count = self._execute(f"SELECT COUNT(*) FROM {fq}")[0][0]
-            if count > 0:
-                rows.append({"dimension": dim.upper(), "fact_count": count})
+            fq = f"{self._schema}.{table_name}"
+            try:
+                count = self._execute(f"SELECT COUNT(*) FROM {fq}")[0][0]
+                if count > 0:
+                    rows.append({"dimension": dim.upper(), "fact_count": count})
+            except Exception:
+                pass
         return DiscoverResult(scope="dimensions", dimension=None, field=None, rows=rows)
 
     def _discover_fields(
@@ -870,8 +888,11 @@ class PostgresAdapter(SubstrateAdapter):
         eid    = self._entity_id_col
 
         for table_name, dim in _TABLE_TO_DIM.items():
-            fq    = f"{self._schema}.{table_name}"
-            count = self._execute(f"SELECT COUNT(*) FROM {fq}")[0][0]
+            fq = f"{self._schema}.{table_name}"
+            try:
+                count = self._execute(f"SELECT COUNT(*) FROM {fq}")[0][0]
+            except Exception:
+                continue
             if count == 0:
                 continue
 
@@ -986,15 +1007,21 @@ class PostgresAdapter(SubstrateAdapter):
         placeholders = ", ".join(["%s"] * len(entity_ids))
 
         if self._shape == "split":
+            # Only include dimension tables that actually exist
+            # (handles partial substrates from materialized views)
+            existing_tables = [
+                (table_name, dim) for table_name, dim in _TABLE_TO_DIM.items()
+                if dim in self._populated_dimensions()
+            ]
             union_parts = [
                 f"SELECT {eid}::TEXT AS entity_id, "
                 f"'{dim.upper()}' AS dimension, "
                 f"semantic_key, value::TEXT AS value "
                 f"FROM {self._schema}.{table_name} "
                 f"WHERE {eid}::TEXT IN ({placeholders})"
-                for table_name, dim in _TABLE_TO_DIM.items()
+                for table_name, dim in existing_tables
             ]
-            all_params = tuple(entity_ids) * len(_SPOKE_TABLES)
+            all_params = tuple(entity_ids) * len(existing_tables)
             union_sql  = " UNION ALL ".join(union_parts)
 
             rows = self._execute(
@@ -1021,13 +1048,17 @@ class PostgresAdapter(SubstrateAdapter):
                 })
 
         else:
+            existing_spoke_tables = [
+                t for t in _SPOKE_TABLES
+                if _TABLE_TO_DIM.get(t) in self._populated_dimensions()
+            ]
             union_parts = [
                 f"SELECT {eid} AS entity_id, coordinate "
                 f"FROM {self._schema}.{table_name} "
                 f"WHERE {eid} IN ({placeholders})"
-                for table_name in _SPOKE_TABLES
+                for table_name in existing_spoke_tables
             ]
-            all_params = tuple(entity_ids) * len(_SPOKE_TABLES)
+            all_params = tuple(entity_ids) * len(existing_spoke_tables)
             union_sql  = " UNION ALL ".join(union_parts)
 
             rows = self._execute(
