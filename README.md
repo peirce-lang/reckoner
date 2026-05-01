@@ -8,6 +8,14 @@ Built on [SNF](https://github.com/peirce-lang/snf-peirce) (Semantic Normalized F
 
 ---
 
+## See it running
+
+[![Reckoner Demo](https://img.youtube.com/vi/mD-NVPNWL-o/maxresdefault.jpg)](https://youtu.be/mD-NVPNWL-o)
+
+A record collection, a data quality catch, a diff between two named sets, and a substrate switch. 5 minutes. No setup required to watch.
+
+---
+
 ## What it looks like
 
 You have a record collection. You want everything by Miles Davis released between 1955 and 1965 on Blue Note. In Reckoner:
@@ -19,6 +27,7 @@ WHERE label      = "Blue Note"
 ```
 
 Results appear in ~5ms. The trace shows:
+
 ```
 PROBE 1.2ms   EXEC 3.8ms   TOTAL 5.0ms
 WHO artist "Miles Davis"  →  anchor  52
@@ -33,17 +42,19 @@ The same workbench works on a law firm's matter database, a library catalog, a f
 
 ## Requirements
 
-- Python 3.10+
-- Node.js 18+
-- pip, npm
+* Python 3.10+
+* Node.js 18+
+* pip, npm
 
 Optional (for live Postgres sources):
-- PostgreSQL 14+
-- psycopg2
+
+* PostgreSQL 14+
 
 ---
 
-## Quickstart — CSV in 5 minutes
+## Quickstart — try the demo datasets in 5 minutes
+
+This gets you running with the three demo substrates that ship in this repo. You can explore everything Reckoner does without loading your own data first.
 
 ### 1. Clone and install
 
@@ -61,6 +72,7 @@ python reckoner_api.py
 ```
 
 You should see:
+
 ```
 ============================================================
   Reckoner API — Python backend
@@ -76,10 +88,12 @@ You should see:
 Open a second terminal:
 
 ```bash
+cd reckoner
 npm run dev
 ```
 
 You should see:
+
 ```
 VITE v5.x.x  ready
 
@@ -103,6 +117,7 @@ http://localhost:5173
 **3.** Click **WHEN** → click **released** → set range `1955` to `1965`
 
 You should see a small set of results with a trace like:
+
 ```
 PROBE 1.2ms   EXEC 3.8ms   TOTAL 5.0ms
 WHO artist "Miles Davis"  →  anchor  52
@@ -122,22 +137,55 @@ That's the core of what Reckoner does — each constraint permanently narrows th
 
 *(You do not need this to try Reckoner. Use the demo datasets above first.)*
 
-Reckoner ships with Model Builder — a browser wizard for loading your own datasets.
+To load your own CSV, Excel file, or Postgres table, you'll also need [snf-model-builder](https://github.com/peirce-lang/snf-model-builder) — the browser wizard that prepares data for Reckoner. It's a separate repo with the wizard frontend; the Python backend it talks to is already running inside `reckoner_api.py` (the same backend you started above).
+
+### Setup
+
+Clone snf-model-builder **next to** your reckoner folder:
+
+```bash
+# from wherever you cloned reckoner — clone the wizard alongside it
+cd ..
+git clone https://github.com/peirce-lang/snf-model-builder
+cd snf-model-builder
+npm install
+```
+
+After this you should have two folders side by side:
 
 ```
-http://localhost:5174
+your-projects/
+├── reckoner/
+└── snf-model-builder/
 ```
 
-*(Start it with `cd ../snf-model-builder && npm run dev` — see [snf-model-builder](https://github.com/peirce-lang/snf-model-builder))*
+### Start the wizard
 
-**Six steps:**
+With `python reckoner_api.py` already running (from the Quickstart above), open a third terminal:
+
+```bash
+cd snf-model-builder
+npm run dev
+```
+
+You should see:
+
+```
+VITE v5.x.x  ready
+
+  Local:   http://localhost:5174/
+```
+
+Open `http://localhost:5174` — that's the Model Builder wizard.
+
+### Load your data — six steps
 
 1. Drop a CSV or Excel file (or connect directly to a Postgres table)
 2. Map your columns to semantic dimensions (WHO / WHAT / WHEN / WHERE / WHY / HOW)
 3. Review pre-ingest flags — variant candidates, null coverage, singletons
 4. Declare a nucleus — the column (or combination) that uniquely identifies each row
 5. Name your dataset and pick a target (DuckDB for local use)
-6. Compile → download → drop in `substrates/` → restart Reckoner
+6. Compile → download the `.duckdb` file → drop it in `reckoner/substrates/` → restart `reckoner_api.py`
 
 Your data is queryable in under an hour. No schema authoring. No code required.
 
@@ -148,12 +196,13 @@ Your data is queryable in under an hour. No schema authoring. No code required.
 The `substrates/` folder ships with:
 
 | Dataset | Entities | Source |
-|---|---|---|
+| --- | --- | --- |
 | `discogsv1` | 833 records | Discogs collection export |
 | `disney` | 659 films | Disney filmography |
 | `shibuya` | 103 items | Shibuya Publishing catalog |
 
 To use the **Discogs demo** with your own collection:
+
 1. Export your Discogs collection as CSV (Discogs → Collection → Export)
 2. Open Model Builder at `http://localhost:5174`
 3. Drop the CSV — columns are auto-mapped
@@ -170,6 +219,7 @@ cp .env.example .env
 ```
 
 Edit `.env`:
+
 ```
 PG_HOST=localhost
 PG_PORT=5432
@@ -201,7 +251,7 @@ Postgres substrates are built by running the SNF views script produced by Model 
 ## The six dimensions
 
 | Dimension | Meaning | Examples |
-|---|---|---|
+| --- | --- | --- |
 | **WHO** | People, organizations, agents | artist, author, attorney, publisher |
 | **WHAT** | Things, topics, identifiers | title, subject, ISBN, format |
 | **WHEN** | Dates, times, periods | released, date_filed, year |
@@ -213,49 +263,34 @@ These are not philosophical categories — they are operational coordinates. A r
 
 ---
 
-## Folder layout
+## Repository layout
+
+After cloning, this repo looks like:
 
 ```
-snf-toolkit/
-├── reckoner/                    ← this repo
-│   ├── src/                     ← React frontend
-│   │   ├── ReckonerSNF.jsx
-│   │   ├── TrieValuePanel.jsx
-│   │   ├── ResultCard.jsx
-│   │   └── main.tsx
-│   ├── substrates/              ← drop .duckdb files here
-│   ├── reckoner_api.py          ← Python backend
-│   ├── model_builder_api.py     ← Model Builder router
-│   ├── postgres_adapter.py      ← Postgres substrate adapter
-│   ├── .env                     ← Postgres credentials (not committed)
-│   ├── requirements.txt
-│   ├── package.json
-│   └── vite.config.js
-│
-└── snf-model-builder/           ← companion repo
-    └── ...
+reckoner/
+├── src/                     ← React frontend
+│   ├── ReckonerSNF.jsx
+│   ├── TrieValuePanel.jsx
+│   ├── ResultCard.jsx
+│   └── main.tsx
+├── substrates/              ← drop .duckdb files here
+├── reckoner_api.py          ← Python backend (FastAPI)
+├── model_builder_api.py     ← Model Builder router (mounted into reckoner_api.py)
+├── postgres_adapter.py      ← Postgres substrate adapter
+├── duckdb_adapter.py        ← DuckDB substrate adapter
+├── .env.example             ← copy to .env for Postgres
+├── requirements.txt
+├── package.json
+└── vite.config.js
 ```
 
----
-
-## Requirements file
+If you also clone `snf-model-builder` (for loading your own data), put it next to `reckoner/` — both READMEs assume that layout:
 
 ```
-fastapi
-uvicorn
-pandas
-openpyxl
-duckdb
-sqlalchemy
-psycopg2-binary
-python-multipart
-snf-peirce
-tantivy
-```
-
-Install:
-```bash
-pip install -r requirements.txt
+your-projects/
+├── reckoner/                ← this repo
+└── snf-model-builder/       ← the wizard frontend (companion repo)
 ```
 
 ---
@@ -268,6 +303,6 @@ The Model Builder API contract (`/api/mb/` endpoints) is **stable as of v1.0**. 
 
 ## License
 
-AGPL-3.0. See [LICENSE](LICENSE).
+AGPL-3.0. See [LICENSE](https://github.com/peirce-lang/reckoner/blob/main/LICENSE).
 
 Part of the [peirce-lang](https://github.com/peirce-lang) ecosystem.
