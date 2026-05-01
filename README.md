@@ -92,11 +92,35 @@ VITE v5.x.x  ready
 http://localhost:5173
 ```
 
-The interface loads with the demo datasets ready. Pick a dataset from the dropdown and start clicking dimensions to query.
+---
+
+## Your first query — do this exactly
+
+**1.** In the top-right dropdown, select **`discogsv1`**
+
+**2.** Click **WHO** in the left sidebar → click **artist** → type `Miles Davis` → click his name
+
+**3.** Click **WHEN** → click **released** → set range `1955` to `1965`
+
+You should see a small set of results with a trace like:
+```
+PROBE 1.2ms   EXEC 3.8ms   TOTAL 5.0ms
+WHO artist "Miles Davis"  →  anchor  52
+WHEN released 1955–1965   →  6
+6 of 52 entities matched  88% skipped
+```
+
+**Now remove the WHEN constraint** (click the × on the chip).
+
+Watch what happens: the result set grows, the trace updates, the skipped % drops.
+
+That's the core of what Reckoner does — each constraint permanently narrows the candidate set. Adding and removing constraints changes the shape of the answer in real time.
 
 ---
 
 ## Bring your own data — Model Builder
+
+*(You do not need this to try Reckoner. Use the demo datasets above first.)*
 
 Reckoner ships with Model Builder — a browser wizard for loading your own datasets.
 
