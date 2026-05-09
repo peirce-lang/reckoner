@@ -663,13 +663,13 @@ export default function ReckonerSNF() {
   };
 
   const handleDownloadSet = (rset) => {
-    // Export .rset.json — strips internal _* metadata fields
+    // Export .peirce — strips internal _* metadata fields
     const { _saved_at, _id, ...exportable } = rset;
     const blob = new Blob([JSON.stringify(exportable, null, 2)], { type: "application/json" });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement("a");
     a.href     = url;
-    a.download = `${rset.set_id}.rset.json`;
+    a.download = `${rset.set_id}.peirce`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -707,7 +707,7 @@ export default function ReckonerSNF() {
         if (!parsed.results?.count)      missing.push("results.count");
 
         if (missing.length > 0) {
-          alert(`Invalid .rset.json — missing fields: ${missing.join(", ")}`);
+          alert(`Invalid .peirce file — missing fields: ${missing.join(", ")}`);
           return;
         }
 
@@ -730,7 +730,7 @@ export default function ReckonerSNF() {
         };
         setSavedSets(prev => [rset, ...prev]);
       } catch {
-        alert("Could not parse file — make sure it is a valid .rset.json file.");
+        alert("Could not parse file — make sure it is a valid .peirce file.");
       }
     };
     reader.readAsText(file);
@@ -1594,15 +1594,15 @@ export default function ReckonerSNF() {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Saved queries & sets</h2>
                 <div className="flex items-center gap-3">
-                  {/* Load .rset.json from file */}
+                  {/* Load .peirce file from disk */}
                   <label
                     className="text-xs px-3 py-1.5 rounded border border-blue-300 text-blue-600 hover:bg-blue-50 cursor-pointer transition-colors"
-                    title="Load a .rset.json file shared by a colleague"
+                    title="Load a .peirce file shared by a colleague"
                   >
-                    ↑ Load .rset.json
+                    ↑ Load .peirce
                     <input
                       type="file"
-                      accept=".json,.rset.json"
+                      accept=".json,.peirce"
                       onChange={handleLoadRsetFile}
                       className="hidden"
                     />
@@ -1635,8 +1635,8 @@ export default function ReckonerSNF() {
                             <button
                               onClick={() => handleDownloadSet(s)}
                               className="text-xs text-blue-600 hover:text-blue-800 underline"
-                              title="Download .rset.json"
-                            >↓ .rset.json</button>
+                              title="Download .peirce"
+                            >↓ .peirce</button>
                             <button
                               onClick={(e) => handleDeleteSet(s._id, e)}
                               className="text-red-400 hover:text-red-600"

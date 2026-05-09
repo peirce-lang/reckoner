@@ -70,6 +70,7 @@ from snf_peirce import compile_data, query as peirce_query, discover, load
 from snf_peirce.compile import Substrate
 from snf_peirce.parser import parse_to_constraints
 from snf_peirce.peirce import PeirceParseError, PeirceDiscoveryError
+from snf_peirce.srf import SRFRecord, SRFValidationError
 import duckdb
 
 # Force reload to ensure latest peirce.py is used
@@ -84,6 +85,7 @@ from snf_peirce.peirce import PeirceParseError, PeirceDiscoveryError
 
 PORT            = int(os.environ.get("PORT", 8000))
 SUBSTRATES_DIR  = os.environ.get("SNF_SUBSTRATES_DIR", "./substrates")
+SRF_IMPORTS_DIR = os.environ.get("SNF_SRF_IMPORTS_DIR", os.path.join(SUBSTRATES_DIR, "srf_imports"))
 DEBUG           = os.environ.get("DEBUG", "false").lower() == "true"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -861,6 +863,7 @@ except ImportError:
 async def startup():
     load_substrates_from_disk()
     load_postgres_adapters()
+    load_srf_imports()
     if not _registry and not _adapter_registry:
         print("[api] No substrates loaded. Add spoke directories to:", SUBSTRATES_DIR)
         print("[api] Or set PG_SUBSTRATES to load Postgres adapters.")
@@ -1779,6 +1782,382 @@ async def export_parquet(req: ParquetExportRequest):
         media_type  = "application/octet-stream",
         headers     = {"Content-Disposition": f"attachment; filename=reckoner_{substrate_id}.parquet"},
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SRF Import
+#
+# SRF records are never written into existing disk-backed substrates.
+# Each lens_id gets its own in-memory substrate, created on first import
+# and reused for subsequent imports of the same lens.
+# These substrates appear in the registry alongside disk-backed ones and
+# are queryable immediately after import.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _srf_import_path(entity_id: str, lens_id: str) -> Path:
+    """
+    Return the path where an SRF record should be persisted.
+    e.g. substrates/srf_imports/fieldguild_v1/tmdb_film_550.srf
+    """
+    safe_entity_id = entity_id.replace(":", "_").replace("/", "_")
+    lens_dir = Path(SRF_IMPORTS_DIR) / lens_id
+    lens_dir.mkdir(parents=True, exist_ok=True)
+    return lens_dir / f"{safe_entity_id}.srf"
+
+
+def _persist_srf_record(record: SRFRecord) -> None:
+    """Write an SRF record to disk for persistence across restarts."""
+    import json
+    path = _srf_import_path(record.entity_id, record.lens_id)
+    path.write_text(json.dumps(record.to_dict(), indent=2, ensure_ascii=False), encoding="utf-8")
+    if DEBUG:
+        print(f"[import/srf] Persisted {record.entity_id} → {path}")
+
+
+def load_srf_imports() -> None:
+    """
+    Scan SRF_IMPORTS_DIR for .srf files and replay them into in-memory substrates.
+    Called at startup after disk substrates are loaded.
+
+    Directory structure:
+        substrates/srf_imports/
+            fieldguild_v1/
+                tmdb_film_550.srf
+                tmdb_film_807.srf
+            musicbrainz_v1/
+                mb_recording_xxx.srf
+    """
+    import json
+    base = Path(SRF_IMPORTS_DIR)
+    if not base.exists():
+        if DEBUG:
+            print(f"[import/srf] No SRF imports directory found at {SRF_IMPORTS_DIR}")
+        return
+
+    total = 0
+    errors = 0
+    for srf_file in sorted(base.rglob("*.srf")):
+        try:
+            d = json.loads(srf_file.read_text(encoding="utf-8"))
+            record = SRFRecord.from_dict(d)
+            substrate = _get_or_create_srf_substrate(record.lens_id)
+
+            # Skip if already loaded (shouldn't happen at startup but be safe)
+            existing = substrate._conn.execute(
+                "SELECT COUNT(*) FROM snf_spoke WHERE entity_id = ?",
+                [record.entity_id]
+            ).fetchone()[0]
+            if existing > 0:
+                continue
+
+            rows = record.to_snf_rows()
+            substrate._conn.executemany(
+                "INSERT INTO snf_spoke "
+                "(entity_id, dimension, semantic_key, value, coordinate, lens_id, translator_version) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                [
+                    (r["entity_id"], r["dimension"], r["semantic_key"],
+                     r["value"], r["coordinate"], r["lens_id"], record.translator_version)
+                    for r in rows["spoke_rows"]
+                ]
+            )
+            _registry_meta[record.lens_id]["entity_count"]       = substrate.entity_count()
+            _registry_meta[record.lens_id]["translator_version"] = record.translator_version
+            total += 1
+        except Exception as e:
+            print(f"[import/srf] Failed to reload {srf_file}: {e}")
+            errors += 1
+
+    if total > 0 or errors > 0:
+        print(f"[import/srf] Reloaded {total} SRF records ({errors} errors) from {SRF_IMPORTS_DIR}")
+
+
+def _get_or_create_srf_substrate(lens_id: str) -> Substrate:
+    """
+    Return the in-memory SRF substrate for this lens_id, creating it if needed.
+    SRF substrates are separate from disk-backed substrates and are always writable.
+    """
+    if lens_id in _registry:
+        return _registry[lens_id]
+
+    # Create a fresh in-memory DuckDB for this lens
+    conn = duckdb.connect(":memory:")
+    conn.execute("""
+        CREATE TABLE snf_spoke (
+            entity_id         VARCHAR,
+            dimension         VARCHAR,
+            semantic_key      VARCHAR,
+            value             VARCHAR,
+            coordinate        VARCHAR,
+            lens_id           VARCHAR,
+            translator_version VARCHAR
+        )
+    """)
+    conn.execute("CREATE INDEX idx_spoke_coord ON snf_spoke(coordinate)")
+    conn.execute("CREATE INDEX idx_spoke_eid   ON snf_spoke(entity_id)")
+    conn.execute("CREATE INDEX idx_spoke_dim   ON snf_spoke(dimension, semantic_key)")
+
+    substrate = Substrate(conn, lens_id)
+    register_substrate(lens_id, substrate, meta={
+        "label":              lens_id,
+        "entity_count":       0,
+        "dimensions":         [],
+        "lens_id":            lens_id,
+        "translator_version": "",
+        "source":             "srf_import",
+    })
+
+    if DEBUG:
+        print(f"[import/srf] Created new in-memory substrate for lens '{lens_id}'")
+
+    return substrate
+
+
+class SRFImportRequest(BaseModel):
+    record: dict
+
+
+@app.post("/api/import/srf")
+async def import_srf(req: SRFImportRequest):
+    """
+    Accept an SRF record and write it into a per-lens in-memory substrate.
+
+    The substrate is keyed by the record's lens_id and created automatically
+    on first import. Existing disk-backed substrates are never touched.
+
+    Request body:
+        {
+            "record": { ...srf record... }
+        }
+
+    Response:
+        {
+            "entity_id": "mb:recording:...",
+            "spoke_rows_written": 5,
+            "lens_id": "musicbrainz_v1",
+            "translator_version": "1.0.0",
+            "substrate": "musicbrainz_v1"
+        }
+
+    Errors:
+        400 — SRF validation failed (field + reason in detail)
+        409 — entity already exists in this substrate
+    """
+    # --- Validate SRF record ------------------------------------------------
+    try:
+        record = SRFRecord.from_dict(req.record)
+    except SRFValidationError as e:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "SRF validation failed", "field": e.field, "reason": e.reason}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid SRF record: {e}")
+
+    # --- Get or create the substrate for this lens --------------------------
+    substrate = _get_or_create_srf_substrate(record.lens_id)
+
+    # --- Check for duplicate ------------------------------------------------
+    existing = substrate._conn.execute(
+        "SELECT COUNT(*) FROM snf_spoke WHERE entity_id = ?",
+        [record.entity_id]
+    ).fetchone()[0]
+
+    if existing > 0:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Entity '{record.entity_id}' already exists. "
+                   f"Restart Reckoner to clear in-memory SRF substrates."
+        )
+
+    # --- Write spoke rows ---------------------------------------------------
+    rows = record.to_snf_rows()
+    spoke_rows = rows["spoke_rows"]
+
+    if not spoke_rows:
+        raise HTTPException(
+            status_code=400,
+            detail="SRF record produced no routable spoke rows (all facts are UNKNOWN dimension)"
+        )
+
+    substrate._conn.executemany(
+        "INSERT INTO snf_spoke "
+        "(entity_id, dimension, semantic_key, value, coordinate, lens_id, translator_version) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [
+            (
+                r["entity_id"],
+                r["dimension"],
+                r["semantic_key"],
+                r["value"],
+                r["coordinate"],
+                r["lens_id"],
+                record.translator_version,
+            )
+            for r in spoke_rows
+        ]
+    )
+
+    # --- Update registry meta -----------------------------------------------
+    _registry_meta[record.lens_id]["entity_count"]       = substrate.entity_count()
+    _registry_meta[record.lens_id]["dimensions"]         = substrate.dimensions()
+    _registry_meta[record.lens_id]["translator_version"] = record.translator_version
+
+    # --- Persist to disk ----------------------------------------------------
+    _persist_srf_record(record)
+
+    if DEBUG:
+        print(
+            f"[import/srf] {record.entity_id} → {record.lens_id} "
+            f"({len(spoke_rows)} spoke rows)"
+        )
+
+    return {
+        "entity_id":          record.entity_id,
+        "spoke_rows_written": len(spoke_rows),
+        "lens_id":            record.lens_id,
+        "translator_version": record.translator_version,
+        "substrate":          record.lens_id,
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SRF Bulk Import
+# ─────────────────────────────────────────────────────────────────────────────
+
+class SRFBulkImportRequest(BaseModel):
+    records: List[dict]
+
+
+@app.post("/api/import/srf/bulk")
+async def import_srf_bulk(req: SRFBulkImportRequest):
+    """
+    Accept a list of SRF records and write them into per-lens in-memory substrates.
+
+    Each record is validated and imported independently. Failures are reported
+    per-record and do not stop the rest of the import.
+
+    Request body:
+        {
+            "records": [ {...srf record...}, {...srf record...}, ... ]
+        }
+
+    Response:
+        {
+            "imported":  5,
+            "skipped":   1,
+            "duplicate": 1,
+            "total":     7,
+            "results": [
+                {"entity_id": "tmdb:film:550", "status": "ok", "spoke_rows_written": 17},
+                {"entity_id": "tmdb:film:807", "status": "duplicate"},
+                {"entity_id": "...",           "status": "error", "reason": "..."},
+                ...
+            ]
+        }
+    """
+    if not req.records:
+        raise HTTPException(status_code=400, detail="records array must not be empty")
+
+    results = []
+    imported  = 0
+    skipped   = 0
+    duplicate = 0
+
+    for raw in req.records:
+        # Validate
+        try:
+            record = SRFRecord.from_dict(raw)
+        except SRFValidationError as e:
+            results.append({
+                "entity_id": raw.get("entity_id", "(unknown)"),
+                "status":    "error",
+                "reason":    f"{e.field}: {e.reason}",
+            })
+            skipped += 1
+            continue
+        except Exception as e:
+            results.append({
+                "entity_id": raw.get("entity_id", "(unknown)"),
+                "status":    "error",
+                "reason":    str(e),
+            })
+            skipped += 1
+            continue
+
+        # Get or create substrate
+        substrate = _get_or_create_srf_substrate(record.lens_id)
+
+        # Check duplicate
+        existing = substrate._conn.execute(
+            "SELECT COUNT(*) FROM snf_spoke WHERE entity_id = ?",
+            [record.entity_id]
+        ).fetchone()[0]
+
+        if existing > 0:
+            results.append({
+                "entity_id": record.entity_id,
+                "status":    "duplicate",
+            })
+            duplicate += 1
+            continue
+
+        # Write spoke rows
+        rows       = record.to_snf_rows()
+        spoke_rows = rows["spoke_rows"]
+
+        if not spoke_rows:
+            results.append({
+                "entity_id": record.entity_id,
+                "status":    "error",
+                "reason":    "no routable spoke rows (all facts are UNKNOWN dimension)",
+            })
+            skipped += 1
+            continue
+
+        substrate._conn.executemany(
+            "INSERT INTO snf_spoke "
+            "(entity_id, dimension, semantic_key, value, coordinate, lens_id, translator_version) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [
+                (
+                    r["entity_id"],
+                    r["dimension"],
+                    r["semantic_key"],
+                    r["value"],
+                    r["coordinate"],
+                    r["lens_id"],
+                    record.translator_version,
+                )
+                for r in spoke_rows
+            ]
+        )
+
+        # Update registry meta
+        _registry_meta[record.lens_id]["entity_count"]       = substrate.entity_count()
+        _registry_meta[record.lens_id]["dimensions"]         = substrate.dimensions()
+        _registry_meta[record.lens_id]["translator_version"] = record.translator_version
+
+        # Persist to disk
+        _persist_srf_record(record)
+
+        results.append({
+            "entity_id":          record.entity_id,
+            "status":             "ok",
+            "spoke_rows_written": len(spoke_rows),
+        })
+        imported += 1
+
+        if DEBUG:
+            print(f"[import/srf/bulk] {record.entity_id} → {record.lens_id} ({len(spoke_rows)} rows)")
+
+    return {
+        "imported":  imported,
+        "skipped":   skipped,
+        "duplicate": duplicate,
+        "total":     len(req.records),
+        "results":   results,
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────

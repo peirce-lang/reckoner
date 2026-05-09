@@ -120,6 +120,15 @@ function extractSecondaryLabel(coordinates, primaryLabel) {
   return null;
 }
 
+// Extract HOW.image_url if present — returns null if not found.
+// Only fires for substrates that emit image_url facts (art, film, etc).
+// All other substrates are completely unaffected.
+function extractImageUrl(coordinates) {
+  const how = coordinates?.HOW || [];
+  const found = how.find(f => f.field === 'image_url');
+  return found ? found.value : null;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // CoordinatePill — for matched_because section
 // Uses pipe-format coordinate: "WHO|artist|Miles Davis"
@@ -224,6 +233,7 @@ function CoordinateCard({ item, projectedFields, selected, onToggle }) {
   const coordinates    = item.coordinates || {};
   const primaryLabel   = extractPrimaryLabel(coordinates, item.id);
   const secondaryLabel = extractSecondaryLabel(coordinates, primaryLabel);
+  const imageUrl       = extractImageUrl(coordinates);
 
   const presentDims   = DIM_ORDER.filter(d => coordinates[d] && coordinates[d].length > 0);
   const primaryDims   = presentDims.filter(d => ['WHO', 'WHAT', 'WHEN', 'WHERE'].includes(d));
@@ -233,7 +243,7 @@ function CoordinateCard({ item, projectedFields, selected, onToggle }) {
     <div className={`border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow
       ${selected ? 'ring-2 ring-blue-400 border-blue-300' : ''}`}>
 
-      {/* Header — checkbox + primary label + secondary label + entity ID */}
+      {/* Header — checkbox + thumbnail (if art) + primary label + entity ID */}
       <div className="flex items-start gap-3 mb-3">
         {onToggle && (
           <input
@@ -242,6 +252,15 @@ function CoordinateCard({ item, projectedFields, selected, onToggle }) {
             onChange={() => onToggle(item.id)}
             className="mt-1 flex-shrink-0 h-4 w-4 rounded border-gray-300 text-blue-600 cursor-pointer accent-blue-600"
             onClick={e => e.stopPropagation()}
+          />
+        )}
+        {/* Thumbnail — only rendered when HOW.image_url is present */}
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt={primaryLabel}
+            className="flex-shrink-0 w-14 h-14 object-cover rounded border border-gray-200 bg-gray-100"
+            onError={e => { e.currentTarget.style.display = 'none'; }}
           />
         )}
         <div className="flex-1 flex items-start justify-between gap-4 min-w-0">
