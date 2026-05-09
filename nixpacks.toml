@@ -1,0 +1,24 @@
+# nixpacks.toml — Railway build configuration for Reckoner
+#
+# Railway uses Nixpacks to build the container.
+# This file tells it to:
+#   1. Install Node + Python dependencies
+#   2. Build the React frontend
+#   3. Start the Python backend (which serves the built frontend)
+
+[phases.setup]
+nixPkgs = ["python311", "nodejs_20"]
+
+[phases.install]
+cmds = [
+    "pip install -r requirements.txt",
+    "npm install"
+]
+
+[phases.build]
+cmds = [
+    "npm run build"
+]
+
+[start]
+cmd = "python -m uvicorn reckoner_api:app --host 0.0.0.0 --port $PORT"
