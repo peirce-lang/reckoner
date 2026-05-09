@@ -847,6 +847,46 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ── Static frontend ───────────────────────────────────────────────────────────
+# Serve the built React frontend from dist/ if it exists.
+# In production (Railway), the frontend is pre-built and served here.
+# In local dev, the Vite dev server handles the frontend separately.
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse as _FileResponse
+
+_DIST_DIR = Path(__file__).parent / "dist"
+
+if _DIST_DIR.exists():
+    # Serve static assets (JS, CSS, images) at /assets
+    app.mount(
+        "/assets",
+        StaticFiles(directory=str(_DIST_DIR / "assets")),
+        name="assets",
+    )
+
+    @app.get("/")
+    async def serve_frontend_root():
+        """Serve the React app root."""
+        return _FileResponse(str(_DIST_DIR / "index.html"))
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend_catchall(full_path: str):
+        """
+        Catch-all for React Router — serve index.html for any non-API route.
+        API routes (/api/*) are matched before this by FastAPI's router order.
+        """
+        # Don't intercept API routes
+        if full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="API endpoint not found.")
+        index = _DIST_DIR / "index.html"
+        if index.exists():
+            return _FileResponse(str(index))
+        raise HTTPException(status_code=404, detail="Frontend not built.")
+
+    print("[api] Serving React frontend from dist/")
+else:
+    print("[api] No dist/ folder found — frontend not served. Run 'npm run build' in reckoner/ to build.")
+
 # ── Model Builder router ──────────────────────────────────────────────────────
 # Mounts at /api/mb — upload, introspect, review, compile, download.
 # model_builder_api.py must be in the same directory as this file.
