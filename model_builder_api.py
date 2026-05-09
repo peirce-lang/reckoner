@@ -50,6 +50,7 @@ import tempfile
 import zipfile
 from datetime import datetime
 from pathlib import Path
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 try:
@@ -86,6 +87,12 @@ try:
 except ImportError:
     SNF_PEIRCE_AVAILABLE = False
 
+try:
+    from osi_parser import parse_osi_file, parse_json_array, export_snf_as_osi
+    OSI_PARSER_AVAILABLE = True
+except ImportError:
+    OSI_PARSER_AVAILABLE = False
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Config
 # ─────────────────────────────────────────────────────────────────────────────
@@ -97,6 +104,7 @@ SINGLETON_MAX_COUNT   = 1             # values appearing <= this are "singletons
 NULL_PCT_WARN_THRESH  = 0.20          # warn if > 20% of values are null
 OUTPUT_DIR            = Path(tempfile.gettempdir()) / "model_builder_artifacts"
 OUTPUT_DIR.mkdir(exist_ok=True)
+SRF_IMPORTS_DIR       = Path(os.environ.get("SNF_SRF_IMPORTS_DIR", "./substrates/srf_imports"))
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Session store
@@ -628,6 +636,85 @@ def _emit_duckdb(df: pd.DataFrame, spec: Dict) -> Dict:
 
     con.close()
 
+    # ── Emit SRF records ────────────────────────────────────────────────────
+    # Write one .srf file per entity into substrates/srf_imports/<lens_id>/
+    # Makes every Model Builder dataset portable and federable.
+    srf_count  = 0
+    srf_errors = 0
+    try:
+        from snf_peirce.srf import SRFRecord, SRFValidationError
+        import json as _json
+        import datetime as _dt
+
+        srf_imports_dir = SRF_IMPORTS_DIR / lens_id
+        srf_imports_dir.mkdir(parents=True, exist_ok=True)
+
+        now = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        source_name    = spec.get("source", {}).get("filename") or output_name
+        translator_ver = spec.get("provenance", {}).get("translator_version", "1.0.0")
+
+        # Build facts per entity_id
+        facts_by_entity: Dict[str, list] = {}
+        for dim in ["WHO", "WHAT", "WHEN", "WHERE", "WHY", "HOW"]:
+            for r in dim_rows[dim]:
+                eid = r["entity_id"]
+                if eid not in facts_by_entity:
+                    facts_by_entity[eid] = []
+                facts_by_entity[eid].append({
+                    "dimension":    dim,
+                    "semantic_key": r["semantic_key"],
+                    "value":        r["value"],
+                })
+
+        for meta in meta_rows:
+            eid   = meta["entity_id"]
+            facts = facts_by_entity.get(eid, [])
+            if not facts:
+                continue
+
+            record_dict = {
+                "srf_version": "1.0",
+                "srf_uri":     f"srf://{lens_id}/mb/{eid}",
+                "entity_id":   eid,
+                "nucleus": {
+                    "type":  nucleus_spec.get("authority") or lens_id,
+                    "value": meta["nucleus"],
+                },
+                "facts": facts,
+                "provenance": {
+                    "source":             source_name,
+                    "translated_by":      "ModelBuilder",
+                    "translator_version": translator_ver,
+                    "lens":               lens_id,
+                    "translated_at":      now,
+                },
+            }
+
+            try:
+                record = SRFRecord.from_dict(record_dict)
+                safe_eid = eid.replace(":", "_").replace("/", "_")
+                out_file = srf_imports_dir / f"{safe_eid}.srf"
+                out_file.write_text(
+                    _json.dumps(record.to_dict(), indent=2, ensure_ascii=False),
+                    encoding="utf-8"
+                )
+                srf_count += 1
+            except Exception as e:
+                srf_errors += 1
+                warnings.append(f"SRF emit failed for {eid}: {e}")
+
+        if srf_count > 0:
+            print(f"[model_builder] Emitted {srf_count} SRF records to {srf_imports_dir}")
+        if srf_errors > 0:
+            print(f"[model_builder] {srf_errors} SRF emit errors (see warnings)")
+
+    except ImportError:
+        warnings.append(
+            "SRF export skipped: snf-peirce >= 0.1.10 required. "
+            "pip install snf-peirce>=0.1.10"
+        )
+    # ── End SRF emit ────────────────────────────────────────────────────────
+
     facts_by_dim = {dim: len(dim_rows[dim]) for dim in dim_rows}
     total_facts  = sum(facts_by_dim.values())
 
@@ -638,6 +725,7 @@ def _emit_duckdb(df: pd.DataFrame, spec: Dict) -> Dict:
         "fact_count":   total_facts,
         "facts_by_dim": facts_by_dim,
         "warnings":     warnings,
+        "srf_exported": srf_count,
     }
 
 
@@ -801,6 +889,39 @@ def _emit_postgres_views(df: pd.DataFrame, spec: Dict) -> Dict:
 # Pydantic models
 # ─────────────────────────────────────────────────────────────────────────────
 
+class NucleusAuthority(str, Enum):
+    """
+    Portable authority namespace for nucleus values.
+
+    Rule: if two different sources could ever hold a record for the same entity
+    (same artwork at Met and Tate, same film on TMDB and Letterboxd), they must
+    share a NucleusAuthority value so the enricher can match them.
+
+    For firm-internal IDs that will never cross-enrich with anything, use 'local'.
+
+    Adding a new translator: add its authority value here FIRST, then reference
+    it in the translator's BuildSpec. Never add values retroactively — the enum
+    is the contract.
+    """
+    # ── Cross-source portable (preferred) ─────────────────────────────────────
+    wikidata_qid     = "wikidata_qid"      # Wikidata Q-number — universal fallback
+    isbn             = "isbn"              # Books — Open Library, WorldCat, LOC
+    musicbrainz_id   = "musicbrainz_id"    # Recordings, releases, artists
+    tmdb_id          = "tmdb_id"           # Films, TV — TMDB
+    discogs_id       = "discogs_id"        # Vinyl, releases, labels — Discogs
+    # ── Museum / art ──────────────────────────────────────────────────────────
+    met_object_id    = "met_object_id"     # Metropolitan Museum of Art
+    artsy_id         = "artsy_id"          # Artsy — artworks, artists, movements
+    getty_ulan_id    = "getty_ulan_id"     # Getty Union List of Artist Names
+    # ── Legal / library ───────────────────────────────────────────────────────
+    courtlistener_id = "courtlistener_id"  # CourtListener — opinions, dockets
+    gutenberg_id     = "gutenberg_id"      # Project Gutenberg — public domain books
+    # ── Weak / local ──────────────────────────────────────────────────────────
+    letterboxd_uri   = "letterboxd_uri"    # Letterboxd — enrichable to tmdb_id
+    row_number       = "row_number"        # No stable ID — weakest, not portable
+    local            = "local"             # Firm-internal ID, never cross-enriches
+
+
 class IntrospectRequest(BaseModel):
     connection_string: str
     table_name:        str
@@ -816,10 +937,14 @@ class ReviewRequest(BaseModel):
     columns_mapped: List[MappingRow]
 
 class NucleusSpec(BaseModel):
-    type:      str          # 'single' | 'compound'
+    type:      str                            # 'single' | 'compound'
     columns:   List[str]
-    separator: Optional[str] = "-"
-    prefix:    Optional[str] = ""
+    separator: Optional[str]               = "-"
+    prefix:    Optional[str]               = ""
+    authority: Optional[NucleusAuthority]  = None
+    # authority declares the portable identity namespace for this nucleus value.
+    # Required for cross-source enrichment. If None, falls back to lens_id in
+    # SRF emission (not portable). Use NucleusAuthority.local for firm-internal IDs.
 
 class LensSpec(BaseModel):
     lens_id: str
@@ -874,8 +999,8 @@ async def upload_file(file: UploadFile = File(...)):
     _purge_expired()
 
     ext = Path(file.filename).suffix.lower()
-    if ext not in {".csv", ".xlsx", ".xls"}:
-        raise HTTPException(status_code=400, detail=f"Unsupported file type: {ext}. Use CSV or Excel.")
+    if ext not in {".csv", ".xlsx", ".xls", ".json"}:
+        raise HTTPException(status_code=400, detail=f"Unsupported file type: {ext}. Use CSV, Excel, or JSON.")
 
     content = await file.read()
 
@@ -886,8 +1011,21 @@ async def upload_file(file: UploadFile = File(...)):
                 df = pd.read_csv(io.BytesIO(content), dtype=str, keep_default_na=False)
             except UnicodeDecodeError:
                 df = pd.read_csv(io.BytesIO(content), dtype=str, encoding="latin-1", keep_default_na=False)
+        elif ext == ".json":
+            if not OSI_PARSER_AVAILABLE:
+                raise HTTPException(
+                    status_code=501,
+                    detail="osi_parser.py required for JSON upload. Ensure osi_parser.py is in the same directory."
+                )
+            try:
+                parsed = parse_json_array(content, file.filename)
+            except ValueError as e:
+                raise HTTPException(status_code=422, detail=str(e))
+            df = pd.DataFrame(parsed["rows"])
         else:
             df = pd.read_excel(io.BytesIO(content), dtype=str, keep_default_na=False)
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=422, detail=f"Could not parse file: {e}")
 
@@ -1049,7 +1187,7 @@ async def compile_job(spec: BuildSpec):
     # Resolve session token — source type determines which token field to use
     token = (
         spec.source.upload_token
-        if spec.source.type == "file"
+        if spec.source.type in ("file", "osi", "json")
         else spec.source.introspect_token
     )
     if not token:
@@ -1098,6 +1236,150 @@ async def compile_job(spec: BuildSpec):
             "backend":      backend,
             "generated_at": datetime.utcnow().isoformat() + "Z",
         },
+    }
+
+
+# ── POST /api/mb/osi/parse ───────────────────────────────────────────────────
+
+class OSIExportRequest(BaseModel):
+    """Request shape for /api/mb/osi/export."""
+    lens_id:     str
+    description: Optional[str] = ""
+    spoke_rows:  List[Dict[str, Any]]
+
+
+@router.post("/osi/parse")
+async def parse_osi(file: UploadFile = File(...)):
+    """
+    MB-6 — Parse an OSI semantic model definition (YAML or JSON).
+
+    Accepts an OSI .yaml, .yml, or .json file.
+    Returns the same column response shape as /upload so the existing
+    six-step wizard handles steps 2–6 without modification.
+
+    Primary key fields are marked suggested_dim='skip' and is_nucleus=True.
+    The wizard should pre-populate step 4 (Nucleus) from nucleus_hints.
+
+    Step 3 (review) produces no variant flags for OSI sources — there is
+    no row data to scan. The frontend should skip or auto-acknowledge step 3
+    when source_type='osi' is present in the response.
+
+    Extra fields alongside the standard columns response:
+        nucleus_hints  — primary key declarations per dataset (for step 4)
+        relationships  — Relationship entries (for cross-entity linking hints)
+        osi_meta       — model name, description, version (pre-fills step 5)
+        dataset_count  — number of OSI Datasets parsed
+        field_count    — total fields mapped
+        source_type    — "osi" (frontend uses this to adapt wizard behaviour)
+    """
+    _purge_expired()
+
+    if not OSI_PARSER_AVAILABLE:
+        raise HTTPException(
+            status_code=501,
+            detail="osi_parser.py required. Ensure osi_parser.py is in the same directory as model_builder_api.py."
+        )
+
+    ext = Path(file.filename).suffix.lower()
+    if ext not in {".yaml", ".yml", ".json"}:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type: {ext}. OSI parser accepts .yaml, .yml, or .json"
+        )
+
+    content = await file.read()
+
+    try:
+        result = parse_osi_file(content, file.filename)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"OSI parse failed: {e}")
+
+    token = _new_token()
+
+    # OSI has no row data — create empty DataFrame with field names as columns.
+    # Session is still needed so /compile can resolve the token.
+    col_names = [c["name"] for c in result["columns"]]
+    df_osi    = pd.DataFrame(columns=col_names)
+
+    _sessions[token] = SessionData(
+        df          = df_osi,
+        source_info = {
+            "type":     "osi",
+            "filename": file.filename,
+            "format":   ext.lstrip("."),
+        },
+        columns = result["columns"],
+    )
+
+    return {
+        "upload_token":  token,
+        "columns":       result["columns"],
+        "row_count":     result["field_count"],
+        "nucleus_hints": result["nucleus_hints"],
+        "relationships": result["relationships"],
+        "osi_meta":      result["osi_meta"],
+        "dataset_count": result["dataset_count"],
+        "field_count":   result["field_count"],
+        "source_type":   "osi",
+    }
+
+
+# ── POST /api/mb/osi/export ──────────────────────────────────────────────────
+
+@router.post("/osi/export")
+async def export_osi(req: OSIExportRequest):
+    """
+    MB-6 export direction — project a compiled SNF substrate as an OSI model.
+
+    Accepts spoke_rows (snf_spoke table contents from a compiled substrate)
+    and emits an OSI SemanticModel structure.
+
+    Enables warehouse tools that speak OSI to consume a Reckoner substrate
+    without knowing SNF internals — Peirce queries against warehouse data
+    via the OSI bridge.
+
+    spoke_rows shape (matches snf_spoke table):
+        [ { entity_id, dimension, semantic_key, value, coordinate, lens_id }, ... ]
+
+    Note: Relationship structure is not recoverable from spoke_rows alone.
+    The returned relationships array will be empty. Merge relationship hints
+    from the original BuildSpec on the client side if needed.
+    """
+    if not OSI_PARSER_AVAILABLE:
+        raise HTTPException(
+            status_code=501,
+            detail="osi_parser.py required. Ensure osi_parser.py is in the same directory as model_builder_api.py."
+        )
+
+    if not req.spoke_rows:
+        raise HTTPException(status_code=400, detail="spoke_rows must not be empty.")
+
+    try:
+        osi_model = export_snf_as_osi(
+            spoke_rows  = req.spoke_rows,
+            lens_id     = req.lens_id,
+            description = req.description or "",
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"OSI export failed: {e}")
+
+    field_count = sum(
+        len(ds.get("fields", []))
+        for sm in osi_model.get("semantic_model", [])
+        for ds in sm.get("datasets", [])
+    )
+    metric_count = sum(
+        len(sm.get("metrics", []))
+        for sm in osi_model.get("semantic_model", [])
+    )
+
+    return {
+        "lens_id":      req.lens_id,
+        "osi_model":    osi_model,
+        "field_count":  field_count,
+        "metric_count": metric_count,
     }
 
 
