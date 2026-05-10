@@ -10,7 +10,7 @@
 substrates/*.duckdb
 substrates/*.db
 !substrates/discogsv1.duckdb
-!substrates/disney.duckdb
+
 
 # ── Model Builder artifacts ───────────────────────────────────────────────────
 # Compiled artifacts land in the OS temp directory — nothing to ignore here.
@@ -23,7 +23,7 @@ __pycache__/
 *.pyd
 .Python
 *.egg-info/
-dist/
+
 build/
 *.egg
 .eggs/
