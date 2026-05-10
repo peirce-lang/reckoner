@@ -1,0 +1,51 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://musicbrainz_v1/mb/545a54b6-b0e4-47ce-90d1-f79c9edabcd0",
+  "entity_id": "mb:recording:545a54b6-b0e4-47ce-90d1-f79c9edabcd0",
+  "nucleus": {
+    "type": "musicbrainz_id",
+    "value": "545a54b6-b0e4-47ce-90d1-f79c9edabcd0",
+    "authority": "musicbrainz.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist",
+      "value": "Pixies"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "Vamos (live)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "recording"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1988"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "release_date",
+      "value": "1988-08-22"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "release_country",
+      "value": "GB"
+    }
+  ],
+  "provenance": {
+    "source": "MusicBrainz",
+    "translated_by": "MusicBrainzTranslator",
+    "translator_version": "1.0.0",
+    "lens": "musicbrainz_v1",
+    "translated_at": "2026-05-05T17:01:15Z",
+    "source_record_id": "545a54b6-b0e4-47ce-90d1-f79c9edabcd0",
+    "source_url": "https://musicbrainz.org/recording/545a54b6-b0e4-47ce-90d1-f79c9edabcd0"
+  }
+}

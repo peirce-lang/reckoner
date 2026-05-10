@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback, startTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Table, X, Calendar, Scale, Users, FileText,
@@ -8,9 +8,10 @@ import {
 import { TrieValuePanel } from "./TrieValuePanel";
 import ResultCard from "./ResultCard";
 
-const API_URL = "http://localhost:8000/api";
-const SAVED_QUERIES_KEY = "reckoner_saved_queries";
-const SAVED_SETS_KEY    = "reckoner_saved_sets";
+const API_URL = import.meta.env.VITE_API_URL || "/api";
+const SAVED_QUERIES_KEY  = "reckoner_saved_queries";
+const SAVED_SETS_KEY     = "reckoner_saved_sets";
+const HEADER_PREFS_KEY   = "reckoner_header_prefs"; // prefix — keyed by substrate id
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Peirce serializer (inlined — no require() in JSX)
@@ -79,6 +80,29 @@ function persistSavedQueries(queries) {
     localStorage.setItem(SAVED_QUERIES_KEY, JSON.stringify(queries));
   } catch (e) {
     console.error("Could not persist saved queries:", e);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Header prefs — primary/secondary label overrides per substrate
+// Fallback chain: lens-level → substrate-level → null (use default in ResultCard)
+// Stored shape: [{ dim: 'WHO', alwaysVisible: true }, ...]
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Header prefs — { primary: {dim, field} | null, secondary: {dim, field} | null }
+// Stored per substrate. null means use automatic logic in extractPrimaryLabel.
+function loadHeaderPrefs(substrateId) {
+  try {
+    const raw = localStorage.getItem(`${HEADER_PREFS_KEY}::${substrateId}`);
+    return raw ? JSON.parse(raw) : { primary: null, secondary: null };
+  } catch { return { primary: null, secondary: null }; }
+}
+
+function saveHeaderPrefs(prefs, substrateId) {
+  try {
+    localStorage.setItem(`${HEADER_PREFS_KEY}::${substrateId}`, JSON.stringify(prefs));
+  } catch (e) {
+    console.error("Could not persist header prefs:", e);
   }
 }
 
@@ -278,6 +302,7 @@ export default function ReckonerSNF() {
   const [selectedIds, setSelectedIds]   = useState(new Set());
   const [loading, setLoading]           = useState(false);
   const [queryStats, setQueryStats]     = useState(null); // { probe_ms, execution_ms, total_ms, row_count, trace }
+  const [queryVersion, setQueryVersion] = useState(0);    // incremented once per completed query — controls TrieValuePanel refetch
   const [pageOffset, setPageOffset]     = useState(0);    // current pagination offset
   const [searchTerm, setSearchTerm]     = useState("");
   const [searchTerm2, setSearchTerm2]   = useState("");
@@ -288,6 +313,10 @@ export default function ReckonerSNF() {
   // projectedFields: Set of field names to show. Empty = show all (default).
   const [projectedFields, setProjectedFields] = useState(new Set());
   const [showFieldPicker, setShowFieldPicker] = useState(false);
+
+  // ── Header prefs — { primary: {dim,field}|null, secondary: {dim,field}|null }
+  const [headerPrefs, setHeaderPrefs] = useState({ primary: null, secondary: null });
+
 
   // ── Sort ──────────────────────────────────────────────────────────────────
   // sortField: field name to sort by, or null (no sort = result order).
@@ -303,6 +332,18 @@ export default function ReckonerSNF() {
 
   // ── Schema selector ───────────────────────────────────────────────────────
   const [activeSchema, setActiveSchema]   = useState("");
+
+  // Pin a field as primary (title) or secondary (subtitle) for this substrate.
+  // Persists to localStorage. Toggling the same field again clears the pin.
+  const handlePinHeader = useCallback((role, dim, field) => {
+    setHeaderPrefs(prev => {
+      const existing = prev[role];
+      const isAlreadyPinned = existing?.dim === dim && existing?.field === field;
+      const next = { ...prev, [role]: isAlreadyPinned ? null : { dim, field } };
+      saveHeaderPrefs(next, activeSchema);
+      return next;
+    });
+  }, [activeSchema]);
   const [schemas, setSchemas]             = useState([]);
 
   useEffect(() => {
@@ -333,6 +374,7 @@ export default function ReckonerSNF() {
     setShowFieldPicker(false);
     setSortField(null);
     setSortDir('asc');
+    setHeaderPrefs(loadHeaderPrefs(schema));
     fetch(`${API_URL}/health?schema=${schema}`)
       .then(r => r.json()).then(setApiStatus).catch(() => {});
     fetch(`${API_URL}/affordances?schema=${schema}`)
@@ -553,26 +595,29 @@ export default function ReckonerSNF() {
         body: JSON.stringify(body),
       });
       const d = await r.json();
-      setResults(Array.isArray(d.results) ? d.results : []);
-      setSelectedIds(new Set());
-      setQueryStats({
-        probe_ms:       d.probe_ms,
-        execution_ms:   d.execution_ms,
-        total_ms:       d.total_ms,
-        row_count:      d.row_count,
-        trace:          d.trace || [],
-        portolan_order: d.portolan_order || [],
-        // Provenance — for XLSX Sheet 2 and result set identity model
-        substrate_id:   d.query_identity?.substrate_id || activeSchema,
-        lens_id:        d.query_identity?.lens_id || d.lens_id || '',
-        translator_version: d.query_identity?.translator_version || '',
-        query_hash:     d.query_identity?.query_hash || null,
-        executed_at:    d.query_identity?.executed_at || new Date().toISOString(),
-        peirce:         toPeirce(constraints),
-        constraints:    constraints.map(({ id, ...rest }) => rest),
-        projected_fields: projectedFields.size > 0 ? Array.from(projectedFields) : null,
-        sort_field:     sortField,
-        sort_dir:       sortDir,
+      startTransition(() => {
+        setResults(Array.isArray(d.results) ? d.results : []);
+        setSelectedIds(new Set());
+        setQueryStats({
+          probe_ms:       d.probe_ms,
+          execution_ms:   d.execution_ms,
+          total_ms:       d.total_ms,
+          row_count:      d.row_count,
+          trace:          d.trace || [],
+          portolan_order: d.portolan_order || [],
+          // Provenance — for XLSX Sheet 2 and result set identity model
+          substrate_id:   d.query_identity?.substrate_id || activeSchema,
+          lens_id:        d.query_identity?.lens_id || d.lens_id || '',
+          translator_version: d.query_identity?.translator_version || '',
+          query_hash:     d.query_identity?.query_hash || null,
+          executed_at:    d.query_identity?.executed_at || new Date().toISOString(),
+          peirce:         toPeirce(constraints),
+          constraints:    constraints.map(({ id, ...rest }) => rest),
+          projected_fields: projectedFields.size > 0 ? Array.from(projectedFields) : null,
+          sort_field:     sortField,
+          sort_dir:       sortDir,
+        });
+        setQueryVersion(v => v + 1); // signal TrieValuePanel instances to refetch
       });
     } catch { console.error("Query failed"); alert("Query failed. Make sure the API server is running."); setResults([]); }
     finally { setLoading(false); }
@@ -1212,6 +1257,7 @@ export default function ReckonerSNF() {
   };
 
   // ─────────────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────────
   // Export helpers
   // ─────────────────────────────────────────────────────────────────────────────
 
@@ -1553,6 +1599,7 @@ export default function ReckonerSNF() {
                 ? results.map(r => r.id)
                 : null}
               activeConstraints={constraints.length > 0 ? constraints : null}
+              queryVersion={queryVersion}
               onAggregateSearch={async (entityIds, label, meta) => {
                 if (!entityIds || entityIds.length === 0) {
                   alert(`No entities found matching that count filter.`);
@@ -2049,6 +2096,7 @@ export default function ReckonerSNF() {
                       {projectedFields.size > 0 ? `Fields (${projectedFields.size})` : "Fields"}
                     </button>
                   )}
+
                   {/* Save Set button — Option C: inline with results header */}
                   {!loading && results.length > 0 && (
                     <div className="relative">
@@ -2174,6 +2222,7 @@ export default function ReckonerSNF() {
 
               {/* Field picker — shown when toggled */}
               {showFieldPicker && <FieldPicker />}
+
 
               {/* Query stats — probe / execution / total */}
               {!loading && queryStats && (
@@ -2315,6 +2364,8 @@ export default function ReckonerSNF() {
                                 projectedFields={projectedFields.size > 0 ? projectedFields : null}
                                 selected={selectedIds.has(item.id)}
                                 onToggle={toggleSelected}
+                                headerPrefs={headerPrefs}
+                                onPinHeader={handlePinHeader}
                               />
                             ))}
                           </div>
@@ -2335,6 +2386,8 @@ export default function ReckonerSNF() {
                       projectedFields={projectedFields.size > 0 ? projectedFields : null}
                       selected={selectedIds.has(item.id)}
                       onToggle={toggleSelected}
+                      headerPrefs={headerPrefs}
+                      onPinHeader={handlePinHeader}
                     />
                   ))}
                 </div>

@@ -1,0 +1,38 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://letterboxd_watched/mb/https://boxd.it/6hQu",
+  "entity_id": "https://boxd.it/6hQu",
+  "nucleus": {
+    "type": "letterboxd_watched",
+    "value": "https://boxd.it/6hQu"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "Gone Girl"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "letterboxd_uri",
+      "value": "https://boxd.it/6hQu"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "date",
+      "value": "2023-11-14"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2014"
+    }
+  ],
+  "provenance": {
+    "source": "letterboxd_watched",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "letterboxd_watched",
+    "translated_at": "2026-05-05T22:02:58Z"
+  }
+}

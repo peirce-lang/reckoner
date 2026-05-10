@@ -1,0 +1,121 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://fieldguild_v1/tmdb/9005",
+  "entity_id": "tmdb:film:9005",
+  "nucleus": {
+    "type": "tmdb_id",
+    "value": "9005",
+    "authority": "themoviedb.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "director",
+      "value": "Harold Ramis"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "writer",
+      "value": "Richard Russo"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "writer",
+      "value": "Robert Benton"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "John Cusack"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Billy Bob Thornton"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Connie Nielsen"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Randy Quaid"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Oliver Platt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "The Ice Harvest"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "film"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Crime"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Comedy"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Drama"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Thriller"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "language",
+      "value": "en"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2005"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "release_date",
+      "value": "2005-11-23"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "origin_country",
+      "value": "US"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "studio",
+      "value": "Focus Features"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "runtime_minutes",
+      "value": "88"
+    }
+  ],
+  "provenance": {
+    "source": "TMDB",
+    "translated_by": "TMDBTranslator",
+    "translator_version": "1.0.0",
+    "lens": "fieldguild_v1",
+    "translated_at": "2026-05-06T02:11:12Z",
+    "source_record_id": "9005",
+    "source_url": "https://www.themoviedb.org/movie/9005"
+  }
+}

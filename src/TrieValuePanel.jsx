@@ -22,7 +22,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { motion } from "framer-motion";
 import { AlertTriangle, ChevronDown, Plus, Search, X } from "lucide-react";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 const DEBOUNCE_MS = 200;
 const DEFAULT_LIMIT = 100;
 
@@ -189,6 +189,11 @@ export function TrieValuePanel({
 
   // Active constraints — for Narrow mode pre-query (I18)
   activeConstraints, // constraint[] | null — current constraint set before query runs
+
+  // Controlled re-fetch signal — incremented by parent once per completed query.
+  // Panels respond to this instead of watching resultEntityIds directly,
+  // preventing a cascade of conditional discover calls on every result array rebuild.
+  queryVersion,      // number
 }) {
   if (!activeDrawer || !activeField || !activeFieldMeta) return null;
 
@@ -241,6 +246,7 @@ export function TrieValuePanel({
           resultEntityIds={resultEntityIds}
           onAggregateSearch={onAggregateSearch}
           activeConstraints={activeConstraints}
+          queryVersion={queryVersion}
         />
       ) : (
         /* Text / number / date: same as before */
@@ -266,7 +272,7 @@ export function TrieValuePanel({
 // TrieEnumPanel — the new trie narrowing experience for enum fields
 // ─────────────────────────────────────────────────────────────────────────────
 
-function TrieEnumPanel({ dimension, field, schema, onAddConstraint, onClose, resultEntityIds, onAggregateSearch, activeConstraints }) {
+function TrieEnumPanel({ dimension, field, schema, onAddConstraint, onClose, resultEntityIds, onAggregateSearch, activeConstraints, queryVersion }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading,  setIsLoading]  = useState(false);
   const [hasMore,    setHasMore]    = useState(false);
@@ -353,7 +359,11 @@ function TrieEnumPanel({ dimension, field, schema, onAddConstraint, onClose, res
     } finally {
       setIsLoading(false);
     }
-  }, [dimension, field, schema, resultEntityIds, activeConstraints, narrowMode]);
+  // queryVersion is the controlled re-fetch signal from the parent.
+  // resultEntityIds/activeConstraints are read inside via closure but not deps —
+  // we don't want every entity ID array rebuild to trigger a refetch cascade.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dimension, field, schema, queryVersion, narrowMode]);
 
   useEffect(() => { fetchValues(); }, [fetchValues]);
 
@@ -775,7 +785,7 @@ function TextInputPanel({
       .then(d => setRefValues(Array.isArray(d.rows) ? d.rows : []))
       .catch(() => setRefValues([]))
       .finally(() => setRefLoading(false));
-  }, [activeDrawer, activeField, valueType, schema, resultEntityIds]);
+  }, [activeDrawer, activeField, valueType, schema, queryVersion]);
 
   // Filter reference values by what's been typed
   const filteredRef = refValues.filter(r =>

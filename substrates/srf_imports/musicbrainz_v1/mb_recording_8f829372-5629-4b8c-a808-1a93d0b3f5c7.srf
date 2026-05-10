@@ -1,0 +1,46 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://musicbrainz_v1/mb/8f829372-5629-4b8c-a808-1a93d0b3f5c7",
+  "entity_id": "mb:recording:8f829372-5629-4b8c-a808-1a93d0b3f5c7",
+  "nucleus": {
+    "type": "musicbrainz_id",
+    "value": "8f829372-5629-4b8c-a808-1a93d0b3f5c7",
+    "authority": "musicbrainz.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist",
+      "value": "Tom Waits"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "Christmas Card From a Hooker in Minneapolis"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "recording"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1978"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "release_country",
+      "value": "US"
+    }
+  ],
+  "provenance": {
+    "source": "MusicBrainz",
+    "translated_by": "MusicBrainzTranslator",
+    "translator_version": "1.0.0",
+    "lens": "musicbrainz_v1",
+    "translated_at": "2026-05-06T02:11:17Z",
+    "source_record_id": "8f829372-5629-4b8c-a808-1a93d0b3f5c7",
+    "source_url": "https://musicbrainz.org/recording/8f829372-5629-4b8c-a808-1a93d0b3f5c7"
+  }
+}

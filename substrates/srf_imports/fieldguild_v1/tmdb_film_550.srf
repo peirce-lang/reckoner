@@ -1,0 +1,106 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://fieldguild_v1/tmdb/550",
+  "entity_id": "tmdb:film:550",
+  "nucleus": {
+    "type": "tmdb_id",
+    "value": "550",
+    "authority": "themoviedb.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "director",
+      "value": "David Fincher"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "writer",
+      "value": "Jim Uhls"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Edward Norton"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Brad Pitt"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Helena Bonham Carter"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Meat Loaf"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Jared Leto"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "Fight Club"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "film"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Drama"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Thriller"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "language",
+      "value": "en"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1999"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "release_date",
+      "value": "1999-10-15"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "origin_country",
+      "value": "DE"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "studio",
+      "value": "Fox 2000 Pictures"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "runtime_minutes",
+      "value": "139"
+    }
+  ],
+  "provenance": {
+    "source": "TMDB",
+    "translated_by": "TMDBTranslator",
+    "translator_version": "1.0.0",
+    "lens": "fieldguild_v1",
+    "translated_at": "2026-05-05T19:36:42Z",
+    "source_record_id": "550",
+    "source_url": "https://www.themoviedb.org/movie/550"
+  }
+}

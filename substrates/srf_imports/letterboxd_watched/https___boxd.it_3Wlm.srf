@@ -1,0 +1,38 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://letterboxd_watched/mb/https://boxd.it/3Wlm",
+  "entity_id": "https://boxd.it/3Wlm",
+  "nucleus": {
+    "type": "letterboxd_watched",
+    "value": "https://boxd.it/3Wlm"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "Decalogue X"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "letterboxd_uri",
+      "value": "https://boxd.it/3Wlm"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "date",
+      "value": "2023-11-16"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1989"
+    }
+  ],
+  "provenance": {
+    "source": "letterboxd_watched",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "letterboxd_watched",
+    "translated_at": "2026-05-05T22:02:58Z"
+  }
+}

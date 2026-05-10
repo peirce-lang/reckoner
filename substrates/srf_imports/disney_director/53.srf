@@ -1,0 +1,33 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://disney_director/mb/53",
+  "entity_id": "53",
+  "nucleus": {
+    "type": "disney_director",
+    "value": "53"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "Big Hero 6"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "director",
+      "value": "Don Hall"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "index",
+      "value": "53"
+    }
+  ],
+  "provenance": {
+    "source": "disney_director",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "disney_director",
+    "translated_at": "2026-05-05T21:54:28Z"
+  }
+}

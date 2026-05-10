@@ -29,7 +29,7 @@
  */
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Heading1, Heading2 } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
@@ -66,53 +66,58 @@ function clampStr(s, n = 60) {
 
 // Extract the primary label for the card header.
 // Looks for title, name, or subject in WHAT — falls back to entity ID.
-function extractPrimaryLabel(coordinates, entityId) {
-  // 1. Priority WHAT fields — the canonical title/name fields
+function extractPrimaryLabel(coordinates, entityId, headerPrefs) {
+  // 1. Pinned preference — substrate-level override
+  const pin = headerPrefs?.primary;
+  if (pin) {
+    const facts = coordinates?.[pin.dim] || [];
+    const match = facts.find(f => f.field === pin.field);
+    if (match) return match.value;
+  }
+
+  // 2. Default: WHO before WHAT
+  const who = coordinates?.WHO || [];
+  if (who.length > 0) return who[0].value;
+
   const what = coordinates?.WHAT || [];
   const whatPriority = ['title', 'name', 'subject', 'description', 'matter_name', 'matter_id'];
   for (const p of whatPriority) {
     const found = what.find(f => f.field === p);
     if (found) return found.value;
   }
-
-  // 2. First WHO value — partner, timekeeper, artist, author, whoever is the subject
-  const who = coordinates?.WHO || [];
-  if (who.length > 0) return who[0].value;
-
-  // 3. First WHAT value — something is better than an ID
   if (what.length > 0) return what[0].value;
 
-  // 4. First fact from any populated dimension
-  const dimOrder = ['WHEN', 'WHERE', 'WHY', 'HOW'];
-  for (const dim of dimOrder) {
+  for (const dim of ['WHEN', 'WHERE', 'WHY', 'HOW']) {
     const facts = coordinates?.[dim] || [];
     if (facts.length > 0) return facts[0].value;
   }
 
-  // 5. Last resort — entity ID
   return entityId;
 }
 
 // Extract the secondary label.
 // Shown below the primary label for additional context.
-function extractSecondaryLabel(coordinates, primaryLabel) {
-  // If primary came from WHO, show first WHAT instead
-  const who = coordinates?.WHO || [];
-  const what = coordinates?.WHAT || [];
-
-  // Try priority WHO fields first
-  const whoPriority = ['artist', 'author', 'creator', 'attorney', 'person', 'name', 'partner_id', 'timekeeper_id'];
-  for (const p of whoPriority) {
-    const found = who.find(f => f.field === p);
-    if (found && found.value !== primaryLabel) return found.value;
+function extractSecondaryLabel(coordinates, primaryLabel, headerPrefs) {
+  // Pinned preference
+  const pin = headerPrefs?.secondary;
+  if (pin) {
+    const facts = coordinates?.[pin.dim] || [];
+    const match = facts.find(f => f.field === pin.field && f.value !== primaryLabel);
+    if (match) return match.value;
   }
 
-  // First WHO value that isn't the primary label
+  // Default: first WHAT title/name, then first non-primary WHO
+  const who  = coordinates?.WHO  || [];
+  const what = coordinates?.WHAT || [];
+
+  const whatPriority = ['title', 'name', 'subject', 'matter_name'];
+  for (const p of whatPriority) {
+    const found = what.find(f => f.field === p);
+    if (found && found.value !== primaryLabel) return found.value;
+  }
   for (const f of who) {
     if (f.value !== primaryLabel) return f.value;
   }
-
-  // First WHAT value that isn't the primary label
   for (const f of what) {
     if (f.value !== primaryLabel) return f.value;
   }
@@ -181,10 +186,9 @@ function MatchedOn({ matchedBecause }) {
 // DimensionSection — one dimension's facts rendered as a row of field: value pairs
 // ─────────────────────────────────────────────────────────────────────────────
 
-function DimensionSection({ dim, facts, projectedFields }) {
+function DimensionSection({ dim, facts, projectedFields, onPinHeader, headerPrefs }) {
   if (!facts || facts.length === 0) return null;
 
-  // Filter to projected fields if a projection is active
   const visibleFacts = projectedFields
     ? facts.filter(f => projectedFields.has(f.field))
     : facts;
@@ -195,25 +199,59 @@ function DimensionSection({ dim, facts, projectedFields }) {
     bg: 'bg-gray-50', border: 'border-gray-200', text: 'text-gray-800', label: 'text-gray-400'
   };
 
-  // Sort — primary fields first, secondary fields last
   const sorted = [...visibleFacts].sort((a, b) => {
     const aSecondary = SECONDARY_FIELDS.has(a.field) ? 1 : 0;
     const bSecondary = SECONDARY_FIELDS.has(b.field) ? 1 : 0;
     return aSecondary - bSecondary;
   });
 
+  const isPrimary   = (fact) => headerPrefs?.primary?.dim   === dim && headerPrefs?.primary?.field   === fact.field;
+  const isSecondary = (fact) => headerPrefs?.secondary?.dim === dim && headerPrefs?.secondary?.field === fact.field;
+
+  const [hoveredField, setHoveredField] = useState(null);
+
   return (
     <div className={`rounded px-2 py-1.5 mb-1 ${colors.bg} ${colors.border} border`}>
       <div className="flex gap-2">
-        {/* Dimension label — fixed-width left anchor */}
         <span className={`text-xs font-bold ${colors.text} w-10 flex-shrink-0 pt-0.5`}>{dim}</span>
-        {/* Field-value pairs stacked vertically */}
-        <div className="flex flex-col gap-0.5 min-w-0">
+        <div className="flex flex-col gap-0.5 min-w-0 flex-1">
           {sorted.map((fact, i) => (
             !SECONDARY_FIELDS.has(fact.field) && (
-              <div key={i} className="text-xs text-gray-600 flex gap-1 min-w-0">
+              <div
+                key={i}
+                className="text-xs text-gray-600 flex gap-1 min-w-0 items-start"
+                onMouseEnter={() => setHoveredField(fact.field)}
+                onMouseLeave={() => setHoveredField(null)}
+              >
                 <span className={`${colors.label} flex-shrink-0`}>{humanizeField(fact.field)}:</span>
-                <span className="text-gray-800 break-words">{clampStr(fact.value, 60)}</span>
+                <span className="text-gray-800 break-words flex-1">{clampStr(fact.value, 60)}</span>
+                {/* Pin affordance — only shown when onPinHeader is provided and row is hovered */}
+                {onPinHeader && hoveredField === fact.field && (
+                  <span style={{display:'flex', gap:2, flexShrink:0, marginLeft:4}}>
+                    <button
+                      onClick={() => onPinHeader('primary', dim, fact.field)}
+                      title="Pin as card title"
+                      style={{
+                        display:'flex', alignItems:'center', padding:'1px 3px', borderRadius:3,
+                        border:'1px solid', cursor:'pointer',
+                        background: isPrimary(fact) ? '#dbeafe' : 'transparent',
+                        borderColor: isPrimary(fact) ? '#93c5fd' : 'transparent',
+                        color: isPrimary(fact) ? '#1d4ed8' : '#9ca3af',
+                      }}
+                    ><Heading1 size={12} /></button>
+                    <button
+                      onClick={() => onPinHeader('secondary', dim, fact.field)}
+                      title="Pin as card subtitle"
+                      style={{
+                        display:'flex', alignItems:'center', padding:'1px 3px', borderRadius:3,
+                        border:'1px solid', cursor:'pointer',
+                        background: isSecondary(fact) ? '#f3e8ff' : 'transparent',
+                        borderColor: isSecondary(fact) ? '#d8b4fe' : 'transparent',
+                        color: isSecondary(fact) ? '#7c3aed' : '#9ca3af',
+                      }}
+                    ><Heading2 size={12} /></button>
+                  </span>
+                )}
               </div>
             )
           ))}
@@ -227,12 +265,12 @@ function DimensionSection({ dim, facts, projectedFields }) {
 // CoordinateCard — the generic card
 // ─────────────────────────────────────────────────────────────────────────────
 
-function CoordinateCard({ item, projectedFields, selected, onToggle }) {
+function CoordinateCard({ item, projectedFields, selected, onToggle, headerPrefs, onPinHeader }) {
   const [expanded, setExpanded] = useState(false);
 
   const coordinates    = item.coordinates || {};
-  const primaryLabel   = extractPrimaryLabel(coordinates, item.id);
-  const secondaryLabel = extractSecondaryLabel(coordinates, primaryLabel);
+  const primaryLabel   = extractPrimaryLabel(coordinates, item.id, headerPrefs);
+  const secondaryLabel = extractSecondaryLabel(coordinates, primaryLabel, headerPrefs);
   const imageUrl       = extractImageUrl(coordinates);
 
   const presentDims   = DIM_ORDER.filter(d => coordinates[d] && coordinates[d].length > 0);
@@ -283,7 +321,7 @@ function CoordinateCard({ item, projectedFields, selected, onToggle }) {
       {/* Primary dimensions */}
       <div className="space-y-1 mb-2">
         {primaryDims.map(dim => (
-          <DimensionSection key={dim} dim={dim} facts={coordinates[dim]} projectedFields={projectedFields} />
+          <DimensionSection key={dim} dim={dim} facts={coordinates[dim]} projectedFields={projectedFields} onPinHeader={onPinHeader} headerPrefs={headerPrefs} />
         ))}
       </div>
 
@@ -300,7 +338,7 @@ function CoordinateCard({ item, projectedFields, selected, onToggle }) {
           {expanded && (
             <div className="space-y-1 mb-2">
               {secondaryDims.map(dim => (
-                <DimensionSection key={dim} dim={dim} facts={coordinates[dim]} projectedFields={projectedFields} />
+                <DimensionSection key={dim} dim={dim} facts={coordinates[dim]} projectedFields={projectedFields} onPinHeader={onPinHeader} headerPrefs={headerPrefs} />
               ))}
             </div>
           )}
@@ -317,7 +355,7 @@ function CoordinateCard({ item, projectedFields, selected, onToggle }) {
 // Main export
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function ResultCard({ item, schema, idx, projectedFields, selected, onToggle }) {
+export default function ResultCard({ item, schema, idx, projectedFields, selected, onToggle, headerPrefs, onPinHeader }) {
   if (item.coordinates) {
     return (
       <CoordinateCard
@@ -325,6 +363,8 @@ export default function ResultCard({ item, schema, idx, projectedFields, selecte
         projectedFields={projectedFields}
         selected={selected}
         onToggle={onToggle}
+        headerPrefs={headerPrefs}
+        onPinHeader={onPinHeader}
       />
     );
   }
