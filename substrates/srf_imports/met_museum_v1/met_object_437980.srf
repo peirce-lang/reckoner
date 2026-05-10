@@ -1,0 +1,125 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://met_museum_v1/met/met:object:437980",
+  "entity_id": "met:object:437980",
+  "nucleus": {
+    "type": "met_object_id",
+    "value": "437980"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist",
+      "value": "Vincent van Gogh"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_nationality",
+      "value": "Dutch"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_begin_date",
+      "value": "1853"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_end_date",
+      "value": "1890"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "Cypresses"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "Paintings"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "department",
+      "value": "European Paintings"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "object_name",
+      "value": "Painting"
+    },
+    {
+      "dimension": "WHY",
+      "semantic_key": "subject",
+      "value": "Landscapes"
+    },
+    {
+      "dimension": "WHY",
+      "semantic_key": "subject",
+      "value": "Cypresses"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "date_created",
+      "value": "1889"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "object_end_date",
+      "value": "1889"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "medium",
+      "value": "Oil on canvas"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "dimensions",
+      "value": "36 3/4 x 29 1/8 in. (93.4 x 74 cm)"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "image_url",
+      "value": "https://images.metmuseum.org/CRDImages/ep/web-large/DP130999.jpg"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "image_url_full",
+      "value": "https://images.metmuseum.org/CRDImages/ep/original/DP130999.jpg"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "credit_line",
+      "value": "Rogers Fund, 1949"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "accession_number",
+      "value": "49.30"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "repository",
+      "value": "Metropolitan Museum of Art, New York, NY"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "met_object_id",
+      "value": "437980"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "source_url",
+      "value": "https://www.metmuseum.org/art/collection/search/437980"
+    }
+  ],
+  "provenance": {
+    "source": "Metropolitan Museum of Art",
+    "translated_by": "MetMuseumTranslator",
+    "translator_version": "1.0.0",
+    "lens": "met_museum_v1",
+    "translated_at": "2026-05-07T20:24:58Z",
+    "source_record_id": "437980",
+    "source_url": "https://www.metmuseum.org/art/collection/search/437980"
+  }
+}

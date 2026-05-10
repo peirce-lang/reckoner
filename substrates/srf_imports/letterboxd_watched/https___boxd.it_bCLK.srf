@@ -1,0 +1,38 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://letterboxd_watched/mb/https://boxd.it/bCLK",
+  "entity_id": "https://boxd.it/bCLK",
+  "nucleus": {
+    "type": "letterboxd_watched",
+    "value": "https://boxd.it/bCLK"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "Barbie"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "letterboxd_uri",
+      "value": "https://boxd.it/bCLK"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "date",
+      "value": "2024-01-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    }
+  ],
+  "provenance": {
+    "source": "letterboxd_watched",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "letterboxd_watched",
+    "translated_at": "2026-05-05T22:02:58Z"
+  }
+}

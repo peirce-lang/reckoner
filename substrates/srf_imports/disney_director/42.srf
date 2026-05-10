@@ -1,0 +1,33 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://disney_director/mb/42",
+  "entity_id": "42",
+  "nucleus": {
+    "type": "disney_director",
+    "value": "42"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "Treasure Planet"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "director",
+      "value": "Ron Clements"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "index",
+      "value": "42"
+    }
+  ],
+  "provenance": {
+    "source": "disney_director",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "disney_director",
+    "translated_at": "2026-05-05T21:54:28Z"
+  }
+}

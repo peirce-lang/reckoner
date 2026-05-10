@@ -1,0 +1,86 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://openlibrary_v1/isbn/9780345440198",
+  "entity_id": "isbn:9780345440198",
+  "nucleus": {
+    "type": "isbn",
+    "value": "9780345440198",
+    "authority": "openlibrary.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "author",
+      "value": "Scott Phillips"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "The ice harvest"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "book"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "subject",
+      "value": "Organized crime"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "subject",
+      "value": "Christmas stories"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "subject",
+      "value": "Fiction"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "subject",
+      "value": "Music-halls (Variety-theaters, cabarets, etc.)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "subject",
+      "value": "Extortion"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2000"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "publish_date",
+      "value": "2000"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "publish_place",
+      "value": "New York"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "publisher",
+      "value": "Ballantine Books"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "pages",
+      "value": "217"
+    }
+  ],
+  "provenance": {
+    "source": "Open Library",
+    "translated_by": "OpenLibraryTranslator",
+    "translator_version": "1.0.0",
+    "lens": "openlibrary_v1",
+    "translated_at": "2026-05-06T02:17:44Z",
+    "source_record_id": "9780345440198",
+    "source_url": "https://openlibrary.org/isbn/9780345440198"
+  }
+}

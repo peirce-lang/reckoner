@@ -1,0 +1,38 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://letterboxd_watched/mb/https://boxd.it/2MKu",
+  "entity_id": "https://boxd.it/2MKu",
+  "nucleus": {
+    "type": "letterboxd_watched",
+    "value": "https://boxd.it/2MKu"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "The Good Humor Man"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "letterboxd_uri",
+      "value": "https://boxd.it/2MKu"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "date",
+      "value": "2023-11-14"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1950"
+    }
+  ],
+  "provenance": {
+    "source": "letterboxd_watched",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "letterboxd_watched",
+    "translated_at": "2026-05-05T22:02:58Z"
+  }
+}

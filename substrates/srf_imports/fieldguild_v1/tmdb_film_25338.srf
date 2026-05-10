@@ -1,0 +1,106 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://fieldguild_v1/tmdb/25338",
+  "entity_id": "tmdb:film:25338",
+  "nucleus": {
+    "type": "tmdb_id",
+    "value": "25338",
+    "authority": "themoviedb.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "director",
+      "value": "Daryl Duke"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "writer",
+      "value": "Curtis Hanson"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Elliott Gould"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Christopher Plummer"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Susannah York"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "CÃ©line Lomez"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Michael Kirby"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "The Silent Partner"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "film"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Drama"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Thriller"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "language",
+      "value": "en"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1978"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "release_date",
+      "value": "1978-09-07"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "origin_country",
+      "value": "CA"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "studio",
+      "value": "Tiberius Entertainment"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "runtime_minutes",
+      "value": "102"
+    }
+  ],
+  "provenance": {
+    "source": "TMDB",
+    "translated_by": "TMDBTranslator",
+    "translator_version": "1.0.0",
+    "lens": "fieldguild_v1",
+    "translated_at": "2026-05-06T02:09:59Z",
+    "source_record_id": "25338",
+    "source_url": "https://www.themoviedb.org/movie/25338"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://fieldguild_v1/tmdb/210577",
+  "entity_id": "tmdb:film:210577",
+  "nucleus": {
+    "type": "tmdb_id",
+    "value": "210577",
+    "authority": "themoviedb.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "director",
+      "value": "David Fincher"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "writer",
+      "value": "Gillian Flynn"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Ben Affleck"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Rosamund Pike"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Neil Patrick Harris"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Tyler Perry"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Carrie Coon"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "Gone Girl"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "film"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Mystery"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Thriller"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Drama"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "language",
+      "value": "en"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2014"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "release_date",
+      "value": "2014-10-01"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "origin_country",
+      "value": "US"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "studio",
+      "value": "20th Century Fox"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "runtime_minutes",
+      "value": "149"
+    }
+  ],
+  "provenance": {
+    "source": "TMDB",
+    "translated_by": "TMDBTranslator",
+    "translator_version": "1.0.0",
+    "lens": "fieldguild_v1",
+    "translated_at": "2026-05-05T19:36:44Z",
+    "source_record_id": "210577",
+    "source_url": "https://www.themoviedb.org/movie/210577"
+  }
+}

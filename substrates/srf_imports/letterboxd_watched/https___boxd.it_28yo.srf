@@ -1,0 +1,38 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://letterboxd_watched/mb/https://boxd.it/28yo",
+  "entity_id": "https://boxd.it/28yo",
+  "nucleus": {
+    "type": "letterboxd_watched",
+    "value": "https://boxd.it/28yo"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "Rope"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "letterboxd_uri",
+      "value": "https://boxd.it/28yo"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "date",
+      "value": "2023-11-14"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1948"
+    }
+  ],
+  "provenance": {
+    "source": "letterboxd_watched",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "letterboxd_watched",
+    "translated_at": "2026-05-05T22:02:58Z"
+  }
+}

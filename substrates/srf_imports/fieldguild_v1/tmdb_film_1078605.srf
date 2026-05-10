@@ -1,0 +1,106 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://fieldguild_v1/tmdb/1078605",
+  "entity_id": "tmdb:film:1078605",
+  "nucleus": {
+    "type": "tmdb_id",
+    "value": "1078605",
+    "authority": "themoviedb.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "director",
+      "value": "Zach Cregger"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "writer",
+      "value": "Zach Cregger"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Julia Garner"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Josh Brolin"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Alden Ehrenreich"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Austin Abrams"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Benedict Wong"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "Weapons"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "film"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Horror"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Mystery"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "language",
+      "value": "en"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2025"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "release_date",
+      "value": "2025-08-04"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "origin_country",
+      "value": "US"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "studio",
+      "value": "Subconscious"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "runtime_minutes",
+      "value": "129"
+    }
+  ],
+  "provenance": {
+    "source": "TMDB",
+    "translated_by": "TMDBTranslator",
+    "translator_version": "1.0.0",
+    "lens": "fieldguild_v1",
+    "translated_at": "2026-05-05T19:36:43Z",
+    "source_record_id": "1078605",
+    "source_url": "https://www.themoviedb.org/movie/1078605"
+  }
+}

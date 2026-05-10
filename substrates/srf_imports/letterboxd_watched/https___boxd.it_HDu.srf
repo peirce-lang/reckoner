@@ -1,0 +1,38 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://letterboxd_watched/mb/https://boxd.it/HDu",
+  "entity_id": "https://boxd.it/HDu",
+  "nucleus": {
+    "type": "letterboxd_watched",
+    "value": "https://boxd.it/HDu"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "Six Men Getting Sick"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "letterboxd_uri",
+      "value": "https://boxd.it/HDu"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "date",
+      "value": "2023-11-14"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1967"
+    }
+  ],
+  "provenance": {
+    "source": "letterboxd_watched",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "letterboxd_watched",
+    "translated_at": "2026-05-05T22:02:58Z"
+  }
+}

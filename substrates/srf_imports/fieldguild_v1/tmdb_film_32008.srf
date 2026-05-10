@@ -1,0 +1,116 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://fieldguild_v1/tmdb/32008",
+  "entity_id": "tmdb:film:32008",
+  "nucleus": {
+    "type": "tmdb_id",
+    "value": "32008",
+    "authority": "themoviedb.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "director",
+      "value": "Allen Baron"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "writer",
+      "value": "Allen Baron"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "writer",
+      "value": "Waldo Salt"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Allen Baron"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Molly McCarthy"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Larry Tucker"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Bill DePrato"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "actor",
+      "value": "Peter H. Clune"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "Blast of Silence"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "film"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Crime"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Drama"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "genre",
+      "value": "Thriller"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "language",
+      "value": "en"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1961"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "release_date",
+      "value": "1961-03-20"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "origin_country",
+      "value": "US"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "studio",
+      "value": "Magla Productions"
+    },
+    {
+      "dimension": "HOW",
+      "semantic_key": "runtime_minutes",
+      "value": "77"
+    }
+  ],
+  "provenance": {
+    "source": "TMDB",
+    "translated_by": "TMDBTranslator",
+    "translator_version": "1.0.0",
+    "lens": "fieldguild_v1",
+    "translated_at": "2026-05-06T02:09:34Z",
+    "source_record_id": "32008",
+    "source_url": "https://www.themoviedb.org/movie/32008"
+  }
+}

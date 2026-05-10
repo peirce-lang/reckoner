@@ -1,0 +1,46 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://musicbrainz_v1/mb/db7e2108-f2af-4709-8773-aba6bdba5534",
+  "entity_id": "mb:recording:db7e2108-f2af-4709-8773-aba6bdba5534",
+  "nucleus": {
+    "type": "musicbrainz_id",
+    "value": "db7e2108-f2af-4709-8773-aba6bdba5534",
+    "authority": "musicbrainz.org"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist",
+      "value": "Pixies"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "title",
+      "value": "Wave of Mutilation"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "type",
+      "value": "recording"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1995"
+    },
+    {
+      "dimension": "WHERE",
+      "semantic_key": "release_country",
+      "value": "US"
+    }
+  ],
+  "provenance": {
+    "source": "MusicBrainz",
+    "translated_by": "MusicBrainzTranslator",
+    "translator_version": "1.0.0",
+    "lens": "musicbrainz_v1",
+    "translated_at": "2026-05-05T17:01:19Z",
+    "source_record_id": "db7e2108-f2af-4709-8773-aba6bdba5534",
+    "source_url": "https://musicbrainz.org/recording/db7e2108-f2af-4709-8773-aba6bdba5534"
+  }
+}

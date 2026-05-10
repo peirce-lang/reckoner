@@ -1,0 +1,38 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://letterboxd_watched/mb/https://boxd.it/5dz8",
+  "entity_id": "https://boxd.it/5dz8",
+  "nucleus": {
+    "type": "letterboxd_watched",
+    "value": "https://boxd.it/5dz8"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "American Hustle"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "letterboxd_uri",
+      "value": "https://boxd.it/5dz8"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "date",
+      "value": "2024-01-15"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2013"
+    }
+  ],
+  "provenance": {
+    "source": "letterboxd_watched",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "letterboxd_watched",
+    "translated_at": "2026-05-05T22:02:58Z"
+  }
+}
