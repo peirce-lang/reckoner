@@ -534,6 +534,8 @@ export default function ReckonerSNF() {
     setPageOffset(0);
     setShowSaveSetDialog(false); setSaveSetNameInput("");
     setShowDiffPanel(false); setDiffSetA(null); setDiffSetB(null); setDiffResult(null); setSetOpResult(null); setSetOperation("diff");
+    // Close any open drawer so date picker and value panels reset cleanly
+    setActiveDrawer(null); setActiveField(null);
   };
 
   const fieldsForActiveDrawer = useMemo(() => {
@@ -1174,19 +1176,28 @@ export default function ReckonerSNF() {
       }
       groups.get(key).items.push(item);
     }
-    // Sort groups — numeric/date fields sort by value ascending (chronological),
-    // text fields sort by count descending (most common first).
-    const isNumeric = [...groups.keys()].every(k => k === '(none)' || !isNaN(parseFloat(k)));
+    // Sort groups — date fields sort chronologically, numeric fields sort
+    // numerically, text fields sort by count descending (most common first).
+    const keys = [...groups.keys()].filter(k => k !== '(none)');
+    const isDateField = groupByField && /date|year|month|day|at|time/i.test(groupByField);
+    const isNumeric = !isDateField && keys.every(k => !isNaN(parseFloat(k)));
+
     return new Map([...groups.entries()].sort((a, b) => {
+      if (a[0] === '(none)') return 1;
+      if (b[0] === '(none)') return -1;
+      if (isDateField) {
+        // Normalize datetime strings to date-only for correct chronological sort
+        const dateA = a[0].split(' ')[0];
+        const dateB = b[0].split(' ')[0];
+        return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
+      }
       if (isNumeric) {
         const an = parseFloat(a[0]);
         const bn = parseFloat(b[0]);
         if (!isNaN(an) && !isNaN(bn)) return an - bn;
-        if (a[0] === '(none)') return 1;  // push (none) to end
-        if (b[0] === '(none)') return -1;
         return a[0].localeCompare(b[0]);
       }
-      return b[1].items.length - a[1].items.length; // count desc for text fields
+      return b[1].items.length - a[1].items.length; // count desc for text
     }));
   }, [sortedResults, groupByField]);
 
