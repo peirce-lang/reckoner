@@ -534,8 +534,6 @@ export default function ReckonerSNF() {
     setPageOffset(0);
     setShowSaveSetDialog(false); setSaveSetNameInput("");
     setShowDiffPanel(false); setDiffSetA(null); setDiffSetB(null); setDiffResult(null); setSetOpResult(null); setSetOperation("diff");
-    // Close any open drawer so date picker and value panels reset cleanly
-    setActiveDrawer(null); setActiveField(null);
   };
 
   const fieldsForActiveDrawer = useMemo(() => {
@@ -1176,28 +1174,19 @@ export default function ReckonerSNF() {
       }
       groups.get(key).items.push(item);
     }
-    // Sort groups — date fields sort chronologically, numeric fields sort
-    // numerically, text fields sort by count descending (most common first).
-    const keys = [...groups.keys()].filter(k => k !== '(none)');
-    const isDateField = groupByField && /date|year|month|day|at|time/i.test(groupByField);
-    const isNumeric = !isDateField && keys.every(k => !isNaN(parseFloat(k)));
-
+    // Sort groups — numeric/date fields sort by value ascending (chronological),
+    // text fields sort by count descending (most common first).
+    const isNumeric = [...groups.keys()].every(k => k === '(none)' || !isNaN(parseFloat(k)));
     return new Map([...groups.entries()].sort((a, b) => {
-      if (a[0] === '(none)') return 1;
-      if (b[0] === '(none)') return -1;
-      if (isDateField) {
-        // Normalize datetime strings to date-only for correct chronological sort
-        const dateA = a[0].split(' ')[0];
-        const dateB = b[0].split(' ')[0];
-        return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
-      }
       if (isNumeric) {
         const an = parseFloat(a[0]);
         const bn = parseFloat(b[0]);
         if (!isNaN(an) && !isNaN(bn)) return an - bn;
+        if (a[0] === '(none)') return 1;  // push (none) to end
+        if (b[0] === '(none)') return -1;
         return a[0].localeCompare(b[0]);
       }
-      return b[1].items.length - a[1].items.length; // count desc for text
+      return b[1].items.length - a[1].items.length; // count desc for text fields
     }));
   }, [sortedResults, groupByField]);
 
@@ -1398,6 +1387,146 @@ export default function ReckonerSNF() {
     }
   };
 
+  // ── SRF export — one SRF record per result entity ────────────────────────
+  const exportSRF = () => {
+    if (!sortedResults || sortedResults.length === 0) return;
+
+    const lensId            = queryStats?.lens_id || activeSchema || 'reckoner_v1';
+    const translatorVersion = queryStats?.translator_version || '1.0.0';
+    const translatedAt      = new Date().toISOString();
+    const peirceQuery       = queryStats?.peirce || toPeirce(constraints);
+
+    // Derive a default collection name from the Peirce query
+    const defaultName = peirceQuery
+      ? peirceQuery
+          .toLowerCase()
+          .replace(/[^a-z0-9\s]/g, ' ')
+          .trim()
+          .replace(/\s+/g, '_')
+          .slice(0, 60)
+      : activeSchema || 'reckoner_export';
+
+    // Prompt user to name the collection
+    const collectionName = window.prompt(
+      'Name this collection (used as substrate name on import):',
+      defaultName
+    );
+    if (collectionName === null) return; // user cancelled
+
+    const slugName = collectionName.trim().toLowerCase()
+      .replace(/\s+/g, '_')
+      .replace(/[^a-z0-9_]/g, '')
+      || 'reckoner_export';
+
+    const records = sortedResults.map(item => {
+      // Build facts array from coordinates
+      const facts = [];
+      for (const [dim, dimFacts] of Object.entries(item.coordinates || {})) {
+        for (const fact of dimFacts || []) {
+          if (fact.field && fact.value !== undefined && fact.value !== null && fact.value !== '') {
+            facts.push({
+              dimension:    dim.toUpperCase(),
+              semantic_key: fact.field,
+              value:        String(fact.value).replace(/\.0$/, ''),
+            });
+          }
+        }
+      }
+
+      // Derive nucleus from entity_id
+      // Handle URL entity_ids (e.g. https://boxd.it/1efK) gracefully
+      let nucleusType, nucleusValue;
+      const idStr = String(item.id);
+      if (idStr.startsWith('http://') || idStr.startsWith('https://')) {
+        nucleusType  = activeSchema || 'reckoner_id';
+        nucleusValue = idStr;
+      } else {
+        const idParts = idStr.split(':');
+        nucleusType  = idParts.length >= 2 ? idParts.slice(0, -1).join(':') : 'reckoner_id';
+        nucleusValue = idParts[idParts.length - 1];
+      }
+
+      return {
+        srf_version: '1.0',
+        srf_uri:     `srf://${lensId}/reckoner/${item.id}`,
+        entity_id:   String(item.id),
+        nucleus: {
+          type:  nucleusType,
+          value: nucleusValue,
+        },
+        facts,
+        provenance: {
+          source:             activeSchema || 'reckoner',
+          translated_by:      'Reckoner',
+          translator_version: translatorVersion,
+          lens:               lensId,
+          translated_at:      translatedAt,
+        },
+      };
+    });
+
+    // Write one JSON file per record — standard SRF convention
+    // For result sets, bundle as a JSON array in a single file
+    const bundle = {
+      srf_bundle_version: '1.0',
+      collection_name:    slugName,
+      lens_id:            lensId,
+      record_count:       records.length,
+      exported_at:        translatedAt,
+      peirce_query:       peirceQuery,
+      records,
+    };
+
+    const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `${slugName}_${Date.now()}.srf.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // ── SRF load — drop a .srf.json bundle into Reckoner ─────────────────────
+  const loadSRFBundle = async (file) => {
+    if (!file) return;
+    try {
+      const isZip = file.name.endsWith('.zip') || file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
+
+      if (!isZip) {
+        // For JSON/SRF files, validate it's parseable before sending
+        const text = await file.text();
+        try {
+          JSON.parse(text);
+        } catch (e) {
+          alert(`Could not load SRF bundle: file does not appear to be valid JSON or a zip archive.`);
+          return;
+        }
+      }
+
+      // Send to backend as file upload regardless of type
+      const fd = new FormData();
+      fd.append('file', file, file.name);
+
+      const r = await fetch(`${API_URL}/load/srf`, {
+        method: 'POST',
+        body: fd,
+      });
+
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        alert(`SRF load failed: ${err.detail || r.status}`);
+        return;
+      }
+
+      const data = await r.json();
+      alert(`Loaded ${data.entity_count} entities from ${file.name} as substrate "${data.schema}"`);
+      window.location.reload();
+    } catch (err) {
+      console.error('SRF load failed:', err);
+      alert(`Could not load SRF bundle: ${err.message}`);
+    }
+  };
+
   // ─────────────────────────────────────────────────────────────────────────────
   // Render
   // ─────────────────────────────────────────────────────────────────────────────
@@ -1432,6 +1561,19 @@ export default function ReckonerSNF() {
                 ))}
               </select>
             )}
+            {/* SRF load — drop a .srf.json bundle to add a substrate */}
+            <label
+              className="text-xs px-2 py-1 rounded border border-purple-200 text-purple-500 hover:border-purple-300 hover:text-purple-700 cursor-pointer transition-colors"
+              title="Load an SRF bundle, single .srf file, or .zip of .srf files as a substrate"
+            >
+              + SRF
+              <input
+                type="file"
+                accept=".json,.srf.json,.srf,.zip"
+                className="hidden"
+                onChange={e => { loadSRFBundle(e.target.files[0]); e.target.value = ''; }}
+              />
+            </label>
           </div>
         </div>
 
@@ -2195,6 +2337,14 @@ export default function ReckonerSNF() {
                             : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700'}`}
                         title={selectedIds.size > 0 ? `Export ${selectedIds.size} selected as Parquet` : 'Export as Parquet'}
                       >Parquet</button>
+                      <button
+                        onClick={exportSRF}
+                        className={`text-xs px-2 py-1 rounded border transition-colors
+                          ${selectedIds.size > 0
+                            ? 'border-purple-300 text-purple-600 hover:border-purple-400 hover:text-purple-700'
+                            : 'border-purple-200 text-purple-500 hover:border-purple-300 hover:text-purple-700'}`}
+                        title={selectedIds.size > 0 ? `Export ${selectedIds.size} selected as SRF bundle` : 'Export as SRF bundle'}
+                      >SRF</button>
                     </div>
                   )}
                   {/* Load more — visible when results are paginated */}
