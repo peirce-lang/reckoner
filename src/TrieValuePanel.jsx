@@ -262,6 +262,7 @@ export function TrieValuePanel({
           onClose={onClose}
           schema={schema}
           resultEntityIds={resultEntityIds}
+          queryVersion={queryVersion}
         />
       )}
     </motion.div>
@@ -419,6 +420,14 @@ function TrieEnumPanel({ dimension, field, schema, onAddConstraint, onClose, res
     if (sortMode === "alpha") {
       list.sort((a, b) => {
         const clean = s => String(s).replace(/[\s:;,./]+$/, "").toLowerCase();
+        // For date-like values (contain digits and dashes in ISO pattern)
+        // strip timestamps and sort chronologically
+        const isDate = s => /^\d{4}-\d{2}-\d{2}/.test(String(s).trim());
+        if (isDate(a.value) && isDate(b.value)) {
+          const da = String(a.value).split(' ')[0];
+          const db = String(b.value).split(' ')[0];
+          return da < db ? -1 : da > db ? 1 : 0;
+        }
         return clean(a.value).localeCompare(clean(b.value));
       });
     } else if (sortMode === "flagged") {
@@ -749,6 +758,7 @@ function TextInputPanel({
   onAddConstraint, onClose,
   schema,
   resultEntityIds,
+  queryVersion,
 }) {
   const [val,        setVal]        = useState("");
   const [val2,       setVal2]       = useState("");
