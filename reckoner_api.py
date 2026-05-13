@@ -37,6 +37,8 @@ from __future__ import annotations
 import os
 import time
 import json
+import zipfile
+import io
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
@@ -52,7 +54,7 @@ except ImportError:
 # ─────────────────────────────────────────────────────────────────────────────
 
 try:
-    from fastapi import FastAPI, HTTPException, Query
+    from fastapi import FastAPI, HTTPException, Query, UploadFile, File
     from fastapi.middleware.cors import CORSMiddleware
     from pydantic import BaseModel
     import uvicorn
@@ -1037,6 +1039,7 @@ async def values(dimension: str, field: str, schema: str = None):
             values_detail = rows_raw
         else:
             substrate = substrate_or_adapter
+
             rows = substrate._conn.execute(
                 "SELECT value, COUNT(DISTINCT entity_id) as cnt "
                 "FROM snf_spoke "
@@ -1794,21 +1797,24 @@ async def export_parquet(req: ParquetExportRequest):
 # are queryable immediately after import.
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _srf_import_path(entity_id: str, lens_id: str) -> Path:
+def _srf_import_path(entity_id: str, lens_id: str, substrate_key: str = None) -> Path:
     """
     Return the path where an SRF record should be persisted.
-    e.g. substrates/srf_imports/fieldguild_v1/tmdb_film_550.srf
+    Uses substrate_key as folder name if provided (for named collections),
+    otherwise falls back to lens_id.
+    e.g. substrates/srf_imports/novels_of_joseph_heller/isbn_9780774032551.srf
     """
     safe_entity_id = entity_id.replace(":", "_").replace("/", "_")
-    lens_dir = Path(SRF_IMPORTS_DIR) / lens_id
+    folder = substrate_key if substrate_key else lens_id
+    lens_dir = Path(SRF_IMPORTS_DIR) / folder
     lens_dir.mkdir(parents=True, exist_ok=True)
     return lens_dir / f"{safe_entity_id}.srf"
 
 
-def _persist_srf_record(record: SRFRecord) -> None:
+def _persist_srf_record(record: SRFRecord, substrate_key: str = None) -> None:
     """Write an SRF record to disk for persistence across restarts."""
     import json
-    path = _srf_import_path(record.entity_id, record.lens_id)
+    path = _srf_import_path(record.entity_id, record.lens_id, substrate_key)
     path.write_text(json.dumps(record.to_dict(), indent=2, ensure_ascii=False), encoding="utf-8")
     if DEBUG:
         print(f"[import/srf] Persisted {record.entity_id} → {path}")
@@ -1840,7 +1846,10 @@ def load_srf_imports() -> None:
         try:
             d = json.loads(srf_file.read_text(encoding="utf-8"))
             record = SRFRecord.from_dict(d)
-            substrate = _get_or_create_srf_substrate(record.lens_id)
+            # Use the parent folder name as substrate key — this is the
+            # collection name set at import time (e.g. novels_of_joseph_heller)
+            substrate_key = srf_file.parent.name
+            substrate = _get_or_create_srf_substrate(record.lens_id, substrate_key)
 
             # Skip if already loaded (shouldn't happen at startup but be safe)
             existing = substrate._conn.execute(
@@ -1853,16 +1862,16 @@ def load_srf_imports() -> None:
             rows = record.to_snf_rows()
             substrate._conn.executemany(
                 "INSERT INTO snf_spoke "
-                "(entity_id, dimension, semantic_key, value, coordinate, lens_id, translator_version) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "(entity_id, dimension, semantic_key, value, coordinate, lens_id) "
+                "VALUES (?, ?, ?, ?, ?, ?)",
                 [
-                    (r["entity_id"], r["dimension"], r["semantic_key"],
-                     r["value"], r["coordinate"], r["lens_id"], record.translator_version)
+                    (r["entity_id"], r["dimension"].lower(), r["semantic_key"],
+                     r["value"], r["coordinate"], substrate_key)
                     for r in rows["spoke_rows"]
                 ]
             )
-            _registry_meta[record.lens_id]["entity_count"]       = substrate.entity_count()
-            _registry_meta[record.lens_id]["translator_version"] = record.translator_version
+            _registry_meta[substrate_key]["entity_count"]       = substrate.entity_count()
+            _registry_meta[substrate_key]["translator_version"] = record.translator_version
             total += 1
         except Exception as e:
             print(f"[import/srf] Failed to reload {srf_file}: {e}")
@@ -1872,15 +1881,18 @@ def load_srf_imports() -> None:
         print(f"[import/srf] Reloaded {total} SRF records ({errors} errors) from {SRF_IMPORTS_DIR}")
 
 
-def _get_or_create_srf_substrate(lens_id: str) -> Substrate:
+def _get_or_create_srf_substrate(lens_id: str, substrate_key: str = None) -> Substrate:
     """
     Return the in-memory SRF substrate for this lens_id, creating it if needed.
+    substrate_key overrides lens_id as the registry key (for named collections).
     SRF substrates are separate from disk-backed substrates and are always writable.
     """
-    if lens_id in _registry:
-        return _registry[lens_id]
+    key = substrate_key if substrate_key else lens_id
 
-    # Create a fresh in-memory DuckDB for this lens
+    if key in _registry:
+        return _registry[key]
+
+    # Create a fresh in-memory DuckDB for this substrate
     conn = duckdb.connect(":memory:")
     conn.execute("""
         CREATE TABLE snf_spoke (
@@ -1889,17 +1901,16 @@ def _get_or_create_srf_substrate(lens_id: str) -> Substrate:
             semantic_key      VARCHAR,
             value             VARCHAR,
             coordinate        VARCHAR,
-            lens_id           VARCHAR,
-            translator_version VARCHAR
+            lens_id           VARCHAR
         )
     """)
     conn.execute("CREATE INDEX idx_spoke_coord ON snf_spoke(coordinate)")
     conn.execute("CREATE INDEX idx_spoke_eid   ON snf_spoke(entity_id)")
     conn.execute("CREATE INDEX idx_spoke_dim   ON snf_spoke(dimension, semantic_key)")
 
-    substrate = Substrate(conn, lens_id)
-    register_substrate(lens_id, substrate, meta={
-        "label":              lens_id,
+    substrate = Substrate(conn, key)
+    register_substrate(key, substrate, meta={
+        "label":              key,
         "entity_count":       0,
         "dimensions":         [],
         "lens_id":            lens_id,
@@ -1908,7 +1919,7 @@ def _get_or_create_srf_substrate(lens_id: str) -> Substrate:
     })
 
     if DEBUG:
-        print(f"[import/srf] Created new in-memory substrate for lens '{lens_id}'")
+        print(f"[import/srf] Created new in-memory substrate '{key}' (lens: {lens_id})")
 
     return substrate
 
@@ -1982,23 +1993,20 @@ async def import_srf(req: SRFImportRequest):
 
     substrate._conn.executemany(
         "INSERT INTO snf_spoke "
-        "(entity_id, dimension, semantic_key, value, coordinate, lens_id, translator_version) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "(entity_id, dimension, semantic_key, value, coordinate, lens_id) "
+        "VALUES (?, ?, ?, ?, ?, ?)",
         [
             (
                 r["entity_id"],
-                r["dimension"],
+                r["dimension"].lower(),
                 r["semantic_key"],
                 r["value"],
                 r["coordinate"],
                 r["lens_id"],
-                record.translator_version,
             )
             for r in spoke_rows
         ]
     )
-
-    # --- Update registry meta -----------------------------------------------
     _registry_meta[record.lens_id]["entity_count"]       = substrate.entity_count()
     _registry_meta[record.lens_id]["dimensions"]         = substrate.dimensions()
     _registry_meta[record.lens_id]["translator_version"] = record.translator_version
@@ -2117,17 +2125,16 @@ async def import_srf_bulk(req: SRFBulkImportRequest):
 
         substrate._conn.executemany(
             "INSERT INTO snf_spoke "
-            "(entity_id, dimension, semantic_key, value, coordinate, lens_id, translator_version) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "(entity_id, dimension, semantic_key, value, coordinate, lens_id) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
             [
                 (
                     r["entity_id"],
-                    r["dimension"],
+                    r["dimension"].lower(),
                     r["semantic_key"],
                     r["value"],
                     r["coordinate"],
                     r["lens_id"],
-                    record.translator_version,
                 )
                 for r in spoke_rows
             ]
@@ -2157,6 +2164,166 @@ async def import_srf_bulk(req: SRFBulkImportRequest):
         "duplicate": duplicate,
         "total":     len(req.records),
         "results":   results,
+    }
+
+
+@app.post("/api/load/srf")
+async def load_srf_bundle(file: UploadFile = File(...)):
+    """
+    Accept an SRF bundle file exported from Reckoner and load it as a substrate.
+
+    Accepts the bundle format produced by Reckoner's SRF export:
+        {
+            "srf_bundle_version": "1.0",
+            "lens_id": "...",
+            "record_count": N,
+            "exported_at": "...",
+            "peirce_query": "...",
+            "records": [ {...srf record...}, ... ]
+        }
+
+    Also accepts a plain JSON array of SRF records for compatibility.
+
+    Response:
+        {
+            "schema":       "lens_id",
+            "entity_count": N,
+            "imported":     N,
+            "skipped":      N,
+            "duplicate":    N,
+        }
+    """
+    content = await file.read()
+
+    # ── Zip file — unpack and process each .srf file as one substrate ────────
+    if file.filename.endswith('.zip') or content[:2] == b'PK':
+        try:
+            with zipfile.ZipFile(io.BytesIO(content)) as zf:
+                names = zf.namelist()
+
+                # Try to read expedition metadata from .peirce file
+                expedition_name = None
+                expedition_id   = None
+                peirce_files = [n for n in names if n.endswith('.peirce')]
+                if peirce_files:
+                    try:
+                        peirce_data = json.loads(zf.read(peirce_files[0]).decode('utf-8'))
+                        title = peirce_data.get('title', '').strip()
+                        if title:
+                            # Slugify: lowercase, spaces to underscores, strip non-alphanum
+                            import re as _re
+                            expedition_name = _re.sub(r'[^a-z0-9_]', '', title.lower().replace(' ', '_'))
+                        expedition_id = peirce_data.get('expedition_id')
+                    except Exception:
+                        pass
+
+                srf_files = [n for n in names if n.endswith('.srf') or n.endswith('.srf.json')]
+                if not srf_files:
+                    raise HTTPException(status_code=422, detail="Zip contains no .srf files.")
+
+                records_raw = []
+                for name in srf_files:
+                    try:
+                        record_text = zf.read(name).decode('utf-8')
+                        records_raw.append(json.loads(record_text))
+                    except Exception:
+                        continue
+        except zipfile.BadZipFile:
+            raise HTTPException(status_code=400, detail="Could not read zip file.")
+    else:
+        # ── JSON — single record, bundle, or array ────────────────────────────
+        expedition_name = None
+        expedition_id   = None
+        try:
+            payload = json.loads(content.decode("utf-8"))
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Could not parse SRF bundle: {e}")
+
+        if isinstance(payload, list):
+            records_raw = payload
+        elif isinstance(payload, dict) and "records" in payload:
+            # Reckoner bundle format — use collection_name if present
+            records_raw = payload["records"]
+            if not expedition_name and payload.get("collection_name"):
+                expedition_name = payload["collection_name"]
+        elif isinstance(payload, dict) and "srf_version" in payload:
+            records_raw = [payload]
+        else:
+            raise HTTPException(
+                status_code=422,
+                detail="Expected an SRF bundle with a 'records' array, a plain JSON array of SRF records, or a single SRF record."
+            )
+
+    if not records_raw:
+        raise HTTPException(status_code=400, detail="Bundle contains no records.")
+
+    imported  = 0
+    skipped   = 0
+    duplicate = 0
+    schema    = None
+
+    for raw in records_raw:
+        try:
+            record = SRFRecord.from_dict(raw)
+        except Exception as e:
+            skipped += 1
+            continue
+
+        # Use expedition name as substrate key if available, otherwise lens_id
+        substrate_key = expedition_name if expedition_name else record.lens_id
+
+        if schema is None:
+            schema = substrate_key
+
+        substrate = _get_or_create_srf_substrate(record.lens_id, substrate_key)
+
+        # Check for duplicate
+        existing = substrate._conn.execute(
+            "SELECT COUNT(*) FROM snf_spoke WHERE entity_id = ?",
+            [record.entity_id]
+        ).fetchone()[0]
+
+        if existing > 0:
+            duplicate += 1
+            continue
+
+        rows       = record.to_snf_rows()
+        spoke_rows = rows.get("spoke_rows", [])
+
+        if not spoke_rows:
+            skipped += 1
+            continue
+
+        substrate._conn.executemany(
+            "INSERT INTO snf_spoke "
+            "(entity_id, dimension, semantic_key, value, coordinate, lens_id) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            [
+                (
+                    r["entity_id"],
+                    r["dimension"].lower(),
+                    r["semantic_key"],
+                    r["value"],
+                    r["coordinate"],
+                    substrate_key,  # use substrate_key so affordances/values queries match
+                )
+                for r in spoke_rows
+            ]
+        )
+
+        _registry_meta[substrate_key]["entity_count"]       = substrate.entity_count()
+        _registry_meta[substrate_key]["dimensions"]         = substrate.dimensions()
+        _registry_meta[substrate_key]["translator_version"] = record.translator_version
+
+        _persist_srf_record(record, substrate_key)
+        imported += 1
+
+    return {
+        "schema":       schema or "unknown",
+        "entity_count": imported,
+        "imported":     imported,
+        "skipped":      skipped,
+        "duplicate":    duplicate,
     }
 
 
