@@ -93,6 +93,12 @@ try:
 except ImportError:
     OSI_PARSER_AVAILABLE = False
 
+try:
+    from dbt_parser import parse_dbt_schema
+    DBT_PARSER_AVAILABLE = True
+except ImportError:
+    DBT_PARSER_AVAILABLE = False
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Config
 # ─────────────────────────────────────────────────────────────────────────────
@@ -558,6 +564,41 @@ def _emit_duckdb(df: pd.DataFrame, spec: Dict) -> Dict:
             values  = [v.strip() for v in raw_str.split(",") if v.strip()] if "," in raw_str else [raw_str]
             for val in values:
                 skey_clean = skey.replace(" ", "_")
+
+                # ── WHEN dimension: normalize dates and fan out granularities ──
+                if dim == "WHEN":
+                    # Strip trailing timestamp (2025-03-22 00:00:00 → 2025-03-22)
+                    import re as _re
+                    date_match = _re.match(r'^(\d{4}-\d{2}-\d{2})', val)
+                    if date_match:
+                        date_str = date_match.group(1)
+                        try:
+                            from datetime import datetime as _datetime
+                            dt = _datetime.strptime(date_str, "%Y-%m-%d")
+                            # Fan out into granularity facts
+                            gran_facts = [
+                                ("full_date",   date_str),
+                                ("year",        str(dt.year)),
+                                ("month",       date_str[:7]),          # 2025-03
+                                ("month_name",  dt.strftime("%B")),     # March
+                                ("day_of_week", dt.strftime("%A")),     # Saturday
+                            ]
+                            for gran_key, gran_val in gran_facts:
+                                coordinate = f"{dim.lower()}|{gran_key}|{gran_val}"
+                                dim_rows[dim].append({
+                                    "entity_id":          eid,
+                                    "dimension":          dim,
+                                    "semantic_key":       gran_key,
+                                    "value":              gran_val,
+                                    "coordinate":         coordinate,
+                                    "lens_id":            lens_id,
+                                    "translator_version": translator_version,
+                                })
+                            continue  # skip the default single-fact write below
+                        except ValueError:
+                            pass  # not a parseable date — fall through to default
+
+                # Default: write single fact
                 coordinate = f"{dim.lower()}|{skey_clean}|{val}"
                 dim_rows[dim].append({
                     "entity_id":          eid,
@@ -1380,6 +1421,156 @@ async def export_osi(req: OSIExportRequest):
         "osi_model":    osi_model,
         "field_count":  field_count,
         "metric_count": metric_count,
+    }
+
+
+# ── POST /api/mb/dbt/parse ───────────────────────────────────────────────────
+
+@router.post("/dbt/parse")
+async def parse_dbt(file: UploadFile = File(...)):
+    """
+    MB-7 — Parse a dbt schema.yml file.
+
+    Accepts a dbt schema.yml or schema.yaml file (version 2, semantic_model
+    block optional).
+
+    Returns the same column response shape as /upload so the existing
+    six-step wizard handles steps 2–6 without modification.
+
+    Dimension mappings are pre-filled at three confidence levels:
+        deterministic — entity:primary/foreign, dimension:time, metrics
+        strong_hint   — is_/has_* booleans, *_date/*_id/*_region suffixes
+        needs_review  — categorical dimensions with no stronger signal
+
+    Step 3 (review) produces no variant flags for dbt sources — there is
+    no row data to scan. The frontend should skip or auto-acknowledge step 3
+    when source_type='dbt' is present in the response.
+
+    Extra fields alongside the standard columns response:
+        nucleus_hints   — primary entity column per model (for step 4)
+        lens_candidates — metrics block entries as lens candidates (step 5)
+        dbt_meta        — model name, group, agg_time_dimension
+        model_count     — number of dbt models parsed
+        field_count     — total columns mapped
+        source_type     — "dbt" (frontend uses this to adapt wizard behaviour)
+    """
+    _purge_expired()
+
+    if not DBT_PARSER_AVAILABLE:
+        raise HTTPException(
+            status_code=501,
+            detail="dbt_parser.py required. Ensure dbt_parser.py is in the same directory as model_builder_api.py."
+        )
+
+    ext = Path(file.filename).suffix.lower()
+    if ext not in {".yaml", ".yml"}:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type: {ext}. dbt parser accepts .yaml or .yml files."
+        )
+
+    content = await file.read()
+
+    try:
+        result = parse_dbt_schema(content.decode("utf-8"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"dbt parse failed: {e}")
+
+    if result.get("errors"):
+        # Surface parse errors that aren't fatal but warrant a warning
+        non_fatal = [e for e in result["errors"] if e.startswith("Warning")]
+        fatal     = [e for e in result["errors"] if not e.startswith("Warning")]
+        if fatal:
+            raise HTTPException(status_code=422, detail="; ".join(fatal))
+
+    if not result["models"]:
+        raise HTTPException(
+            status_code=422,
+            detail="No models found in schema.yml. Check that the file is a valid dbt version 2 schema."
+        )
+
+    # Build the columns list in the same shape as /upload and /osi/parse.
+    # Each mapped column becomes one entry. Nucleus columns are flagged.
+    columns = []
+    nucleus_hints = {}
+    lens_candidates = {}
+    dbt_meta = {}
+
+    for model in result["models"]:
+        model_name = model["model_name"]
+
+        # Nucleus hint for this model
+        if model["nucleus"]:
+            nucleus_hints[model_name] = model["nucleus"]
+
+        # Lens candidates from metrics
+        if model["lens_candidates"]:
+            lens_candidates[model_name] = model["lens_candidates"]
+
+        # Meta for step 5 pre-fill
+        dbt_meta[model_name] = {
+            "description":      model["description"],
+            "agg_time_dimension": model["agg_time_dimension"],
+            "group":            model["meta"].get("group"),
+        }
+
+        # Nucleus column — flagged but not mapped to a dimension
+        if model["nucleus"]:
+            columns.append({
+                "name":          model["nucleus"],
+                "suggested_dim": "skip",
+                "suggested_key": model["nucleus"],
+                "is_nucleus":    True,
+                "confidence":    "deterministic",
+                "mapping_source": model["nucleus_source"],
+                "sample_values": [],
+                "model":         model_name,
+            })
+
+        # Mapped columns
+        for m in model["mappings"]:
+            columns.append({
+                "name":          m["column_name"],
+                "suggested_dim": m["dimension"] or "skip",
+                "suggested_key": m["semantic_key"],
+                "is_nucleus":    False,
+                "confidence":    m["confidence"],
+                "mapping_source": m["mapping_source"],
+                "description":   m["description"],
+                "notes":         m["notes"],
+                "sample_values": [],
+                "model":         model_name,
+            })
+
+    token = _new_token()
+
+    # dbt has no row data — create empty DataFrame with column names.
+    col_names = [c["name"] for c in columns]
+    df_dbt    = pd.DataFrame(columns=col_names)
+
+    _sessions[token] = SessionData(
+        df          = df_dbt,
+        source_info = {
+            "type":     "dbt",
+            "filename": file.filename,
+            "format":   "yaml",
+        },
+        columns = columns,
+    )
+
+    field_count = len([c for c in columns if not c.get("is_nucleus")])
+
+    return {
+        "upload_token":   token,
+        "columns":        columns,
+        "row_count":      field_count,
+        "nucleus_hints":  nucleus_hints,
+        "lens_candidates": lens_candidates,
+        "dbt_meta":       dbt_meta,
+        "model_count":    result["summary"]["model_count"],
+        "field_count":    field_count,
+        "source_type":    "dbt",
+        "parse_warnings": result.get("errors", []),
     }
 
 
