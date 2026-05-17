@@ -181,6 +181,9 @@ def register_substrate(name: str, substrate: Substrate, meta: dict = None) -> No
     """Register a compiled substrate under a name."""
     _registry[name] = substrate
     _registry_meta[name] = meta or {}
+    # Invalidate affordances cache on every registration — same-name re-ingests
+    # must not serve stale type metadata from the previous substrate version.
+    _affordances_cache.pop(name, None)
     print(f"[registry] Registered substrate: {name}")
 
 
@@ -999,9 +1002,26 @@ async def affordances(schema: str = None):
                     [dim, substrate.lens_id]
                 ).fetchall()
 
+                # Load compiled type table if present (written by Model Builder).
+                # Eliminates keyword guessing for substrates built with current Model Builder.
+                # Falls back to keyword heuristic for older substrates — no breakage.
+                compiled_types: Dict[str, str] = {}
+                try:
+                    type_rows = substrate._conn.execute(
+                        "SELECT dimension, semantic_key, value_type FROM snf_field_types"
+                    ).fetchall()
+                    for td, tsk, tvt in type_rows:
+                        compiled_types[f"{td}|{tsk}"] = tvt
+                except Exception:
+                    pass  # table absent — older substrate, heuristic handles it
+
                 for semantic_key, distinct_entities, fact_count in rows:
                     field_name = semantic_key.split(".")[-1] if "." in semantic_key else semantic_key
-                    if any(kw in field_name.lower() for kw in ["year", "date", "month", "day", "release", "activity"]):
+
+                    compiled_key = f"{dim}|{semantic_key}"
+                    if compiled_key in compiled_types:
+                        value_type = compiled_types[compiled_key]
+                    elif any(kw in field_name.lower() for kw in ["year", "date", "month", "day", "release", "activity"]):
                         value_type = "date"
                     elif any(kw in field_name.lower() for kw in ["count", "amount", "price", "cmc", "size"]):
                         value_type = "number"

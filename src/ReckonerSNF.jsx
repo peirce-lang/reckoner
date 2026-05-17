@@ -507,6 +507,19 @@ export default function ReckonerSNF() {
     let v1 = value;
     let v2 = value2Override ?? "";
 
+    // Coerce to JS number for numeric fields so serializeValue emits an
+    // unquoted literal (5 not "5"). Without this, Peirce gets a string
+    // comparison and "21" < "5" is true lexicographically.
+    const fieldType = inferValueType(affordances?.[dim]?.[field]);
+    if (fieldType === "number") {
+      const n1 = parseFloat(v1);
+      if (!isNaN(n1)) v1 = n1;
+      if (v2 !== "") {
+        const n2 = parseFloat(v2);
+        if (!isNaN(n2)) v2 = n2;
+      }
+    }
+
     // BETWEEN: silently swap if low > high (user typed them in reverse order)
     if (op === "between" && v2 !== "") {
       const n1 = parseFloat(v1);

@@ -99,6 +99,12 @@ try:
 except ImportError:
     DBT_PARSER_AVAILABLE = False
 
+try:
+    from mb8_data_connect import connect_router
+    MB8_AVAILABLE = True
+except ImportError:
+    MB8_AVAILABLE = False
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Config
 # ─────────────────────────────────────────────────────────────────────────────
@@ -204,6 +210,37 @@ def _suggest_dim_key(col_name: str) -> Tuple[str, str]:
     return 'skip', normalized.replace(" ", "_")
 
 
+def _infer_snf_type(series: pd.Series) -> str:
+    """
+    Infer the SNF value_type for a column from its raw string values.
+
+    Called AFTER read with dtype=str, so we coerce rather than trust pandas.
+    Returns one of: "number", "date", "text".
+
+    Threshold: 95%+ of non-empty values must parse cleanly.
+    "enum" is NOT returned here — that is a Reckoner-side decision based on
+    distinct_values cardinality, not a property of the source data.
+    """
+    non_empty = series.dropna().loc[lambda s: s.str.strip() != ""]
+    if len(non_empty) == 0:
+        return "text"
+
+    # Number check
+    numeric = pd.to_numeric(non_empty, errors="coerce")
+    if numeric.notna().mean() >= 0.95:
+        return "number"
+
+    # Date check — pandas is conservative here, which is what we want
+    try:
+        parsed = pd.to_datetime(non_empty, errors="coerce", infer_datetime_format=True)
+        if parsed.notna().mean() >= 0.95:
+            return "date"
+    except Exception:
+        pass
+
+    return "text"
+
+
 def _build_columns(df: pd.DataFrame) -> List[Dict]:
     """
     Build the columns payload from a DataFrame:
@@ -220,8 +257,10 @@ def _build_columns(df: pd.DataFrame) -> List[Dict]:
             .tolist()
         )
         suggested_dim, suggested_key = _suggest_dim_key(str(col))
+        inferred_type = _infer_snf_type(df[col].astype(str))
         cols.append({
             "name":          str(col),
+            "inferred_type": inferred_type,  # "number" | "date" | "text"
             "samples":       samples,
             "suggested_dim": suggested_dim,
             "suggested_key": suggested_key,
@@ -656,6 +695,36 @@ def _emit_duckdb(df: pd.DataFrame, spec: Dict) -> Dict:
     con.execute("CREATE INDEX IF NOT EXISTS idx_spoke_eid   ON snf_spoke(entity_id)")
     con.execute("CREATE INDEX IF NOT EXISTS idx_spoke_dim   ON snf_spoke(dimension, semantic_key)")
 
+    # snf_field_types — persists inferred value_type so Reckoner never has to guess.
+    # Written at compile time when we still know the pandas dtype of the source column.
+    # Reckoner's /api/affordances reads this table first; falls back to heuristics only
+    # if this table is absent (older substrates).
+    con.execute("""
+        CREATE OR REPLACE TABLE snf_field_types (
+            dimension    VARCHAR NOT NULL,
+            semantic_key VARCHAR NOT NULL,
+            value_type   VARCHAR NOT NULL,   -- 'number' | 'date' | 'text'
+            PRIMARY KEY (dimension, semantic_key)
+        )
+    """)
+    field_type_rows = []
+    for m in mapping:
+        col  = m.get("column")
+        dim  = m.get("dimension")
+        skey = m.get("semantic_key", "").replace(" ", "_")
+        if not col or not dim or col not in df.columns:
+            continue
+        vtype = _infer_snf_type(df[col].astype(str))
+        # WHEN dimension is always date regardless of content inference
+        if dim == "WHEN":
+            vtype = "date"
+        field_type_rows.append((dim.lower(), skey, vtype))
+    if field_type_rows:
+        con.executemany(
+            "INSERT OR REPLACE INTO snf_field_types VALUES (?, ?, ?)",
+            field_type_rows
+        )
+
     # snf_meta display table
     con.execute("""
         CREATE OR REPLACE TABLE snf_meta (
@@ -1027,6 +1096,9 @@ class BuildSpec(BaseModel):
 # ─────────────────────────────────────────────────────────────────────────────
 
 router = APIRouter(prefix="/api/mb", tags=["model_builder"])
+
+if MB8_AVAILABLE:
+    router.include_router(connect_router)
 
 # ── POST /api/mb/upload ──────────────────────────────────────────────────────
 
