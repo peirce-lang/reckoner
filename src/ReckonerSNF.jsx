@@ -1313,19 +1313,58 @@ export default function ReckonerSNF() {
     execution_ms:        queryStats?.execution_ms ?? '',
   });
 
-  const exportCSV = () => {
-    const rows = buildFlatRows();
+  // ── Full result set fetch — bypasses display cap ─────────────────────────
+  // Called by CSV/XLSX/JSON export when result count exceeds the page size.
+  const fetchFullResults = async () => {
+    const body = { constraints, schema: activeSchema };
+    if (projectedFields.size > 0) body.fields = Array.from(projectedFields);
+    if (selectedIds.size > 0) body.entity_ids = Array.from(selectedIds);
+    const r = await fetch(`${API_URL}/export/full`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body),
+    });
+    if (!r.ok) throw new Error(`Export failed: ${r.status}`);
+    const d = await r.json();
+    return d.results;
+  };
+
+  const exportCSV = async () => {
+    const DISPLAY_CAP = 200;
+    const totalCount  = queryStats?.row_count ?? sortedResults.length;
+    const needsFullFetch = selectedIds.size === 0 && totalCount > DISPLAY_CAP;
+
+    let rows;
+    if (needsFullFetch) {
+      try {
+        const fullResults = await fetchFullResults();
+        rows = fullResults.map(item => {
+          const flat = { id: item.id };
+          for (const [dim, facts] of Object.entries(item.coordinates || {})) {
+            for (const f of facts) {
+              const col = `${dim}.${f.field}`;
+              flat[col] = flat[col] ? `${flat[col]} | ${f.value}` : f.value;
+            }
+          }
+          return flat;
+        });
+      } catch (err) {
+        console.error('Full export failed:', err);
+        alert('Full export failed. Exporting current page only.');
+        rows = buildFlatRows();
+      }
+    } else {
+      rows = buildFlatRows();
+    }
+
     if (rows.length === 0) return;
-    const cols = Object.keys(rows[0]);
+    const cols   = Object.keys(rows[0]);
     const escape = (v) => {
       const s = String(v ?? '');
       return s.includes(',') || s.includes('"') || s.includes('\n')
         ? `"${s.replace(/"/g, '""')}"` : s;
     };
-    const csv = [
-      cols.join(','),
-      ...rows.map(r => cols.map(c => escape(r[c] ?? '')).join(','))
-    ].join('\n');
+    const csv  = [cols.join(','), ...rows.map(r => cols.map(c => escape(r[c] ?? '')).join(','))].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
@@ -1335,39 +1374,72 @@ export default function ReckonerSNF() {
     URL.revokeObjectURL(url);
   };
 
-  const exportJSON = () => {
-    const payload = {
-      query:   buildQueryRecord(),
-      results: sortedResults,
-    };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = `reckoner_${activeSchema}_${Date.now()}.json`;
+  const exportJSON = async () => {
+    const DISPLAY_CAP = 200;
+    const totalCount  = queryStats?.row_count ?? sortedResults.length;
+    const needsFullFetch = selectedIds.size === 0 && totalCount > DISPLAY_CAP;
+
+    let results;
+    if (needsFullFetch) {
+      try {
+        results = await fetchFullResults();
+      } catch (err) {
+        console.error('Full export failed:', err);
+        alert('Full export failed. Exporting current page only.');
+        results = sortedResults;
+      }
+    } else {
+      results = sortedResults;
+    }
+
+    const payload = { query: buildQueryRecord(), results };
+    const blob    = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url     = URL.createObjectURL(blob);
+    const a       = document.createElement('a');
+    a.href        = url;
+    a.download    = `reckoner_${activeSchema}_${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   const exportXLSX = async () => {
-    // SheetJS — expect XLSX to be available on window (loaded via CDN or npm)
     const XLSX = window.XLSX;
     if (!XLSX) { alert('SheetJS not available. Add XLSX to the page.'); return; }
 
-    const rows    = buildFlatRows();
+    const DISPLAY_CAP = 200;
+    const totalCount  = queryStats?.row_count ?? sortedResults.length;
+    const needsFullFetch = selectedIds.size === 0 && totalCount > DISPLAY_CAP;
+
+    let rows;
+    if (needsFullFetch) {
+      try {
+        const fullResults = await fetchFullResults();
+        rows = fullResults.map(item => {
+          const flat = { id: item.id };
+          for (const [dim, facts] of Object.entries(item.coordinates || {})) {
+            for (const f of facts) {
+              const col = `${dim}.${f.field}`;
+              flat[col] = flat[col] ? `${flat[col]} | ${f.value}` : f.value;
+            }
+          }
+          return flat;
+        });
+      } catch (err) {
+        console.error('Full export failed:', err);
+        alert('Full export failed. Exporting current page only.');
+        rows = buildFlatRows();
+      }
+    } else {
+      rows = buildFlatRows();
+    }
+
     const qRecord = buildQueryRecord();
-
-    // Sheet 1 — result rows
-    const ws1 = XLSX.utils.json_to_sheet(rows);
-
-    // Sheet 2 — query record (key / value pairs)
-    const qRows = Object.entries(qRecord).map(([k, v]) => ({ field: k, value: String(v ?? '') }));
-    const ws2   = XLSX.utils.json_to_sheet(qRows);
-
-    const wb = XLSX.utils.book_new();
+    const ws1     = XLSX.utils.json_to_sheet(rows);
+    const qRows   = Object.entries(qRecord).map(([k, v]) => ({ field: k, value: String(v ?? '') }));
+    const ws2     = XLSX.utils.json_to_sheet(qRows);
+    const wb      = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws1, 'Results');
     XLSX.utils.book_append_sheet(wb, ws2, 'Query Record');
-
     XLSX.writeFile(wb, `reckoner_${activeSchema}_${Date.now()}.xlsx`);
   };
 

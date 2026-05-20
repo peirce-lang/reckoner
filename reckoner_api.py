@@ -96,6 +96,19 @@ DEBUG           = os.environ.get("DEBUG", "false").lower() == "true"
 
 import hashlib
 
+def _is_numeric(value: str) -> bool:
+    """
+    Return True if value parses as a finite float.
+    Used for empirical value-type inference in affordances.
+    Rejects 'nan', 'inf', '-inf' which float() accepts but are not useful data values.
+    """
+    try:
+        f = float(value)
+        import math
+        return math.isfinite(f)
+    except (ValueError, TypeError):
+        return False
+
 def compute_query_hash(
     substrate_id:       str,
     lens_id:            str,
@@ -1020,15 +1033,45 @@ async def affordances(schema: str = None):
 
                     compiled_key = f"{dim}|{semantic_key}"
                     if compiled_key in compiled_types:
+                        # Compiled type table — authoritative, no guessing needed
                         value_type = compiled_types[compiled_key]
                     elif any(kw in field_name.lower() for kw in ["year", "date", "month", "day", "release", "activity"]):
+                        # Known date fields — keyword fast path
                         value_type = "date"
                     elif any(kw in field_name.lower() for kw in ["count", "amount", "price", "cmc", "size"]):
+                        # Known numeric fields — keyword fast path
                         value_type = "number"
-                    elif distinct_entities <= 25:
-                        value_type = "enum"
-                    else:
+                    elif any(kw in field_name.lower() for kw in ["_id", "code", "number", "ref", "key", "system", "status"]):
+                        # Identifier/code fields — always TEXT even if values look numeric.
+                        # e.g. matter_number="2024-0042", condition_code="44054006",
+                        # postal_code="98119". A human knows these aren't measurements.
                         value_type = "text"
+                    else:
+                        # Value sampling — empirically determine type from actual values.
+                        # Handles any domain's numeric fields without keyword maintenance.
+                        # Falls back to enum/text if sampling fails or is inconclusive.
+                        try:
+                            sample = substrate._conn.execute(
+                                "SELECT value FROM snf_spoke "
+                                "WHERE dimension = ? AND semantic_key = ? AND lens_id = ? "
+                                "LIMIT 20",
+                                [dim, semantic_key, substrate.lens_id]
+                            ).fetchall()
+                            if sample:
+                                numeric_hits = sum(
+                                    1 for (v,) in sample
+                                    if v is not None and _is_numeric(v)
+                                )
+                                if numeric_hits == len(sample):
+                                    value_type = "number"
+                                elif distinct_entities <= 25:
+                                    value_type = "enum"
+                                else:
+                                    value_type = "text"
+                            else:
+                                value_type = "text"
+                        except Exception:
+                            value_type = "enum" if distinct_entities <= 25 else "text"
 
                     result[dim_upper][field_name] = {
                         "fact_count":      fact_count,
@@ -1678,6 +1721,77 @@ async def discover_conditional(req: ConditionalDiscoverRequest):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Full result set export — bypasses display cap, returns all matching entities
+# ─────────────────────────────────────────────────────────────────────────────
+
+class FullExportRequest(BaseModel):
+    peirce:       Optional[str]        = None
+    constraints:  Optional[List[dict]] = None
+    entity_ids:   Optional[List[str]]  = None   # explicit selection — bypasses query
+    schema:       Optional[str]        = None
+    substrate_id: Optional[str]        = None
+    fields:       Optional[List[str]]  = None   # projection
+
+
+@app.post("/api/export/full")
+async def export_full(req: FullExportRequest):
+    """
+    Run a query without any display cap and return the full hydrated result set.
+
+    Used by CSV, XLSX, and JSON export when the result set exceeds the display
+    cap (200 entities per page). The client formats the response into the
+    desired file format.
+
+    Returns the same shape as /api/query but with all matching entities
+    hydrated — no pagination, no offset.
+    """
+    substrate_id = req.substrate_id or req.schema
+    substrate    = _registry.get(substrate_id)
+
+    if not substrate:
+        if _registry:
+            substrate_id = list(_registry.keys())[0]
+            substrate    = _registry[substrate_id]
+        else:
+            raise HTTPException(status_code=404, detail="No substrates loaded")
+
+    # Resolve entity IDs
+    if req.entity_ids:
+        entity_ids = req.entity_ids
+    else:
+        if req.peirce:
+            peirce_string = req.peirce
+        elif req.constraints:
+            peirce_string = constraints_to_peirce(req.constraints)
+        else:
+            raise HTTPException(status_code=400, detail="peirce, constraints, or entity_ids required")
+
+        try:
+            entity_ids, total_count, _ = _duckdb_query_with_trace(
+                substrate     = substrate,
+                peirce_string = peirce_string,
+                limit         = 100000,  # hard cap — no reasonable cohort exceeds this
+            )
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+    if not entity_ids:
+        return {"results": [], "total": 0}
+
+    # Hydrate all entities — no display cap
+    hydrated = hydrate_results(
+        entity_ids          = entity_ids,
+        substrate           = substrate,
+        matched_coordinates = {},
+        fields              = req.fields,
+    )
+
+    return {
+        "total":   len(entity_ids),
+        "results": hydrated,
+    }
+
+
 # Parquet export
 # ─────────────────────────────────────────────────────────────────────────────
 
