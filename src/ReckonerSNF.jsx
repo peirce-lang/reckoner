@@ -30,22 +30,54 @@ function serializeValue(value) {
 
 function toPeirce(constraints) {
   if (!constraints || constraints.length === 0) return "";
-  const parts = constraints.map((c) => {
+
+  // Group ONLY constraints by dim+field so multiple ONLY values on the same
+  // field serialize as set form: WHAT.color ONLY ("Blue", "Black")
+  const onlyGroups = {};
+  const nonOnly = [];
+
+  constraints.forEach(c => {
     const dim   = (c.category || c.dimension || "").toUpperCase();
     const field = (c.field || "").toLowerCase();
-    if (!dim || !field) return null;
+    if (c.op === "only" && dim && field) {
+      const key = `${dim}.${field}`;
+      if (!onlyGroups[key]) onlyGroups[key] = { dim, field, values: [] };
+      onlyGroups[key].values.push(c.value);
+    } else {
+      nonOnly.push(c);
+    }
+  });
+
+  const parts = [];
+
+  // Non-ONLY constraints
+  nonOnly.forEach(c => {
+    const dim   = (c.category || c.dimension || "").toUpperCase();
+    const field = (c.field || "").toLowerCase();
+    if (!dim || !field) return;
     let expr;
     if (c.op === "between") {
       expr = `${dim}.${field} BETWEEN ${serializeValue(c.value)} AND ${serializeValue(c.value2 ?? c.value)}`;
-    } else if (c.op === "only") {
-      expr = `${dim}.${field} ONLY ${serializeValue(c.value)}`;
     } else {
       const op = OP_TO_PEIRCE[c.op] || "=";
       expr = `${dim}.${field} ${op} ${serializeValue(c.value)}`;
     }
     if (c.negated) expr = `NOT ${expr}`;
-    return expr;
-  }).filter(Boolean);
+    parts.push(expr);
+  });
+
+  // ONLY groups — set form if multiple values, scalar if one
+  Object.values(onlyGroups).forEach(({ dim, field, values }) => {
+    let expr;
+    if (values.length === 1) {
+      expr = `${dim}.${field} ONLY ${serializeValue(values[0])}`;
+    } else {
+      const valueList = values.map(serializeValue).join(", ");
+      expr = `${dim}.${field} ONLY (${valueList})`;
+    }
+    parts.push(expr);
+  });
+
   return parts.join("\nAND ");
 }
 
@@ -138,7 +170,7 @@ function chipLabel(c) {
        : c.op === "gte"      ? `≥ ${c.value}`
        : c.op === "lte"      ? `≤ ${c.value}`
        : c.op === "not_eq"   ? `≠ ${c.value}`
-       : c.op === "only"     ? `only "${c.value}"`
+       : c.op === "only"     ? `only "${c.value}"` // individual chip — set grouping visible in toPeirce
        : String(c.value);
 }
 
@@ -197,31 +229,66 @@ function DimRow({ dimKey, dimConstraints, onRemove }) {
               <span style={{ color: "#9ca3af", fontSize: 11, marginRight: 3 }}>
                 {humanizeField(field)}
               </span>
-              {fieldConstraints.map((c, ci) => (
-                <span key={c.id} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
-                  {ci > 0 && (
-                    <span style={{ color: "#9ca3af", fontSize: 10, padding: "0 3px", fontStyle: "italic" }}>or</span>
-                  )}
-                  <span style={{
-                    background: DIM_ACCENT_LIGHT[c.category] || "#f9fafb",
-                    color: DIM_ACCENT_TEXT[c.category] || "#374151",
-                    borderLeft: `2px solid ${DIM_ACCENT[c.category] || "#6b7280"}`,
-                    padding: "1px 7px 1px 5px",
-                    borderRadius: "2px",
-                    fontSize: 12,
-                    display: "inline-flex", alignItems: "center", gap: 5,
-                  }}>
-                    {chipLabel(c)}
-                    <button
-                      onClick={() => onRemove(c.id)}
-                      style={{ opacity: 0.4, cursor: "pointer", background: "none", border: "none", padding: 0, lineHeight: 1, color: "inherit" }}
-                      onMouseEnter={e => e.target.style.opacity = 1}
-                      onMouseLeave={e => e.target.style.opacity = 0.4}
-                      title="Remove"
-                    >✕</button>
+              {(() => {
+                // If all chips in this field are op:only with multiple values,
+                // collapse them into a single bracketed set chip.
+                const allOnly = fieldConstraints.length > 1 && fieldConstraints.every(c => c.op === "only");
+                if (allOnly) {
+                  const first = fieldConstraints[0];
+                  const valueList = fieldConstraints.map(c => `"${c.value}"`).join(", ");
+                  return (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+                      <span style={{
+                        background: DIM_ACCENT_LIGHT[first.category] || "#f9fafb",
+                        color: DIM_ACCENT_TEXT[first.category] || "#374151",
+                        borderLeft: `2px solid ${DIM_ACCENT[first.category] || "#6b7280"}`,
+                        padding: "1px 7px 1px 5px",
+                        borderRadius: "2px",
+                        fontSize: 12,
+                        display: "inline-flex", alignItems: "center", gap: 5,
+                      }}>
+                        only ({valueList})
+                        {fieldConstraints.map(c => (
+                          <button
+                            key={c.id}
+                            onClick={() => onRemove(c.id)}
+                            style={{ opacity: 0.4, cursor: "pointer", background: "none", border: "none", padding: 0, lineHeight: 1, color: "inherit", fontSize: 10 }}
+                            onMouseEnter={e => e.target.style.opacity = 1}
+                            onMouseLeave={e => e.target.style.opacity = 0.4}
+                            title={`Remove "${c.value}"`}
+                          >✕</button>
+                        ))}
+                      </span>
+                    </span>
+                  );
+                }
+                // Default — individual chips with or between them
+                return fieldConstraints.map((c, ci) => (
+                  <span key={c.id} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+                    {ci > 0 && (
+                      <span style={{ color: "#9ca3af", fontSize: 10, padding: "0 3px", fontStyle: "italic" }}>or</span>
+                    )}
+                    <span style={{
+                      background: DIM_ACCENT_LIGHT[c.category] || "#f9fafb",
+                      color: DIM_ACCENT_TEXT[c.category] || "#374151",
+                      borderLeft: `2px solid ${DIM_ACCENT[c.category] || "#6b7280"}`,
+                      padding: "1px 7px 1px 5px",
+                      borderRadius: "2px",
+                      fontSize: 12,
+                      display: "inline-flex", alignItems: "center", gap: 5,
+                    }}>
+                      {chipLabel(c)}
+                      <button
+                        onClick={() => onRemove(c.id)}
+                        style={{ opacity: 0.4, cursor: "pointer", background: "none", border: "none", padding: 0, lineHeight: 1, color: "inherit" }}
+                        onMouseEnter={e => e.target.style.opacity = 1}
+                        onMouseLeave={e => e.target.style.opacity = 0.4}
+                        title="Remove"
+                      >✕</button>
+                    </span>
                   </span>
-                </span>
-              ))}
+                ));
+              })()}
               {/* Collapse toggle when expanded and over threshold */}
               {fi === Object.entries(dimConstraints).length - 1 && totalChips > COLLAPSE_THRESHOLD && (
                 <span
@@ -502,6 +569,18 @@ export default function ReckonerSNF() {
 
   const addConstraint = (field, value, dim, opOverride, value2Override) => {
     if (!field || value == null || value === "" || !dim) return;
+
+    // Handle only_set — multiple values for ONLY set form
+    // Adds one constraint per value; execution layer groups them correctly
+    if (opOverride === "only_set" && Array.isArray(value)) {
+      value.forEach(v => {
+        const c = { id: Date.now() + Math.random(), category: dim, field, value: v, op: "only" };
+        setConstraints(prev => [...prev, c]);
+      });
+      setSearchTerm(""); setSearchTerm2(""); setShowResults(false);
+      return;
+    }
+
     const op = opOverride || defaultOpForField(dim, field);
 
     let v1 = value;

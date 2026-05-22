@@ -702,18 +702,26 @@ function TrieEnumPanel({ dimension, field, schema, onAddConstraint, onClose, res
               <Plus size={14} />
               Add {selected.size} constraint{selected.size > 1 ? "s" : ""}
             </button>
-            {/* ONLY — single value only; logically undefined for multiple values */}
-            {selected.size === 1 && (
+            {/* ONLY — single value or set of values */}
+            {selected.size >= 1 && (
               <button
                 onClick={() => {
-                  const value = [...selected][0];
-                  onAddConstraint(field, value, dimension, "only");
+                  const values = [...selected];
+                  if (values.length === 1) {
+                    onAddConstraint(field, values[0], dimension, "only");
+                  } else {
+                    onAddConstraint(field, values, dimension, "only_set");
+                  }
                   setSelected(new Set());
                 }}
                 className="flex items-center justify-center gap-1 px-3 py-2 border border-current border-opacity-30 rounded-md text-sm hover:bg-white/20 transition-colors"
-                title={`Only "${[...selected][0]}" — exclude entities that also have other values for this field`}
+                title={
+                  selected.size === 1
+                    ? `Only "${[...selected][0]}" — exclude entities with other values for this field`
+                    : `Only these ${selected.size} values — exclude entities with any other value for this field`
+                }
               >
-                Only
+                Only{selected.size > 1 ? ` (${selected.size})` : ""}
               </button>
             )}
             <button
