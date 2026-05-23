@@ -407,6 +407,8 @@ def load_substrates_from_disk() -> None:
         # ── .duckdb file — model_builder.py output ───────────────────────────
         if entry.is_file() and entry.suffix == ".duckdb":
             name = entry.stem
+            if name in _registry or name in _adapter_registry:
+                continue  # already loaded — skip on refresh
             try:
                 conn      = duckdb.connect(str(entry), read_only=True)
                 # Read lens_id from first row — stamped by model_builder
@@ -957,6 +959,28 @@ async def health(schema: str = None):
 async def schemas():
     """List all loaded substrates."""
     return {
+        "schemas": [
+            {
+                "schema":       name,
+                "label":        meta.get("label", name),
+                "entity_count": meta.get("entity_count", 0),
+                "dimensions":   meta.get("dimensions", []),
+                "lens_id":      meta.get("lens_id", ""),
+            }
+            for name, meta in _registry_meta.items()
+        ]
+    }
+
+
+@app.get("/api/refresh-substrates")
+async def refresh_substrates():
+    """Re-scan SUBSTRATES_DIR and load any new substrates without restarting."""
+    before = set(_registry_meta.keys())
+    load_substrates_from_disk()
+    after  = set(_registry_meta.keys())
+    new    = list(after - before)
+    return {
+        "added": new,
         "schemas": [
             {
                 "schema":       name,
@@ -2507,7 +2531,7 @@ if __name__ == "__main__":
     print("=" * 60)
 
     uvicorn.run(
-        "reckoner_api:app",
+        app,
         host="0.0.0.0",
         port=PORT,
         reload=DEBUG,

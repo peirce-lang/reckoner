@@ -1675,3 +1675,35 @@ async def download_artifact(filename: str):
         filename    = safe_name,
         media_type  = media_type,
     )
+
+
+# ── POST /api/mb/save-to-substrates/{filename} ──────────────────────────────
+
+@router.post("/save-to-substrates/{filename}")
+async def save_to_substrates(filename: str):
+    """
+    Copy a compiled artifact directly into SNF_SUBSTRATES_DIR.
+    Used by the Tauri desktop app where browser downloads are not available.
+    The substrate appears in Reckoner automatically on next load.
+    """
+    import shutil
+
+    safe_name = Path(filename).name
+    src       = OUTPUT_DIR / safe_name
+
+    if not src.exists():
+        raise HTTPException(status_code=404, detail=f"Artifact '{safe_name}' not found.")
+    if not src.is_file():
+        raise HTTPException(status_code=400, detail="Not a file.")
+
+    substrates_dir = Path(os.environ.get("SNF_SUBSTRATES_DIR", "./substrates"))
+    substrates_dir.mkdir(parents=True, exist_ok=True)
+    dest = substrates_dir / safe_name
+
+    shutil.copy2(src, dest)
+
+    return {
+        "saved":       True,
+        "filename":    safe_name,
+        "destination": str(dest),
+    }

@@ -413,13 +413,37 @@ export default function ReckonerSNF() {
   }, [activeSchema]);
   const [schemas, setSchemas]             = useState([]);
 
+  const refreshSchemas = useCallback(() => {
+    fetch(`${API_URL}/refresh-substrates`)
+      .then((r) => r.json())
+      .then((d) => {
+        const list = Array.isArray(d.schemas) ? d.schemas : [];
+        setSchemas(list);
+        if (list.length > 0 && !activeSchema) {
+          setActiveSchema(list[0].schema);
+        }
+      })
+      .catch(() => {
+        // fallback to regular schemas endpoint
+        fetch(`${API_URL}/schemas`)
+          .then((r) => r.json())
+          .then((d) => {
+            const list = Array.isArray(d.schemas) ? d.schemas : [];
+            setSchemas(list);
+            if (list.length > 0 && !activeSchema) {
+              setActiveSchema(list[0].schema);
+            }
+          })
+          .catch(() => {});
+      });
+  }, [activeSchema]);
+
   useEffect(() => {
     fetch(`${API_URL}/schemas`)
       .then((r) => r.json())
       .then((d) => {
         const list = Array.isArray(d.schemas) ? d.schemas : [];
         setSchemas(list);
-        // Set active schema to first available if not already set
         if (list.length > 0 && !activeSchema) {
           setActiveSchema(list[0].schema);
         }
@@ -1725,6 +1749,13 @@ export default function ReckonerSNF() {
                 ))}
               </select>
             )}
+            <button
+              onClick={refreshSchemas}
+              className="text-xs px-2 py-1 rounded border border-gray-300 text-gray-500 hover:border-gray-400 hover:text-gray-700 transition-colors"
+              title="Refresh substrate list"
+            >
+              ↻
+            </button>
             {/* SRF load — drop a .srf.json bundle to add a substrate */}
             <label
               className="text-xs px-2 py-1 rounded border border-purple-200 text-purple-500 hover:border-purple-300 hover:text-purple-700 cursor-pointer transition-colors"
