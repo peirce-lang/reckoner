@@ -1,0 +1,2738 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://taylor_discography_simple/mb/ts:0PZ7lAru5FDFHuirTkWe9Z",
+  "entity_id": "ts:0PZ7lAru5FDFHuirTkWe9Z",
+  "nucleus": {
+    "type": "taylor_discography_simple",
+    "value": "0PZ7lAru5FDFHuirTkWe9Z"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "the 1"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0P9wLFurlgumLXuqFEpw52"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "210240"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "1"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "cardigan"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7zcnlq38eqNWyUF6eNaB5Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "239560"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "2"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "the last great american dynasty"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4ojxSyrEraN7d46BMBPThZ"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "231000"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "3"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "exile (feat. Bon Iver)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "6kz2hkq1xQvDqPcUyBkw8f"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "285640"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "4"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "my tears ricochet"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0Oju1YcbPCJuUQQWoZNdJK"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "255893"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "5"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "mirrorball"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5jQyGzcwqAxwT5QUIMivoX"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "208973"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "6"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "seven"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2vJ7QvyCiR4DaHxwO58izA"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "208906"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "7"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "august"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "1UHoF9p75IVsvUt6WdTYhn"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "261920"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "this is me trying"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5DnDBYrfGoxdnomqEAkFIv"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "195106"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "9"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "illicit affairs"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7CVTowKpGPA2MsIbkTl2oc"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "190893"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "10"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "invisible string"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4WHIqhrbdva5vQSrCuet3l"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "252880"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "11"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "mad woman"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7klXN6RCN5Rj0VeYO5gBzU"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "237266"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "12"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "epiphany"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5MFjHn1qfR9AsWuyzJLk1z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "289746"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "13"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "betty"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2jhfs6moEAK13eLM6xim4l"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "294520"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "14"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "peace"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0O9i6jhscByEJs1ipy5hu4"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "234000"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "15"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "hoax"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4XCYmu7QLySdIahgBALKJK"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "220040"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "16"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "the lakes - bonus track"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0zEprKYeuGOIZoHyu6O1E2"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "211813"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "17"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "the 1 - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "08J4bMHbILkwSIhbtrcvjN"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "219893"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "1"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "cardigan - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3EPgWM1zfTSzEc0z4AwWTM"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "230680"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "2"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "the last great american dynasty - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "28tIMaewZuGR8urkvFhQyA"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "232346"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "3"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "exile (feat. Bon Iver) - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7N015NTIWGjQDddHUdHPoO"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "279893"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "4"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "my tears ricochet - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5mdNyCS7ttVcAyVYOIFEjs"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "295173"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "5"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "mirrorball - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2yceD2hx5HhOLgkm1CITCi"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "237373"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "6"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "seven - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4cOWq0cVsKjxaQpRMbDoH1"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "208986"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "7"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "august - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4MGexoZc12lqE0hYkq9YYx"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "260000"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "this is me trying - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "1gaLZjPrDnHQWJds2Jg4KT"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "209293"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "9"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "illicit affairs - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "560uQyz3p5G9WdnMX39xc6"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "183720"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "10"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "invisible string - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5KByGq0JijSSDcy0qzuINs"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "257359"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "11"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "mad woman - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "04xrhDrQ2WOW8GLwu7kbc0"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "238333"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "12"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "epiphany - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4yyKppX85ZkmlGOC2toBZA"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "274880"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "13"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "betty - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "1mh5dObNoOvCfHmXnhvDEK"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "290040"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "14"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "peace - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4YHHz3VIXgNDGdoL9xC1tx"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "214373"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "TRUE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "15"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "hoax - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0QTBsdoJhamY3Aid3fOsOd"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "221800"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "16"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "the lakes - the long pond studio sessions"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "6mqyTq948oap5AkyTsd6XF"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "199733"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "17"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "0PZ7lAru5FDFHuirTkWe9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2020-11-25"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2020"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2020-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Wednesday"
+    }
+  ],
+  "provenance": {
+    "source": "taylor_discography_simple",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "taylor_discography_simple",
+    "translated_at": "2026-05-23T22:53:03Z"
+  }
+}

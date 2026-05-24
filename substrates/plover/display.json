@@ -1,0 +1,7 @@
+{
+  "primary_label": "entity_meta.label",
+  "secondary_label": "entity_meta.provider_date",
+  "description": "entity_meta.description",
+  "link": "entity_meta.url",
+  "image": "entity_meta.thumbnail_url"
+}

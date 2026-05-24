@@ -1,0 +1,1778 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://taylor_discography_simple/mb/ts:5AEDGbliTTfjOB8TSm1sxt",
+  "entity_id": "ts:5AEDGbliTTfjOB8TSm1sxt",
+  "nucleus": {
+    "type": "taylor_discography_simple",
+    "value": "5AEDGbliTTfjOB8TSm1sxt"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Mine (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7G0gBu6nLdhFDPRLc0HdDG"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "231706"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "1"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Sparks Fly (Taylor’s Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3MytWN8L7shNYzGl4tAKRp"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "261230"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "2"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Back To December (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "79uDOz0zuuWS7HWxzMmTa2"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "294189"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "3"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Speak Now (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5xXqyjLicvEpch72qEryFT"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "242473"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "4"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Dear John (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "1zU8j1x3yi9xalMF96pzKp"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "405906"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "5"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Mean (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "30Y4CV7A6YqtQtTTo7Ue4j"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "238693"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "6"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "The Story Of Us (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "6dTA6y0C2ReQklntzZl8l3"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "267653"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "7"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Never Grow Up (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2EFZ9emtKWEglWUQGEQ3P9"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "292920"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Enchanted (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3sW3oSbzsfecv9XoUdGs7h"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "353253"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "9"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Better Than Revenge (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0NwGC0v03ysCYINtg6ns58"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "220306"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "10"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Innocent (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "12nBPF4Rh4XLFJV0YLN7uj"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "301221"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "11"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Haunted (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4tMzIAFTFdqGBQLdfbPces"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "245413"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "12"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Last Kiss (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "59KOoHFcw5XfICnO57holu"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "369120"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "13"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Long Live (Taylor's Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4hqJ4bSlYJOXb6Z4SRmzxs"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "317960"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "14"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Ours (Taylor’s Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3yNJkriPzWjkkDAWHIAVUq"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "235803"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "15"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Superman (Taylor’s Version)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4evLyY5Ue1Wesc61t2KXAU"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "274945"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "16"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Electric Touch (feat. Fall Out Boy) (Taylor’s Version) (From The Vault)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4e3ZNTAV6PCrdYMUrUlMpQ"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "266466"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "17"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "When Emma Falls in Love (Taylor’s Version) (From The Vault)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0zo975x58DlXbZllWvfYhg"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "252385"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "18"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "I Can See You (Taylor’s Version) (From The Vault)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5kHMfzgLZP95O9NBy0ku4v"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "273186"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "19"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Castles Crumbling (feat. Hayley Williams) (Taylor’s Version) (From The Vault)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4ABYxlb92WBIjHu7TIKmml"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "306062"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "20"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Foolish One (Taylor’s Version) (From The Vault)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4s8BIKx4Zh6ryAEz8RTlaU"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "311765"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "21"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Timeless (Taylor’s Version) (From The Vault)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "1HCdems7PQZRj42QDWLA0A"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "321396"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "5AEDGbliTTfjOB8TSm1sxt"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2023-07-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2023"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2023-07"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "July"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Friday"
+    }
+  ],
+  "provenance": {
+    "source": "taylor_discography_simple",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "taylor_discography_simple",
+    "translated_at": "2026-05-23T22:53:03Z"
+  }
+}

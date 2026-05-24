@@ -1,0 +1,3698 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://taylor_discography_simple/mb/ts:1MPAXuTVL2Ej5x0JHiSPq8",
+  "entity_id": "ts:1MPAXuTVL2Ej5x0JHiSPq8",
+  "nucleus": {
+    "type": "taylor_discography_simple",
+    "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "album_name",
+      "value": "reputation Stadium Tour Surprise Song Playlist"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_name",
+      "value": "Taylor Swift"
+    },
+    {
+      "dimension": "WHO",
+      "semantic_key": "artist_id",
+      "value": "06HL4z0CvFAxyc27GXpf02"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "All Too Well"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "00vJzaoxM3Eja1doBUhX0P"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "329160"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "1"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Wildest Dreams"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "22C0JIVhFaczZ4t9heqREN"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "220440"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "2"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "The Best Day"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7APTsjmZbj7TFXQJAiRti4"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "246306"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "3"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Red"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4V9NuhKQcUFt4cgbynHV79"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "223093"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "4"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Holy Ground"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4hCZk6WJBFQeG3P7WsyntI"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "202960"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "5"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Teardrops On My Guitar - Radio Single Remix"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7eGeUVeCEvEQrivmjl9Qn3"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "204706"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "6"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Our Song"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7qGr3rjRhndRIpFUA5f2HJ"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "203440"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "7"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2P5gfMtCcKP0CkmgqFMyPg"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "232120"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "I Knew You Were Trouble."
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2o2IVjuqRkR9hJxtPjtAP0"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "219720"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "9"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "I Don’t Wanna Live Forever (Fifty Shades Darker)"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "55n9yjI6qqXh5F2mYvUc2y"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "247160"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "10"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Mean"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5rcHBt2aNcGFWW0jaAUe1L"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "238693"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "11"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "How You Get The Girl"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3aSYZ4upQ6OSNos26YeVWL"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "247533"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "12"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "So It Goes..."
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "41T04yafZVrjNq2FqvLtId"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "227906"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "13"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Fifteen"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0H2UD0LfSCiRr59YMGlCuS"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "295320"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "14"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Mine"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "6FmJKLpyCt42nP2IOVEVc2"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "231866"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "15"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Sparks Fly"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5h2sBwpUSAndjObfU3ti2r"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "262920"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "16"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "State Of Grace"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0YRGTdfmJPALpglAaraYUr"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "295720"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "17"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Haunted"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "6CB7DczrX9ZJB9Wkjegmaq"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "245413"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "18"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Never Grow Up"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "1UPDfqsVIZLEiZeMuUsni2"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "292920"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "19"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Treacherous"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0r3U7SOcoj4DIEyN44Lt5z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "242760"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "20"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Babe"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "40PXEOFLJc7UIpLMrhSfW1"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "215106"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "21"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Welcome To New York"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3YLA3NgzFRRa7LiHMtFPby"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "212600"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "22"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Fearless"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "43sE2O3skbGBpT2tO6fzv9"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "242973"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "23"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Enchanted"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5lg33MHs1BoUtJVClw8ZpI"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "353253"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "24"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Change"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5PSOWHll3h3Vy226xSJk0M"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "281053"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "25"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Ours"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0V3SNHDka1JSCP71HAzpxw"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "239346"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "26"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Out Of The Woods"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0GmfiNHSgkKamYgQEMYOH3"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "235800"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "27"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Come Back...Be Here"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5hiqtrACtMJkNpaNHj0n9Z"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "223920"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "28"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "A Place in this World"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2RSYYe7LhKFxIi50T5XtUo"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "202080"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "29"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "This Love"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "64KRxmbqypPBlya4nxFmDn"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "250093"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "30"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "The Lucky One"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "24ksPWXKg1k7OOG57pufED"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "240266"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "31"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Invisible"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0kqC185OTcnuhbz4T7g5RB"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "205853"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "32"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Breathe"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3oxgFdIlxFEDEJqn7k5TVN"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "264946"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "33"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Better Man"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3EXetjrGgwIjDRNn6YA8sa"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "263613"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "34"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Jump Then Fall"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "5zytSTR2g0I9psX2Z12ex6"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "238093"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "35"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Begin Again"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2G679wnKfyhUOeNx910OXg"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "239426"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "36"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Tied Together with a Smile"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4qNEi8zGIYLiMtoW8OaJdx"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "251213"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "37"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "The Story Of Us"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "2fF3QzbGCrtrDXIdWcg1mv"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "267653"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "38"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Forever & Always"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0QCS4NpURHvWdF1icdkfBw"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "226293"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "39"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Hey Stephen"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0TYJbIHBtmWy9ugtU9BcbE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "256040"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "40"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Speak Now"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "1XLc4irbX7oQSneh6gWv3O"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "243346"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "41"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Wonderland"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "0eTCaVOYLpJlSkbEi2jay4"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "245560"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "42"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "White Horse"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "4RMfSYDFkcz0bKoK8fHDgR"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "235400"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "43"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "I'm Only Me When I'm With You"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "6Py8IKZqDyU8aQVrjilbJw"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "215600"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "44"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "Starlight"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "7txpzmA69zyk50K3ZyZSzC"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "220600"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "45"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_name",
+      "value": "I Know Places"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_id",
+      "value": "3qGLcmO0XnnrcpAQGZwTvA"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "duration_ms",
+      "value": "195706"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "explicit",
+      "value": "FALSE"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "track_number",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_id",
+      "value": "1MPAXuTVL2Ej5x0JHiSPq8"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_total_tracks",
+      "value": "46"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "album_type",
+      "value": "album"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2017-11-09"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2017"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2017-11"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "November"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Thursday"
+    }
+  ],
+  "provenance": {
+    "source": "taylor_discography_simple",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "taylor_discography_simple",
+    "translated_at": "2026-05-23T22:53:03Z"
+  }
+}

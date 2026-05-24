@@ -1,0 +1,61 @@
+entity_id,dimension,semantic_key,value,coordinate,lens_id,translator_version
+criterion:9158,how,source_url,https://www.criterion.com/current/posts/9158-lumiere-le-cinema-a-conversation-with-thierry-fremaux,HOW|source_url|https://www.criterion.com/current/posts/9158-lumiere-le-cinema-a-conversation-with-thierry-fremaux,web_declaration_v1,1.0.0
+criterion:9158,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9158,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9161,how,source_url,https://www.criterion.com/current/posts/9161-fresh-kill-fluid-transmission,HOW|source_url|https://www.criterion.com/current/posts/9161-fresh-kill-fluid-transmission,web_declaration_v1,1.0.0
+criterion:9161,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9161,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9160,how,source_url,https://www.criterion.com/current/posts/9160-body-heat-the-trap-you-set-for-yourself,HOW|source_url|https://www.criterion.com/current/posts/9160-body-heat-the-trap-you-set-for-yourself,web_declaration_v1,1.0.0
+criterion:9160,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9160,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9155,how,source_url,https://www.criterion.com/current/posts/9155-the-criterion-channel-s-june-2026-lineup,HOW|source_url|https://www.criterion.com/current/posts/9155-the-criterion-channel-s-june-2026-lineup,web_declaration_v1,1.0.0
+criterion:9155,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9155,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9154,how,source_url,https://www.criterion.com/current/posts/9154-the-delta-across-the-lines,HOW|source_url|https://www.criterion.com/current/posts/9154-the-delta-across-the-lines,web_declaration_v1,1.0.0
+criterion:9154,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9154,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9143,how,source_url,https://www.criterion.com/current/posts/9143-the-defiant-ironies-of-rainer-werner-fassbinder-s-the-third-generation,HOW|source_url|https://www.criterion.com/current/posts/9143-the-defiant-ironies-of-rainer-werner-fassbinder-s-the-third-generation,web_declaration_v1,1.0.0
+criterion:9143,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9143,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9142,how,source_url,https://www.criterion.com/current/posts/9142-john-singleton-s-hood-trilogy-born-and-raised-in-south-central,HOW|source_url|https://www.criterion.com/current/posts/9142-john-singleton-s-hood-trilogy-born-and-raised-in-south-central,web_declaration_v1,1.0.0
+criterion:9142,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9142,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9140,how,source_url,https://www.criterion.com/current/posts/9140-kinuyo-tanaka-directs-married-to-cinema,HOW|source_url|https://www.criterion.com/current/posts/9140-kinuyo-tanaka-directs-married-to-cinema,web_declaration_v1,1.0.0
+criterion:9140,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9140,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9137,how,source_url,https://www.criterion.com/current/posts/9137-far-from-home-three-noirs-by-jacques-tourneur,HOW|source_url|https://www.criterion.com/current/posts/9137-far-from-home-three-noirs-by-jacques-tourneur,web_declaration_v1,1.0.0
+criterion:9137,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9137,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9130,how,source_url,https://www.criterion.com/current/posts/9130-on-restoration-and-repair-a-conversation-with-ja-tovia-gary,HOW|source_url|https://www.criterion.com/current/posts/9130-on-restoration-and-repair-a-conversation-with-ja-tovia-gary,web_declaration_v1,1.0.0
+criterion:9130,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9130,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9121,how,source_url,https://www.criterion.com/current/posts/9121-next-stop-the-criterion-mobile-closet-in-portland-oregon,HOW|source_url|https://www.criterion.com/current/posts/9121-next-stop-the-criterion-mobile-closet-in-portland-oregon,web_declaration_v1,1.0.0
+criterion:9121,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9121,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9132,how,source_url,https://www.criterion.com/current/posts/9132-point-blank-a-dream-of-full-color-noir,HOW|source_url|https://www.criterion.com/current/posts/9132-point-blank-a-dream-of-full-color-noir,web_declaration_v1,1.0.0
+criterion:9132,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9132,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9129,how,source_url,https://www.criterion.com/current/posts/9129-sinister-synergies,HOW|source_url|https://www.criterion.com/current/posts/9129-sinister-synergies,web_declaration_v1,1.0.0
+criterion:9129,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9129,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9126,how,source_url,https://www.criterion.com/current/posts/9126-the-criterion-channel-s-may-2026-lineup,HOW|source_url|https://www.criterion.com/current/posts/9126-the-criterion-channel-s-may-2026-lineup,web_declaration_v1,1.0.0
+criterion:9126,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9126,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9123,how,source_url,https://www.criterion.com/current/posts/9123-trouble-in-paradise-pure-style,HOW|source_url|https://www.criterion.com/current/posts/9123-trouble-in-paradise-pure-style,web_declaration_v1,1.0.0
+criterion:9123,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9123,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9124,how,source_url,https://www.criterion.com/current/posts/9124-monty-python-s-life-of-brian-the-wrong-messiah,HOW|source_url|https://www.criterion.com/current/posts/9124-monty-python-s-life-of-brian-the-wrong-messiah,web_declaration_v1,1.0.0
+criterion:9124,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9124,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9111,how,source_url,https://www.criterion.com/current/posts/9111-the-blade-cutting-deep,HOW|source_url|https://www.criterion.com/current/posts/9111-the-blade-cutting-deep,web_declaration_v1,1.0.0
+criterion:9111,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9111,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9106,how,source_url,https://www.criterion.com/current/posts/9106-a-man-and-a-woman-modern-lovers,HOW|source_url|https://www.criterion.com/current/posts/9106-a-man-and-a-woman-modern-lovers,web_declaration_v1,1.0.0
+criterion:9106,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9106,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9098,how,source_url,https://www.criterion.com/current/posts/9098-to-become-the-sky-a-conversation-with-jess-x-snow,HOW|source_url|https://www.criterion.com/current/posts/9098-to-become-the-sky-a-conversation-with-jess-x-snow,web_declaration_v1,1.0.0
+criterion:9098,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9098,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0
+criterion:9105,how,source_url,https://www.criterion.com/current/posts/9105-the-rolling-stones-on-the-brink-of-superstardom,HOW|source_url|https://www.criterion.com/current/posts/9105-the-rolling-stones-on-the-brink-of-superstardom,web_declaration_v1,1.0.0
+criterion:9105,how,harvest_path,rss+og,HOW|harvest_path|rss+og,web_declaration_v1,1.0.0
+criterion:9105,how,metadata_model,Criterion RSS + Open Graph,HOW|metadata_model|Criterion RSS + Open Graph,web_declaration_v1,1.0.0

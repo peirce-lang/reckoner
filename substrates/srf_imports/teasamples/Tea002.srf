@@ -1,0 +1,43 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://teasamples/mb/Tea002",
+  "entity_id": "Tea002",
+  "nucleus": {
+    "type": "teasamples",
+    "value": "Tea002"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "tea_company",
+      "value": "Rishi"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "testid",
+      "value": "Tea002"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "tea_product",
+      "value": "Masala Chai"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "tea_form",
+      "value": "Loose Leaf"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "tea_type",
+      "value": "Black"
+    }
+  ],
+  "provenance": {
+    "source": "teasamples",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "teasamples",
+    "translated_at": "2026-05-23T23:22:46Z"
+  }
+}

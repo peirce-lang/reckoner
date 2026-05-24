@@ -1,0 +1,13 @@
+entity_id,dimension,semantic_key,value,coordinate,lens_id,translator_version
+a237875fbe4fec1727b348bc8a7346c9,where,place,"Denver, Colorado","WHERE|place|Denver, Colorado",web_declaration_v1,1.0.0
+a0277d919a6dda83914624c795fad5cc,where,place,Milan,WHERE|place|Milan,web_declaration_v1,1.0.0
+a0277d919a6dda83914624c795fad5cc,where,city,Milan,WHERE|city|Milan,web_declaration_v1,1.0.0
+a0277d919a6dda83914624c795fad5cc,where,country,Italy,WHERE|country|Italy,web_declaration_v1,1.0.0
+79ace2f94353b4e7f49fe2335b361905,where,place,Minneapolis,WHERE|place|Minneapolis,web_declaration_v1,1.0.0
+348d9dc4be7f8b0d4459886c6a102ba6,where,place,Sweden,WHERE|place|Sweden,web_declaration_v1,1.0.0
+348d9dc4be7f8b0d4459886c6a102ba6,where,country,Sweden,WHERE|country|Sweden,web_declaration_v1,1.0.0
+c6ef5cab785f4ffa17512c096c9bbe70,where,place,University Memorial Center Ballroom,WHERE|place|University Memorial Center Ballroom,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522341-0,where,place,United States,WHERE|place|United States,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,where,place,United States,WHERE|place|United States,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150938686-2,where,place,United States,WHERE|place|United States,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,where,place,China,WHERE|place|China,web_declaration_v1,1.0.0

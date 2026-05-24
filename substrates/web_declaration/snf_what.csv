@@ -1,0 +1,350 @@
+entity_id,dimension,semantic_key,value,coordinate,lens_id,translator_version
+779c785edd5377e0c9b0024f3aefad84,what,title,Jazz Week: Vocal Jazz,WHAT|title|Jazz Week: Vocal Jazz,web_declaration_v1,1.0.0
+779c785edd5377e0c9b0024f3aefad84,what,type,text,WHAT|type|text,web_declaration_v1,1.0.0
+7441a526a5eb5afcfe6c6914cff55f5b,what,title,Jazz Week: Jazz Faculty,WHAT|title|Jazz Week: Jazz Faculty,web_declaration_v1,1.0.0
+7441a526a5eb5afcfe6c6914cff55f5b,what,type,text,WHAT|type|text,web_declaration_v1,1.0.0
+f023d71c14d5f830e88ca35eeff79e6d,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+2aea8e4e263a205860d4f4c01d38b6fc,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+53f8ea57abe8f96a901702b15a96f53e,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+53f8ea57abe8f96a901702b15a96f53e,what,subject,Jazz--Discography,WHAT|subject|Jazz--Discography,web_declaration_v1,1.0.0
+53f8ea57abe8f96a901702b15a96f53e,what,subject,Jazz musicians,WHAT|subject|Jazz musicians,web_declaration_v1,1.0.0
+53f8ea57abe8f96a901702b15a96f53e,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+53f8ea57abe8f96a901702b15a96f53e,what,type,text,WHAT|type|text,web_declaration_v1,1.0.0
+6c9f2a94b13a21671aa38828ea26856c,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+6c9f2a94b13a21671aa38828ea26856c,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+6c9f2a94b13a21671aa38828ea26856c,what,subject,Abstraction,WHAT|subject|Abstraction,web_declaration_v1,1.0.0
+6c9f2a94b13a21671aa38828ea26856c,what,type,image,WHAT|type|image,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Shot glass,WHAT|subject|Shot glass,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Bars (Drinking establishments)--Colorado--Denver,WHAT|subject|Bars (Drinking establishments)--Colorado--Denver,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Restaurants--Colorado--Denver,WHAT|subject|Restaurants--Colorado--Denver,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Liquor,WHAT|subject|Liquor,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Musician,WHAT|subject|Musician,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Saxophone,WHAT|subject|Saxophone,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Text,WHAT|subject|Text,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Drinking vessels,WHAT|subject|Drinking vessels,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,"Denver County, Colorado","WHAT|subject|Denver County, Colorado",web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,"Denver, Colorado","WHAT|subject|Denver, Colorado",web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,"El Chapultepec (Denver, Colo.)","WHAT|subject|El Chapultepec (Denver, Colo.)",web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,subject,Souvenir,WHAT|subject|Souvenir,web_declaration_v1,1.0.0
+a237875fbe4fec1727b348bc8a7346c9,what,type,physical object,WHAT|type|physical object,web_declaration_v1,1.0.0
+368519d53332295393c11a48d5e5c1ed,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+368519d53332295393c11a48d5e5c1ed,what,subject,Alfredo Ramon,WHAT|subject|Alfredo Ramon,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,subject,Concert posters,WHAT|subject|Concert posters,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,subject,Cultural posters,WHAT|subject|Cultural posters,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,subject,Men,WHAT|subject|Men,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,subject,Saxophone,WHAT|subject|Saxophone,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,subject,Musical instruments,WHAT|subject|Musical instruments,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,subject,Jazz festivals -- Denmark -- Aarhus,WHAT|subject|Jazz festivals -- Denmark -- Aarhus,web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,subject,"Posters, Danish","WHAT|subject|Posters, Danish",web_declaration_v1,1.0.0
+7cdace405b09a20df0fb99bbcb4dc107,what,type,image,WHAT|type|image,web_declaration_v1,1.0.0
+5554d79a36f10fcdef558fc1efa69c04,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+5554d79a36f10fcdef558fc1efa69c04,what,subject,Concert posters,WHAT|subject|Concert posters,web_declaration_v1,1.0.0
+5554d79a36f10fcdef558fc1efa69c04,what,subject,Cultural posters,WHAT|subject|Cultural posters,web_declaration_v1,1.0.0
+5554d79a36f10fcdef558fc1efa69c04,what,subject,Persons,WHAT|subject|Persons,web_declaration_v1,1.0.0
+5554d79a36f10fcdef558fc1efa69c04,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+5554d79a36f10fcdef558fc1efa69c04,what,subject,Jazz festivals -- Denmark -- Aarhus,WHAT|subject|Jazz festivals -- Denmark -- Aarhus,web_declaration_v1,1.0.0
+5554d79a36f10fcdef558fc1efa69c04,what,subject,"Posters, Danish","WHAT|subject|Posters, Danish",web_declaration_v1,1.0.0
+5554d79a36f10fcdef558fc1efa69c04,what,type,image,WHAT|type|image,web_declaration_v1,1.0.0
+856f21d9ba761c3ec5074dc166aa68c7,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+856f21d9ba761c3ec5074dc166aa68c7,what,subject,Concert posters,WHAT|subject|Concert posters,web_declaration_v1,1.0.0
+856f21d9ba761c3ec5074dc166aa68c7,what,subject,Cultural posters,WHAT|subject|Cultural posters,web_declaration_v1,1.0.0
+856f21d9ba761c3ec5074dc166aa68c7,what,subject,Ear,WHAT|subject|Ear,web_declaration_v1,1.0.0
+856f21d9ba761c3ec5074dc166aa68c7,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+856f21d9ba761c3ec5074dc166aa68c7,what,subject,"Posters, Swiss","WHAT|subject|Posters, Swiss",web_declaration_v1,1.0.0
+856f21d9ba761c3ec5074dc166aa68c7,what,type,image,WHAT|type|image,web_declaration_v1,1.0.0
+a0277d919a6dda83914624c795fad5cc,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+a0277d919a6dda83914624c795fad5cc,what,subject,PAF,WHAT|subject|PAF,web_declaration_v1,1.0.0
+a0277d919a6dda83914624c795fad5cc,what,subject,"Porsche, Ferdinand Alexander","WHAT|subject|Porsche, Ferdinand Alexander",web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Musical instruments,WHAT|subject|Musical instruments,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Music,WHAT|subject|Music,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Newspapers,WHAT|subject|Newspapers,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Figure male,WHAT|subject|Figure male,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Entertainers,WHAT|subject|Entertainers,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Saxophone,WHAT|subject|Saxophone,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,"Holston, Joseph","WHAT|subject|Holston, Joseph",web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,African Americans,WHAT|subject|African Americans,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,African American,WHAT|subject|African American,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Performing arts,WHAT|subject|Performing arts,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Music,WHAT|subject|Music,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Object,WHAT|subject|Object,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Musical instrument,WHAT|subject|Musical instrument,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Saxophone,WHAT|subject|Saxophone,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Written matter,WHAT|subject|Written matter,web_declaration_v1,1.0.0
+860fb09c982e6e8fb7289524a243e2df,what,subject,Newspaper,WHAT|subject|Newspaper,web_declaration_v1,1.0.0
+bbf7633bf5adbc2288b5bd48e266d052,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,subject,Concert posters,WHAT|subject|Concert posters,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,subject,Cultural posters,WHAT|subject|Cultural posters,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,subject,Women,WHAT|subject|Women,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,subject,Microphone,WHAT|subject|Microphone,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,subject,Stools,WHAT|subject|Stools,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,subject,Jazz festivals -- Denmark -- Aarhus,WHAT|subject|Jazz festivals -- Denmark -- Aarhus,web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,subject,"Posters, Danish","WHAT|subject|Posters, Danish",web_declaration_v1,1.0.0
+03b4ab2f021678adfcca8f2383172f40,what,type,image,WHAT|type|image,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,subject,Exhibition posters,WHAT|subject|Exhibition posters,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,subject,Cultural posters,WHAT|subject|Cultural posters,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,subject,Cats,WHAT|subject|Cats,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,subject,Musical instruments,WHAT|subject|Musical instruments,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,subject,Saxophone,WHAT|subject|Saxophone,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,subject,Posters -- Exhibitions,WHAT|subject|Posters -- Exhibitions,web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,subject,"Posters, Polish","WHAT|subject|Posters, Polish",web_declaration_v1,1.0.0
+adecd51fc78ce402540646ab9c048894,what,type,image,WHAT|type|image,web_declaration_v1,1.0.0
+c1219286fb3f96cd24ae39eb468e6c95,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+c1219286fb3f96cd24ae39eb468e6c95,what,subject,"Clarke, Charles M. (Mrs.)","WHAT|subject|Clarke, Charles M. (Mrs.)",web_declaration_v1,1.0.0
+c1219286fb3f96cd24ae39eb468e6c95,what,subject,Sewickley Music Club,WHAT|subject|Sewickley Music Club,web_declaration_v1,1.0.0
+c1219286fb3f96cd24ae39eb468e6c95,what,type,text,WHAT|type|text,web_declaration_v1,1.0.0
+0727af4ab9ccb917ed24976ee5787774,what,title,Jazz on jazz. reel 3,WHAT|title|Jazz on jazz. reel 3,web_declaration_v1,1.0.0
+0727af4ab9ccb917ed24976ee5787774,what,subject,Jazz--1981-1990,WHAT|subject|Jazz--1981-1990,web_declaration_v1,1.0.0
+0727af4ab9ccb917ed24976ee5787774,what,type,sound,WHAT|type|sound,web_declaration_v1,1.0.0
+a400bb8626055252c99a5d260077ac3a,what,title,Jazz Week: Chamber Jazz Ensembles,WHAT|title|Jazz Week: Chamber Jazz Ensembles,web_declaration_v1,1.0.0
+a400bb8626055252c99a5d260077ac3a,what,type,text,WHAT|type|text,web_declaration_v1,1.0.0
+d15f9fb22605ef2e53f636e77f158b77,what,title,Jazz Week: Chamber Jazz Ensembles,WHAT|title|Jazz Week: Chamber Jazz Ensembles,web_declaration_v1,1.0.0
+d15f9fb22605ef2e53f636e77f158b77,what,type,text,WHAT|type|text,web_declaration_v1,1.0.0
+d2f7966d9d4a0baaed251cd34cd1b16b,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+79ace2f94353b4e7f49fe2335b361905,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+79ace2f94353b4e7f49fe2335b361905,what,subject,"Castaneda, Jazz","WHAT|subject|Castaneda, Jazz",web_declaration_v1,1.0.0
+79ace2f94353b4e7f49fe2335b361905,what,subject,Near-death experiences,WHAT|subject|Near-death experiences,web_declaration_v1,1.0.0
+79ace2f94353b4e7f49fe2335b361905,what,subject,Tattoos,WHAT|subject|Tattoos,web_declaration_v1,1.0.0
+79ace2f94353b4e7f49fe2335b361905,what,subject,Backpacks,WHAT|subject|Backpacks,web_declaration_v1,1.0.0
+79ace2f94353b4e7f49fe2335b361905,what,subject,Loring Park Neighborhood,WHAT|subject|Loring Park Neighborhood,web_declaration_v1,1.0.0
+79ace2f94353b4e7f49fe2335b361905,what,type,image,WHAT|type|image,web_declaration_v1,1.0.0
+348d9dc4be7f8b0d4459886c6a102ba6,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+348d9dc4be7f8b0d4459886c6a102ba6,what,subject,Borås Wäfveri AB,WHAT|subject|Borås Wäfveri AB,web_declaration_v1,1.0.0
+348d9dc4be7f8b0d4459886c6a102ba6,what,subject,"Krondahl, Hans","WHAT|subject|Krondahl, Hans",web_declaration_v1,1.0.0
+348d9dc4be7f8b0d4459886c6a102ba6,what,type,physical object,WHAT|type|physical object,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Trombone,WHAT|subject|Trombone,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Clarinet,WHAT|subject|Clarinet,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Arts and Culture,WHAT|subject|Arts and Culture,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Flutist,WHAT|subject|Flutist,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Dress accessories,WHAT|subject|Dress accessories,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Eyeglasses,WHAT|subject|Eyeglasses,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Flute,WHAT|subject|Flute,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Smoking Implements,WHAT|subject|Smoking Implements,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Musical instruments,WHAT|subject|Musical instruments,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Pianos,WHAT|subject|Pianos,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Horn player,WHAT|subject|Horn player,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Saxophone,WHAT|subject|Saxophone,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Entertainers,WHAT|subject|Entertainers,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Musicians,WHAT|subject|Musicians,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Bass,WHAT|subject|Bass,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Composer,WHAT|subject|Composer,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Drums (Membranophones),WHAT|subject|Drums (Membranophones),web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Portraits,WHAT|subject|Portraits,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Pianist,WHAT|subject|Pianist,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Trumpets,WHAT|subject|Trumpets,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Headgear,WHAT|subject|Headgear,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Cigar,WHAT|subject|Cigar,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Music,WHAT|subject|Music,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Costume,WHAT|subject|Costume,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Men,WHAT|subject|Men,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Hats,WHAT|subject|Hats,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Saxophonist,WHAT|subject|Saxophonist,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Derby hat,WHAT|subject|Derby hat,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Jazz musician,WHAT|subject|Jazz musician,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,"Sharp, William","WHAT|subject|Sharp, William",web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,"Block, Al","WHAT|subject|Block, Al",web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,"Shachner, Harold","WHAT|subject|Shachner, Harold",web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,"Spanier, Francis Joseph","WHAT|subject|Spanier, Francis Joseph",web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,"Kane, Ed","WHAT|subject|Kane, Ed",web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,"Smith, William Henry","WHAT|subject|Smith, William Henry",web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Musical instrument,WHAT|subject|Musical instrument,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Piano,WHAT|subject|Piano,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Dress Accessory,WHAT|subject|Dress Accessory,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Equipment,WHAT|subject|Equipment,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Trumpet,WHAT|subject|Trumpet,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Drum,WHAT|subject|Drum,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Hat,WHAT|subject|Hat,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,William Henry Smith,WHAT|subject|William Henry Smith,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Male,WHAT|subject|Male,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Performing Arts,WHAT|subject|Performing Arts,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Musician,WHAT|subject|Musician,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Al Block,WHAT|subject|Al Block,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Ed Kane,WHAT|subject|Ed Kane,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Harold Shachner,WHAT|subject|Harold Shachner,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Francis Joseph Spanier,WHAT|subject|Francis Joseph Spanier,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,subject,Portrait,WHAT|subject|Portrait,web_declaration_v1,1.0.0
+cf3fb6595409d19a0060f920ac5639a1,what,type,image,WHAT|type|image,web_declaration_v1,1.0.0
+c6ef5cab785f4ffa17512c096c9bbe70,what,title,Jazz,WHAT|title|Jazz,web_declaration_v1,1.0.0
+c6ef5cab785f4ffa17512c096c9bbe70,what,subject,Music--Performance,WHAT|subject|Music--Performance,web_declaration_v1,1.0.0
+c6ef5cab785f4ffa17512c096c9bbe70,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+c6ef5cab785f4ffa17512c096c9bbe70,what,type,sound,WHAT|type|sound,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150510742-0,what,title,The Cambridge companion to jazz / edited by Mervyn Cooke and David Horn,WHAT|title|The Cambridge companion to jazz / edited by Mervyn Cooke and David Horn,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150510742-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150510742-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150510742-0,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+sro-1663946979444-1663946989955-0,what,title,Dancing IS the Jazz Age….Jazz is dancing music. Swing is Jazz music,WHAT|title|Dancing IS the Jazz Age….Jazz is dancing music. Swing is Jazz music,web_declaration_v1,1.0.0
+sro-1663946979444-1663946989955-0,what,type,Blog,WHAT|type|Blog,web_declaration_v1,1.0.0
+sro-1663946979444-1663946989955-0,what,type,Smithsonian staff publications,WHAT|type|Smithsonian staff publications,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149727294-1,what,title,"Discover jazz / [edited by] John Edward Hasse, Tad Lathrop","WHAT|title|Discover jazz / [edited by] John Edward Hasse, Tad Lathrop",web_declaration_v1,1.0.0
+ld1-1646149545906-1646149727294-1,what,subject,"Analysis, appreciation","WHAT|subject|Analysis, appreciation",web_declaration_v1,1.0.0
+ld1-1646149545906-1646149727294-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149727294-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149727294-1,what,type,Textbooks,WHAT|type|Textbooks,web_declaration_v1,1.0.0
+ld1-1686732332010-1686732332025-1,what,title,The Oxford companion to jazz edited by Bill Kirchner,WHAT|title|The Oxford companion to jazz edited by Bill Kirchner,web_declaration_v1,1.0.0
+ld1-1686732332010-1686732332025-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1686732332010-1686732332025-1,what,subject,Jazz singers,WHAT|subject|Jazz singers,web_declaration_v1,1.0.0
+ld1-1686732332010-1686732332025-1,what,subject,Histoire et critique,WHAT|subject|Histoire et critique,web_declaration_v1,1.0.0
+ld1-1686732332010-1686732332025-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1686732332010-1686732332025-1,what,subject,Musicians,WHAT|subject|Musicians,web_declaration_v1,1.0.0
+ld1-1686732332010-1686732332025-1,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1686732332010-1686732332025-1,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,title,The real jazz,WHAT|title|The real jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,subject,Discography,WHAT|subject|Discography,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,subject,Discographie,WHAT|subject|Discographie,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,type,Jazz,WHAT|type|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,type,jazz,WHAT|type|jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,type,Discographies,WHAT|type|Discographies,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149602686-1,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1646149545906-1646150217822-1,what,title,"Jazz/not jazz : the music and its boundaries / edited by David Ake, Charles Hiroshi Garrett, Daniel Goldmark","WHAT|title|Jazz/not jazz : the music and its boundaries / edited by David Ake, Charles Hiroshi Garrett, Daniel Goldmark",web_declaration_v1,1.0.0
+ld1-1646149545906-1646150217822-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150217822-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150217822-1,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,title,I like jazz,WHAT|title|I like jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,subject,Juvenile literature,WHAT|subject|Juvenile literature,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,subject,Jazz music,WHAT|subject|Jazz music,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,subject,"Musicians, American","WHAT|subject|Musicians, American",web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,type,Jazz,WHAT|type|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,type,jazz,WHAT|type|jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149969363-0,what,type,Discographies,WHAT|type|Discographies,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150255234-1,what,title,A new history of jazz / Alyn Shipton,WHAT|title|A new history of jazz / Alyn Shipton,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150255234-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150255234-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150255234-1,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150676285-0,what,title,The world of jazz / Rodney Dale,WHAT|title|The world of jazz / Rodney Dale,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150676285-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150676285-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150676285-0,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074671-0,what,title,The history of jazz by Ted Gioia,WHAT|title|The history of jazz by Ted Gioia,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074671-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074671-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074671-0,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074671-0,what,type,Electronic information resources,WHAT|type|Electronic information resources,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,title,"Jazz: the transition years, 1940-1960 [by] John S. Wilson","WHAT|title|Jazz: the transition years, 1940-1960 [by] John S. Wilson",web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,subject,Discography,WHAT|subject|Discography,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,subject,Musicians,WHAT|subject|Musicians,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,type,Jazz,WHAT|type|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,type,jazz,WHAT|type|jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,type,Discographies,WHAT|type|Discographies,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150956262-1,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1646149545906-1646149995397-1,what,title,Jazz journal and jazz & blues,WHAT|title|Jazz journal and jazz & blues,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149995397-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149995397-1,what,subject,Music,WHAT|subject|Music,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149995397-1,what,type,Periodicals,WHAT|type|Periodicals,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,title,Jazz people with photographs by the author,WHAT|title|Jazz people with photographs by the author,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,subject,Musiciens de jazz,WHAT|subject|Musiciens de jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,subject,Musicians,WHAT|subject|Musicians,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,type,Jazz,WHAT|type|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,type,jazz,WHAT|type|jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149884396-1,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,title,Latin jazz the other jazz Christopher Washburne,WHAT|title|Latin jazz the other jazz Christopher Washburne,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,subject,Histoire et critique,WHAT|subject|Histoire et critique,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,culture,Latinos,WHAT|culture|Latinos,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,culture,Hispanics,WHAT|culture|Hispanics,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,type,E-books,WHAT|type|E-books,web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1682428074342-1682428074663-0,what,type,Electronic information resources,WHAT|type|Electronic information resources,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149571316-0,what,title,"The new edition of the encyclopedia of jazz : completely revised, enlarged and brought up to date / by Leonard Feather ; appreciations by Duke Ellington, Benny Goodman and John Hammond","WHAT|title|The new edition of the encyclopedia of jazz : completely revised, enlarged and brought up to date / by Leonard Feather ; appreciations by Duke Ellington, Benny Goodman and John Hammond",web_declaration_v1,1.0.0
+ld1-1646149545906-1646149571316-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149571316-0,what,subject,Music,WHAT|subject|Music,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149571316-0,what,subject,Biology,WHAT|subject|Biology,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149571316-0,what,subject,Musicians,WHAT|subject|Musicians,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149571316-0,what,type,Bibliographies,WHAT|type|Bibliographies,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149571316-0,what,type,Discographies,WHAT|type|Discographies,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522405-0,what,title,The history of jazz,WHAT|title|The history of jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522405-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522405-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522405-0,what,type,Jazz,WHAT|type|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522405-0,what,type,jazz,WHAT|type|jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522405-0,what,type,Discographies,WHAT|type|Discographies,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522405-0,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,title,Jazz profiles. Jazz in song [sound recording],WHAT|title|Jazz profiles. Jazz in song [sound recording],web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,subject,Jazz singers,WHAT|subject|Jazz singers,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,subject,Music,WHAT|subject|Music,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,subject,History,WHAT|subject|History,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,subject,Musicians,WHAT|subject|Musicians,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,subject,Jazz vocals,WHAT|subject|Jazz vocals,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,type,Sound recordings,WHAT|type|Sound recordings,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150524143-1,what,type,Texts,WHAT|type|Texts,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,title,"Sight readings photographers and American jazz, 1900-1960 Alan Ainsworth ; foreword by Darius Brubeck","WHAT|title|Sight readings photographers and American jazz, 1900-1960 Alan Ainsworth ; foreword by Darius Brubeck",web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,subject,Photography,WHAT|subject|Photography,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,subject,Jazz dans l'art,WHAT|subject|Jazz dans l'art,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,subject,Photographie,WHAT|subject|Photographie,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,subject,Histoire,WHAT|subject|Histoire,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,subject,History,WHAT|subject|History,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,subject,Jazz in art,WHAT|subject|Jazz in art,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,type,E-books,WHAT|type|E-books,web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1660639900692-1660639901099-0,what,type,Electronic information resources,WHAT|type|Electronic information resources,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522341-0,what,title,"NEA jazz in the schools jazz, an American story produced by Jazz at Lincoln Center","WHAT|title|NEA jazz in the schools jazz, an American story produced by Jazz at Lincoln Center",web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522341-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522341-0,what,subject,Study and teaching (Secondary),WHAT|subject|Study and teaching (Secondary),web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522341-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522341-0,what,type,Video recordings,WHAT|type|Video recordings,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150522341-0,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1646149545906-1646150114083-2,what,title,The rise of a jazz art world / Paul Lopes,WHAT|title|The rise of a jazz art world / Paul Lopes,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150114083-2,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150114083-2,what,subject,Music,WHAT|subject|Music,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150114083-2,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150114083-2,what,subject,Social aspects,WHAT|subject|Social aspects,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150114083-2,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149688165-1,what,title,Riffs & choruses : a new jazz anthology / edited by Andrew Clark,WHAT|title|Riffs & choruses : a new jazz anthology / edited by Andrew Clark,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149688165-1,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149688165-1,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149688165-1,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149719743-0,what,title,Jazz : new perspectives on the history of jazz / by twelve of the world's foremost jazz critics and scholars ; edited by Nat Hentoff and Albert J. McCarthy,WHAT|title|Jazz : new perspectives on the history of jazz / by twelve of the world's foremost jazz critics and scholars ; edited by Nat Hentoff and Albert J. McCarthy,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149719743-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149719743-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149719743-0,what,type,Jazz,WHAT|type|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149719743-0,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149719743-0,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,title,Blue notes in black and white : photography and jazz / Benjamin Cawthra,WHAT|title|Blue notes in black and white : photography and jazz / Benjamin Cawthra,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,subject,Photography,WHAT|subject|Photography,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,subject,"Photography, Artistic","WHAT|subject|Photography, Artistic",web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,subject,Jazz musicians in art,WHAT|subject|Jazz musicians in art,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,subject,History,WHAT|subject|History,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,subject,Musicians,WHAT|subject|Musicians,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,subject,Jazz in art,WHAT|subject|Jazz in art,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150206942-2,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150938686-2,what,title,The culture of jazz : jazz as critical culture / Frank A. Salamone,WHAT|title|The culture of jazz : jazz as critical culture / Frank A. Salamone,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150938686-2,what,subject,Popular culture,WHAT|subject|Popular culture,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150938686-2,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150938686-2,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150938686-2,what,subject,History,WHAT|subject|History,web_declaration_v1,1.0.0
+ld1-1646149545906-1646150938686-2,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,title,Jazz in China : from dance hall music to individual freedom of expression / Eugene Marlow,WHAT|title|Jazz in China : from dance hall music to individual freedom of expression / Eugene Marlow,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,subject,Jazz,WHAT|subject|Jazz,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,subject,Western influences,WHAT|subject|Western influences,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,subject,Music,WHAT|subject|Music,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,subject,Society,WHAT|subject|Society,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,subject,History and criticism,WHAT|subject|History and criticism,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,subject,Musicians,WHAT|subject|Musicians,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,type,Books,WHAT|type|Books,web_declaration_v1,1.0.0
+ld1-1646149545906-1646149971386-0,what,type,"Criticism, interpretation, etc","WHAT|type|Criticism, interpretation, etc",web_declaration_v1,1.0.0

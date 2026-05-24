@@ -1,0 +1,43 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://teasamples/mb/Tea004",
+  "entity_id": "Tea004",
+  "nucleus": {
+    "type": "teasamples",
+    "value": "Tea004"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "tea_company",
+      "value": "Rishi"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "testid",
+      "value": "Tea004"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "tea_product",
+      "value": "Hibiscus Limeade Powder"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "tea_form",
+      "value": "Powder"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "tea_type",
+      "value": "Herbal"
+    }
+  ],
+  "provenance": {
+    "source": "teasamples",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "teasamples",
+    "translated_at": "2026-05-23T23:22:46Z"
+  }
+}

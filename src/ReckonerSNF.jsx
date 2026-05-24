@@ -353,6 +353,22 @@ function safeLower(s) { return String(s ?? "").toLowerCase(); }
 function clampStr(s, n = 80) { const t = String(s ?? ""); return t.length > n ? t.slice(0, n - 1) + "…" : t; }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Download utility
+// Firefox (dev) tolerates detached <a> clicks; WebView2 (Tauri bundle) does
+// not. Always append to DOM, click, then remove so both environments work.
+// ─────────────────────────────────────────────────────────────────────────────
+
+function triggerDownload(url, filename) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Component
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -828,11 +844,7 @@ export default function ReckonerSNF() {
     const { _saved_at, _id, ...exportable } = rset;
     const blob = new Blob([JSON.stringify(exportable, null, 2)], { type: "application/json" });
     const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a");
-    a.href     = url;
-    a.download = `${rset.set_id}.peirce`;
-    a.click();
-    URL.revokeObjectURL(url);
+    triggerDownload(url, `${rset.set_id}.peirce`);
   };
 
   const handleDeleteSet = (id, e) => {
@@ -1024,11 +1036,7 @@ export default function ReckonerSNF() {
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url  = URL.createObjectURL(blob);
-      const a    = document.createElement('a');
-      a.href     = url;
-      a.download = `reckoner_setop_${Date.now()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
+      triggerDownload(url, `reckoner_setop_${Date.now()}.json`);
       return;
     }
 
@@ -1060,7 +1068,10 @@ export default function ReckonerSNF() {
         { field: 'exported_at',  value: new Date().toISOString() },
       ];
       XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(meta), 'Provenance');
-      XLSX.writeFile(wb, `reckoner_setop_${Date.now()}.xlsx`);
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob  = new Blob([wbout], { type: 'application/octet-stream' });
+      const url   = URL.createObjectURL(blob);
+      triggerDownload(url, `reckoner_setop_${Date.now()}.xlsx`);
     }
   };
 
@@ -1470,11 +1481,7 @@ export default function ReckonerSNF() {
     const csv  = [cols.join(','), ...rows.map(r => cols.map(c => escape(r[c] ?? '')).join(','))].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = `reckoner_${activeSchema}_${Date.now()}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    triggerDownload(url, `reckoner_${activeSchema}_${Date.now()}.csv`);
   };
 
   const exportJSON = async () => {
@@ -1498,11 +1505,7 @@ export default function ReckonerSNF() {
     const payload = { query: buildQueryRecord(), results };
     const blob    = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url     = URL.createObjectURL(blob);
-    const a       = document.createElement('a');
-    a.href        = url;
-    a.download    = `reckoner_${activeSchema}_${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    triggerDownload(url, `reckoner_${activeSchema}_${Date.now()}.json`);
   };
 
   const exportXLSX = async () => {
@@ -1543,7 +1546,10 @@ export default function ReckonerSNF() {
     const wb      = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws1, 'Results');
     XLSX.utils.book_append_sheet(wb, ws2, 'Query Record');
-    XLSX.writeFile(wb, `reckoner_${activeSchema}_${Date.now()}.xlsx`);
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const blob  = new Blob([wbout], { type: 'application/octet-stream' });
+    const url   = URL.createObjectURL(blob);
+    triggerDownload(url, `reckoner_${activeSchema}_${Date.now()}.xlsx`);
   };
 
   const exportParquet = async () => {
@@ -1564,11 +1570,7 @@ export default function ReckonerSNF() {
 
       const blob     = await r.blob();
       const url      = URL.createObjectURL(blob);
-      const a        = document.createElement('a');
-      a.href         = url;
-      a.download     = `reckoner_${activeSchema}_${Date.now()}.parquet`;
-      a.click();
-      URL.revokeObjectURL(url);
+      triggerDownload(url, `reckoner_${activeSchema}_${Date.now()}.parquet`);
     } catch (err) {
       console.error('Parquet export failed:', err);
       alert('Parquet export failed. Check that the API server supports /export/parquet.');
@@ -1667,11 +1669,7 @@ export default function ReckonerSNF() {
 
     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = `${slugName}_${Date.now()}.srf.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    triggerDownload(url, `${slugName}_${Date.now()}.srf.json`);
   };
 
   // ── SRF load — drop a .srf.json bundle into Reckoner ─────────────────────

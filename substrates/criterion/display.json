@@ -1,0 +1,7 @@
+{
+  "primary_label": "coordinate.WHO.creator",
+  "secondary_label": "entity_meta.label",
+  "description": "entity_meta.description",
+  "link": "entity_meta.url",
+  "image": "entity_meta.thumbnail_url"
+}

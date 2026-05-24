@@ -1,0 +1,58 @@
+{
+  "srf_version": "1.0",
+  "srf_uri": "srf://letterboxd_watched/mb/https://boxd.it/F9i",
+  "entity_id": "https://boxd.it/F9i",
+  "nucleus": {
+    "type": "letterboxd_watched",
+    "value": "https://boxd.it/F9i"
+  },
+  "facts": [
+    {
+      "dimension": "WHO",
+      "semantic_key": "name",
+      "value": "The Daytrippers"
+    },
+    {
+      "dimension": "WHAT",
+      "semantic_key": "letterboxd_uri",
+      "value": "https://boxd.it/F9i"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "full_date",
+      "value": "2024-01-15"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "2024"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month",
+      "value": "2024-01"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "month_name",
+      "value": "January"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "day_of_week",
+      "value": "Monday"
+    },
+    {
+      "dimension": "WHEN",
+      "semantic_key": "year",
+      "value": "1996"
+    }
+  ],
+  "provenance": {
+    "source": "letterboxd_watched",
+    "translated_by": "ModelBuilder",
+    "translator_version": "1.0.0",
+    "lens": "letterboxd_watched",
+    "translated_at": "2026-05-23T22:31:17Z"
+  }
+}
