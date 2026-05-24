@@ -1945,6 +1945,256 @@ async def export_parquet(req: ParquetExportRequest):
     )
 
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Save-to-disk exports  (v0.1 desktop contract)
+#
+# All formats write to ~/Documents/Reckoner Exports/ and return the path.
+# The frontend shows the path — no blob, no hidden <a>, no browser download.
+# ─────────────────────────────────────────────────────────────────────────────
+
+from datetime import datetime
+
+EXPORT_DIR = Path.home() / "Documents" / "Reckoner Exports"
+EXPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+
+class SaveExportRequest(BaseModel):
+    peirce:       Optional[str]        = None
+    constraints:  Optional[List[dict]] = None
+    entity_ids:   Optional[List[str]]  = None
+    schema:       Optional[str]        = None
+    substrate_id: Optional[str]        = None
+    fields:       Optional[List[str]]  = None
+    sort_field:   Optional[str]        = None
+    sort_dir:     Optional[str]        = "asc"
+
+
+def _resolve_rows(req: SaveExportRequest) -> tuple[list[dict], str]:
+    """Shared logic: resolve entity IDs → flat row list. Returns (rows, substrate_id)."""
+    import pandas as pd
+    from collections import defaultdict
+
+    substrate_id = req.substrate_id or req.schema
+    substrate    = _registry.get(substrate_id)
+
+    if not substrate:
+        if _registry:
+            substrate_id = list(_registry.keys())[0]
+            substrate    = _registry[substrate_id]
+        else:
+            raise HTTPException(status_code=404, detail="No substrates loaded")
+
+    # Resolve entity IDs
+    if req.entity_ids:
+        entity_ids = req.entity_ids
+    else:
+        if req.peirce:
+            peirce_string = req.peirce
+        elif req.constraints:
+            peirce_string = constraints_to_peirce(req.constraints)
+        else:
+            raise HTTPException(status_code=400, detail="peirce, constraints, or entity_ids required")
+
+        try:
+            entity_ids, _, _ = _duckdb_query_with_trace(
+                substrate     = substrate,
+                peirce_string = peirce_string,
+                limit         = 100000,
+            )
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+    if not entity_ids:
+        raise HTTPException(status_code=204, detail="No results to export")
+
+    # Pull flat spoke rows
+    placeholders = ", ".join("?" * len(entity_ids))
+    spoke_rows = substrate._conn.execute(
+        f"SELECT entity_id, dimension, semantic_key, value "
+        f"FROM snf_spoke "
+        f"WHERE entity_id IN ({placeholders}) AND lens_id = ? "
+        f"ORDER BY entity_id, dimension, semantic_key",
+        entity_ids + [substrate.lens_id]
+    ).fetchall()
+
+    by_entity = defaultdict(dict)
+    for eid, dimension, semantic_key, value in spoke_rows:
+        field = semantic_key.split(".")[-1] if "." in semantic_key else semantic_key
+        if req.fields and field not in req.fields:
+            continue
+        col = f"{dimension.lower()}_{field}"
+        if col in by_entity[eid]:
+            by_entity[eid][col] = f"{by_entity[eid][col]}; {value}"
+        else:
+            by_entity[eid][col] = value
+
+    rows = []
+    for eid in entity_ids:
+        row = {"entity_id": eid}
+        row.update(by_entity.get(eid, {}))
+        rows.append(row)
+
+    # Sort if requested
+    if req.sort_field and rows:
+        reverse = (req.sort_dir or "asc") == "desc"
+        def sort_key(r):
+            v = r.get(req.sort_field) or \
+                next((r[k] for k in r if k.endswith(f"_{req.sort_field}")), "")
+            try:
+                return (0, float(v))
+            except (ValueError, TypeError):
+                return (1, str(v).lower())
+        rows.sort(key=sort_key, reverse=reverse)
+
+    return rows, substrate_id
+
+
+def _ts() -> str:
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
+
+
+@app.post("/api/export/save-csv")
+async def export_save_csv(req: SaveExportRequest):
+    """Write a CSV to ~/Documents/Reckoner Exports/ and return the path."""
+    import pandas as pd
+
+    rows, substrate_id = _resolve_rows(req)
+    filename = f"reckoner_{substrate_id}_{_ts()}.csv"
+    path     = EXPORT_DIR / filename
+
+    pd.DataFrame(rows).to_csv(path, index=False)
+
+    return {"saved": True, "path": str(path), "filename": filename, "row_count": len(rows)}
+
+
+@app.post("/api/export/save-json")
+async def export_save_json(req: SaveExportRequest):
+    """Write a JSON file to ~/Documents/Reckoner Exports/ and return the path."""
+    rows, substrate_id = _resolve_rows(req)
+    filename = f"reckoner_{substrate_id}_{_ts()}.json"
+    path     = EXPORT_DIR / filename
+
+    path.write_text(json.dumps(rows, indent=2, default=str), encoding="utf-8")
+
+    return {"saved": True, "path": str(path), "filename": filename, "row_count": len(rows)}
+
+
+@app.post("/api/export/save-xlsx")
+async def export_save_xlsx(req: SaveExportRequest):
+    """Write an XLSX file to ~/Documents/Reckoner Exports/ and return the path."""
+    import pandas as pd
+
+    rows, substrate_id = _resolve_rows(req)
+    filename = f"reckoner_{substrate_id}_{_ts()}.xlsx"
+    path     = EXPORT_DIR / filename
+
+    df = pd.DataFrame(rows)
+    df.to_excel(str(path), index=False, engine="openpyxl")
+
+    return {"saved": True, "path": str(path), "filename": filename, "row_count": len(rows)}
+
+
+@app.post("/api/export/save-parquet")
+async def export_save_parquet(req: SaveExportRequest):
+    """Write a Parquet file to ~/Documents/Reckoner Exports/ and return the path."""
+    import pandas as pd
+
+    rows, substrate_id = _resolve_rows(req)
+    filename = f"reckoner_{substrate_id}_{_ts()}.parquet"
+    path     = EXPORT_DIR / filename
+
+    substrate_id_key = req.substrate_id or req.schema
+    substrate        = _registry.get(substrate_id_key) or _registry.get(substrate_id)
+
+    if substrate:
+        import tempfile, os as _os
+        df = pd.DataFrame(rows)
+        with tempfile.NamedTemporaryFile(suffix=".parquet", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            substrate._conn.execute(
+                "COPY (SELECT * FROM df) TO ? (FORMAT PARQUET)",
+                [str(path)]
+            )
+        finally:
+            if _os.path.exists(tmp_path):
+                _os.unlink(tmp_path)
+    else:
+        pd.DataFrame(rows).to_parquet(str(path), index=False)
+
+    return {"saved": True, "path": str(path), "filename": filename, "row_count": len(rows)}
+
+
+@app.post("/api/export/save-srf")
+async def export_save_srf(req: SaveExportRequest):
+    """Write an SRF JSON bundle to ~/Documents/Reckoner Exports/ and return the path."""
+    rows, substrate_id = _resolve_rows(req)
+
+    # Build SRF-style bundle: array of {entity_id, coordinates}
+    # Reuse the hydrated shape the frontend already understands
+    substrate_key = req.substrate_id or req.schema or substrate_id
+    substrate     = _registry.get(substrate_key)
+
+    if substrate:
+        hydrated = hydrate_results(
+            entity_ids          = [r["entity_id"] for r in rows],
+            substrate           = substrate,
+            matched_coordinates = {},
+            fields              = req.fields,
+        )
+        bundle = {
+            "schema":      substrate_id,
+            "lens_id":     substrate.lens_id,
+            "exported_at": datetime.now().isoformat(),
+            "row_count":   len(hydrated),
+            "records":     hydrated,
+        }
+    else:
+        bundle = {
+            "schema":      substrate_id,
+            "exported_at": datetime.now().isoformat(),
+            "row_count":   len(rows),
+            "records":     rows,
+        }
+
+    filename = f"reckoner_{substrate_id}_{_ts()}.srf.json"
+    path     = EXPORT_DIR / filename
+    path.write_text(json.dumps(bundle, indent=2, default=str), encoding="utf-8")
+
+    return {"saved": True, "path": str(path), "filename": filename, "row_count": bundle["row_count"]}
+
+
+@app.post("/api/export/save-peirce")
+async def export_save_peirce(req: SaveExportRequest):
+    """Write a .peirce set bundle to ~/Documents/Reckoner Exports/ and return the path."""
+    rows, substrate_id = _resolve_rows(req)
+
+    peirce_str = req.peirce or (constraints_to_peirce(req.constraints) if req.constraints else "")
+
+    bundle = {
+        "set_id":      f"{substrate_id}_{_ts()}",
+        "query": {
+            "substrate_id":       substrate_id,
+            "peirce":             peirce_str,
+            "constraints":        req.constraints or [],
+            "exported_at":        datetime.now().isoformat(),
+        },
+        "results": {
+            "entity_ids":  [r["entity_id"] for r in rows],
+            "count":       len(rows),
+            "captured_at": datetime.now().isoformat(),
+        },
+    }
+
+    filename = f"reckoner_{substrate_id}_{_ts()}.peirce"
+    path     = EXPORT_DIR / filename
+    path.write_text(json.dumps(bundle, indent=2, default=str), encoding="utf-8")
+
+    return {"saved": True, "path": str(path), "filename": filename, "row_count": len(rows)}
+
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # SRF Import
 #
@@ -2537,3 +2787,37 @@ if __name__ == "__main__":
         reload=DEBUG,
         log_level="info" if DEBUG else "warning",
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Set-operation and .peirce-bundle save endpoints
+# ─────────────────────────────────────────────────────────────────────────────
+
+class SaveSetOpRequest(BaseModel):
+    format:  str        # 'json' (xlsx not yet supported server-side)
+    payload: dict
+
+
+@app.post("/api/export/save-setop")
+async def export_save_setop(req: SaveSetOpRequest):
+    """Save a set-operation result (diff / union / intersect) to disk."""
+    filename = f"reckoner_setop_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    path     = EXPORT_DIR / filename
+    path.write_text(json.dumps(req.payload, indent=2, default=str), encoding="utf-8")
+    return {"saved": True, "path": str(path), "filename": filename}
+
+
+class SavePeirceBundleRequest(BaseModel):
+    bundle:   dict
+    filename: Optional[str] = None
+
+
+@app.post("/api/export/save-peirce-bundle")
+async def export_save_peirce_bundle(req: SavePeirceBundleRequest):
+    """Save an arbitrary .peirce bundle dict to disk."""
+    filename = req.filename or f"reckoner_{datetime.now().strftime('%Y%m%d_%H%M%S')}.peirce"
+    # Sanitise filename
+    safe = "".join(c for c in filename if c.isalnum() or c in "._- ").strip()
+    path = EXPORT_DIR / (safe or filename)
+    path.write_text(json.dumps(req.bundle, indent=2, default=str), encoding="utf-8")
+    return {"saved": True, "path": str(path), "filename": path.name}

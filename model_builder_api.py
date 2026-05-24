@@ -1161,6 +1161,74 @@ async def upload_file(file: UploadFile = File(...)):
     }
 
 
+# ── POST /api/mb/upload_path ─────────────────────────────────────────────────
+
+class UploadPathRequest(BaseModel):
+    file_path: str
+
+
+@router.post("/upload_path")
+async def upload_path(req: UploadPathRequest):
+    """
+    Load a file by disk path (Tauri drag-drop).
+    Reads the file directly from disk — no blob transfer needed.
+    Returns the same shape as /upload.
+    """
+    _purge_expired()
+
+    path = Path(req.file_path)
+    if not path.exists():
+        raise HTTPException(status_code=404, detail=f"File not found: {req.file_path}")
+
+    ext = path.suffix.lower()
+    if ext not in {".csv", ".xlsx", ".xls", ".json"}:
+        raise HTTPException(status_code=400, detail=f"Unsupported file type: {ext}. Use CSV, Excel, or JSON.")
+
+    try:
+        content = path.read_bytes()
+
+        if ext == ".csv":
+            try:
+                df = pd.read_csv(io.BytesIO(content), dtype=str, keep_default_na=False)
+            except UnicodeDecodeError:
+                df = pd.read_csv(io.BytesIO(content), dtype=str, encoding="latin-1", keep_default_na=False)
+        elif ext == ".json":
+            if not OSI_PARSER_AVAILABLE:
+                raise HTTPException(
+                    status_code=501,
+                    detail="osi_parser.py required for JSON upload. Ensure osi_parser.py is in the same directory."
+                )
+            try:
+                parsed = parse_json_array(content, path.name)
+            except ValueError as e:
+                raise HTTPException(status_code=422, detail=str(e))
+            df = pd.DataFrame(parsed["rows"])
+        else:
+            df = pd.read_excel(io.BytesIO(content), dtype=str, keep_default_na=False)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Could not parse file: {e}")
+
+    if df.empty:
+        raise HTTPException(status_code=422, detail="File appears to be empty.")
+
+    columns = _build_columns(df)
+    token   = _new_token()
+
+    _sessions[token] = SessionData(
+        df          = df,
+        source_info = {"type": "file", "filename": path.name, "format": ext.lstrip(".")},
+        columns     = columns,
+    )
+
+    return {
+        "upload_token": token,
+        "columns":      columns,
+        "row_count":    len(df),
+    }
+
+
 # ── POST /api/mb/introspect ──────────────────────────────────────────────────
 
 @router.post("/introspect")

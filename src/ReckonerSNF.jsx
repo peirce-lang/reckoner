@@ -353,20 +353,12 @@ function safeLower(s) { return String(s ?? "").toLowerCase(); }
 function clampStr(s, n = 80) { const t = String(s ?? ""); return t.length > n ? t.slice(0, n - 1) + "…" : t; }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Download utility
-// Firefox (dev) tolerates detached <a> clicks; WebView2 (Tauri bundle) does
-// not. Always append to DOM, click, then remove so both environments work.
+// Export contract (v0.1 desktop)
+//
+// All exports POST to /api/export/save-* — the backend writes the file to
+// ~/Documents/Reckoner Exports/ and returns { saved, path, filename, row_count }.
+// The frontend shows the path in a dismissable toast. No blobs, no <a> clicks.
 // ─────────────────────────────────────────────────────────────────────────────
-
-function triggerDownload(url, filename) {
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Component
@@ -391,6 +383,7 @@ export default function ReckonerSNF() {
   const [searchTerm2, setSearchTerm2]   = useState("");
   const [selectedOp, setSelectedOp]     = useState(null);
   const [apiStatus, setApiStatus]       = useState(null);
+  const [exportMsg, setExportMsg]       = useState(null); // { text, ok } — shown after save-to-disk exports
 
   // ── Projection — field picker ─────────────────────────────────────────────
   // projectedFields: Set of field names to show. Empty = show all (default).
@@ -839,12 +832,21 @@ export default function ReckonerSNF() {
     setShowSaveSetDialog(false);
   };
 
-  const handleDownloadSet = (rset) => {
-    // Export .peirce — strips internal _* metadata fields
+  const handleDownloadSet = async (rset) => {
+    // Save .peirce to ~/Documents/Reckoner Exports/
     const { _saved_at, _id, ...exportable } = rset;
-    const blob = new Blob([JSON.stringify(exportable, null, 2)], { type: "application/json" });
-    const url  = URL.createObjectURL(blob);
-    triggerDownload(url, `${rset.set_id}.peirce`);
+    try {
+      const r = await fetch(`${API_URL}/export/save-peirce-bundle`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ bundle: exportable, filename: `${rset.set_id}.peirce` }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || r.status);
+      showExportToast(`✓ .peirce saved\n${d.path}`);
+    } catch (err) {
+      showExportToast(`✗ .peirce save failed: ${err.message}`, false);
+    }
   };
 
   const handleDeleteSet = (id, e) => {
@@ -1006,72 +1008,43 @@ export default function ReckonerSNF() {
 
   // ── Set operation export ─────────────────────────────────────────────────
 
-  const exportSetOperation = (format) => {
-    const XLSX = window.XLSX;
-
-    // Gather the data depending on what's showing
-    const isDiff   = !!diffResult;
-    const isSetOp  = !!setOpResult;
+  const exportSetOperation = async (format) => {
+    const isDiff  = !!diffResult;
+    const isSetOp = !!setOpResult;
     if (!isDiff && !isSetOp) return;
 
-    if (format === 'json') {
-      const payload = isDiff ? {
-        operation:  'diff',
-        set_a:      diffSetA?.set_id,
-        set_b:      diffSetB?.set_id,
-        only_a:     { count: diffResult.onlyA.length, entity_ids: diffResult.onlyA },
-        only_b:     { count: diffResult.onlyB.length, entity_ids: diffResult.onlyB },
-        both:       { count: diffResult.both.length,  entity_ids: diffResult.both  },
-        warnings:   diffResult.warnings || [],
-        exported_at: new Date().toISOString(),
-      } : {
-        operation:   setOpResult.operation,
-        label:       setOpResult.label,
-        set_a:       diffSetA?.set_id,
-        set_b:       diffSetB?.set_id,
-        entity_ids:  setOpResult.ids,
-        count:       setOpResult.ids.length,
-        warnings:    setOpResult.warnings || [],
-        exported_at: new Date().toISOString(),
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const url  = URL.createObjectURL(blob);
-      triggerDownload(url, `reckoner_setop_${Date.now()}.json`);
-      return;
-    }
+    // Build a self-contained JSON payload and save it server-side
+    const payload = isDiff ? {
+      operation:   'diff',
+      set_a:       diffSetA?.set_id,
+      set_b:       diffSetB?.set_id,
+      only_a:      { count: diffResult.onlyA.length, entity_ids: diffResult.onlyA },
+      only_b:      { count: diffResult.onlyB.length, entity_ids: diffResult.onlyB },
+      both:        { count: diffResult.both.length,  entity_ids: diffResult.both  },
+      warnings:    diffResult.warnings || [],
+      exported_at: new Date().toISOString(),
+    } : {
+      operation:   setOpResult.operation,
+      label:       setOpResult.label,
+      set_a:       diffSetA?.set_id,
+      set_b:       diffSetB?.set_id,
+      entity_ids:  setOpResult.ids,
+      count:       setOpResult.ids.length,
+      warnings:    setOpResult.warnings || [],
+      exported_at: new Date().toISOString(),
+    };
 
-    if (format === 'xlsx') {
-      if (!XLSX) { alert('SheetJS not available.'); return; }
-      const wb = XLSX.utils.book_new();
-
-      if (isDiff) {
-        // Three sheets for diff
-        const toRows = ids => ids.map(id => ({ entity_id: id }));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(toRows(diffResult.onlyA)), `Only in ${diffSetA?.set_id}`.slice(0, 31));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(toRows(diffResult.onlyB)), `Only in ${diffSetB?.set_id}`.slice(0, 31));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(toRows(diffResult.both)),  'In Both');
-      } else {
-        // One sheet for union/intersect
-        const rows = setOpResult.ids.map(id => ({ entity_id: id }));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), setOpResult.label.slice(0, 31));
-      }
-
-      // Always add a provenance sheet
-      const meta = [
-        { field: 'operation',    value: isDiff ? 'diff' : setOpResult.operation },
-        { field: 'set_a',        value: diffSetA?.set_id || '' },
-        { field: 'set_b',        value: diffSetB?.set_id || '' },
-        { field: 'set_a_count',  value: String(diffSetA?.results?.count ?? '') },
-        { field: 'set_b_count',  value: String(diffSetB?.results?.count ?? '') },
-        { field: 'set_a_peirce', value: diffSetA?.query?.peirce || '' },
-        { field: 'set_b_peirce', value: diffSetB?.query?.peirce || '' },
-        { field: 'exported_at',  value: new Date().toISOString() },
-      ];
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(meta), 'Provenance');
-      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-      const blob  = new Blob([wbout], { type: 'application/octet-stream' });
-      const url   = URL.createObjectURL(blob);
-      triggerDownload(url, `reckoner_setop_${Date.now()}.xlsx`);
+    try {
+      const r = await fetch(`${API_URL}/export/save-setop`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ format, payload }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || r.status);
+      showExportToast(`✓ Set operation saved\n${d.path}`);
+    } catch (err) {
+      showExportToast(`✗ Set operation export failed: ${err.message}`, false);
     }
   };
 
@@ -1443,233 +1416,96 @@ export default function ReckonerSNF() {
     return d.results;
   };
 
+  // ── Shared save-to-disk payload builder ──────────────────────────────────
+  const buildSavePayload = () => {
+    const body = { schema: activeSchema, constraints };
+    if (projectedFields.size > 0) body.fields = Array.from(projectedFields);
+    if (sortField) { body.sort_field = sortField; body.sort_dir = sortDir; }
+    if (selectedIds.size > 0) body.entity_ids = Array.from(selectedIds);
+    return body;
+  };
+
+  // ── Show export toast — auto-dismisses after 8 s ─────────────────────────
+  const showExportToast = (text, ok = true) => {
+    setExportMsg({ text, ok });
+    setTimeout(() => setExportMsg(null), 8000);
+  };
+
+  // ── Save to disk helpers ──────────────────────────────────────────────────
   const exportCSV = async () => {
-    const DISPLAY_CAP = 200;
-    const totalCount  = queryStats?.row_count ?? sortedResults.length;
-    const needsFullFetch = selectedIds.size === 0 && totalCount > DISPLAY_CAP;
-
-    let rows;
-    if (needsFullFetch) {
-      try {
-        const fullResults = await fetchFullResults();
-        rows = fullResults.map(item => {
-          const flat = { id: item.id };
-          for (const [dim, facts] of Object.entries(item.coordinates || {})) {
-            for (const f of facts) {
-              const col = `${dim}.${f.field}`;
-              flat[col] = flat[col] ? `${flat[col]} | ${f.value}` : f.value;
-            }
-          }
-          return flat;
-        });
-      } catch (err) {
-        console.error('Full export failed:', err);
-        alert('Full export failed. Exporting current page only.');
-        rows = buildFlatRows();
-      }
-    } else {
-      rows = buildFlatRows();
+    try {
+      const r = await fetch(`${API_URL}/export/save-csv`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildSavePayload()),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || r.status);
+      showExportToast(`✓ CSV saved — ${d.row_count} rows\n${d.path}`);
+    } catch (err) {
+      showExportToast(`✗ CSV export failed: ${err.message}`, false);
     }
-
-    if (rows.length === 0) return;
-    const cols   = Object.keys(rows[0]);
-    const escape = (v) => {
-      const s = String(v ?? '');
-      return s.includes(',') || s.includes('"') || s.includes('\n')
-        ? `"${s.replace(/"/g, '""')}"` : s;
-    };
-    const csv  = [cols.join(','), ...rows.map(r => cols.map(c => escape(r[c] ?? '')).join(','))].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url  = URL.createObjectURL(blob);
-    triggerDownload(url, `reckoner_${activeSchema}_${Date.now()}.csv`);
   };
 
   const exportJSON = async () => {
-    const DISPLAY_CAP = 200;
-    const totalCount  = queryStats?.row_count ?? sortedResults.length;
-    const needsFullFetch = selectedIds.size === 0 && totalCount > DISPLAY_CAP;
-
-    let results;
-    if (needsFullFetch) {
-      try {
-        results = await fetchFullResults();
-      } catch (err) {
-        console.error('Full export failed:', err);
-        alert('Full export failed. Exporting current page only.');
-        results = sortedResults;
-      }
-    } else {
-      results = sortedResults;
+    try {
+      const r = await fetch(`${API_URL}/export/save-json`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildSavePayload()),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || r.status);
+      showExportToast(`✓ JSON saved — ${d.row_count} rows\n${d.path}`);
+    } catch (err) {
+      showExportToast(`✗ JSON export failed: ${err.message}`, false);
     }
-
-    const payload = { query: buildQueryRecord(), results };
-    const blob    = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url     = URL.createObjectURL(blob);
-    triggerDownload(url, `reckoner_${activeSchema}_${Date.now()}.json`);
   };
 
   const exportXLSX = async () => {
-    const XLSX = window.XLSX;
-    if (!XLSX) { alert('SheetJS not available. Add XLSX to the page.'); return; }
-
-    const DISPLAY_CAP = 200;
-    const totalCount  = queryStats?.row_count ?? sortedResults.length;
-    const needsFullFetch = selectedIds.size === 0 && totalCount > DISPLAY_CAP;
-
-    let rows;
-    if (needsFullFetch) {
-      try {
-        const fullResults = await fetchFullResults();
-        rows = fullResults.map(item => {
-          const flat = { id: item.id };
-          for (const [dim, facts] of Object.entries(item.coordinates || {})) {
-            for (const f of facts) {
-              const col = `${dim}.${f.field}`;
-              flat[col] = flat[col] ? `${flat[col]} | ${f.value}` : f.value;
-            }
-          }
-          return flat;
-        });
-      } catch (err) {
-        console.error('Full export failed:', err);
-        alert('Full export failed. Exporting current page only.');
-        rows = buildFlatRows();
-      }
-    } else {
-      rows = buildFlatRows();
+    try {
+      const r = await fetch(`${API_URL}/export/save-xlsx`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildSavePayload()),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || r.status);
+      showExportToast(`✓ XLSX saved — ${d.row_count} rows\n${d.path}`);
+    } catch (err) {
+      showExportToast(`✗ XLSX export failed: ${err.message}`, false);
     }
-
-    const qRecord = buildQueryRecord();
-    const ws1     = XLSX.utils.json_to_sheet(rows);
-    const qRows   = Object.entries(qRecord).map(([k, v]) => ({ field: k, value: String(v ?? '') }));
-    const ws2     = XLSX.utils.json_to_sheet(qRows);
-    const wb      = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws1, 'Results');
-    XLSX.utils.book_append_sheet(wb, ws2, 'Query Record');
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const blob  = new Blob([wbout], { type: 'application/octet-stream' });
-    const url   = URL.createObjectURL(blob);
-    triggerDownload(url, `reckoner_${activeSchema}_${Date.now()}.xlsx`);
   };
 
   const exportParquet = async () => {
-    // Parquet is backend-generated — POST constraints, receive file download.
     try {
-      const body = { constraints, schema: activeSchema };
-      if (projectedFields.size > 0) body.fields = Array.from(projectedFields);
-      if (sortField) { body.sort_field = sortField; body.sort_dir = sortDir; }
-      if (selectedIds.size > 0) body.entity_ids = Array.from(selectedIds);
-
-      const r = await fetch(`${API_URL}/export/parquet`, {
+      const r = await fetch(`${API_URL}/export/save-parquet`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(buildSavePayload()),
       });
-
-      if (!r.ok) { alert(`Parquet export failed: ${r.status}`); return; }
-
-      const blob     = await r.blob();
-      const url      = URL.createObjectURL(blob);
-      triggerDownload(url, `reckoner_${activeSchema}_${Date.now()}.parquet`);
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || r.status);
+      showExportToast(`✓ Parquet saved — ${d.row_count} rows\n${d.path}`);
     } catch (err) {
-      console.error('Parquet export failed:', err);
-      alert('Parquet export failed. Check that the API server supports /export/parquet.');
+      showExportToast(`✗ Parquet export failed: ${err.message}`, false);
     }
   };
 
-  // ── SRF export — one SRF record per result entity ────────────────────────
-  const exportSRF = () => {
-    if (!sortedResults || sortedResults.length === 0) return;
-
-    const lensId            = queryStats?.lens_id || activeSchema || 'reckoner_v1';
-    const translatorVersion = queryStats?.translator_version || '1.0.0';
-    const translatedAt      = new Date().toISOString();
-    const peirceQuery       = queryStats?.peirce || toPeirce(constraints);
-
-    // Derive a default collection name from the Peirce query
-    const defaultName = peirceQuery
-      ? peirceQuery
-          .toLowerCase()
-          .replace(/[^a-z0-9\s]/g, ' ')
-          .trim()
-          .replace(/\s+/g, '_')
-          .slice(0, 60)
-      : activeSchema || 'reckoner_export';
-
-    // Prompt user to name the collection
-    const collectionName = window.prompt(
-      'Name this collection (used as substrate name on import):',
-      defaultName
-    );
-    if (collectionName === null) return; // user cancelled
-
-    const slugName = collectionName.trim().toLowerCase()
-      .replace(/\s+/g, '_')
-      .replace(/[^a-z0-9_]/g, '')
-      || 'reckoner_export';
-
-    const records = sortedResults.map(item => {
-      // Build facts array from coordinates
-      const facts = [];
-      for (const [dim, dimFacts] of Object.entries(item.coordinates || {})) {
-        for (const fact of dimFacts || []) {
-          if (fact.field && fact.value !== undefined && fact.value !== null && fact.value !== '') {
-            facts.push({
-              dimension:    dim.toUpperCase(),
-              semantic_key: fact.field,
-              value:        String(fact.value).replace(/\.0$/, ''),
-            });
-          }
-        }
-      }
-
-      // Derive nucleus from entity_id
-      // Handle URL entity_ids (e.g. https://boxd.it/1efK) gracefully
-      let nucleusType, nucleusValue;
-      const idStr = String(item.id);
-      if (idStr.startsWith('http://') || idStr.startsWith('https://')) {
-        nucleusType  = activeSchema || 'reckoner_id';
-        nucleusValue = idStr;
-      } else {
-        const idParts = idStr.split(':');
-        nucleusType  = idParts.length >= 2 ? idParts.slice(0, -1).join(':') : 'reckoner_id';
-        nucleusValue = idParts[idParts.length - 1];
-      }
-
-      return {
-        srf_version: '1.0',
-        srf_uri:     `srf://${lensId}/reckoner/${item.id}`,
-        entity_id:   String(item.id),
-        nucleus: {
-          type:  nucleusType,
-          value: nucleusValue,
-        },
-        facts,
-        provenance: {
-          source:             activeSchema || 'reckoner',
-          translated_by:      'Reckoner',
-          translator_version: translatorVersion,
-          lens:               lensId,
-          translated_at:      translatedAt,
-        },
-      };
-    });
-
-    // Write one JSON file per record — standard SRF convention
-    // For result sets, bundle as a JSON array in a single file
-    const bundle = {
-      srf_bundle_version: '1.0',
-      collection_name:    slugName,
-      lens_id:            lensId,
-      record_count:       records.length,
-      exported_at:        translatedAt,
-      peirce_query:       peirceQuery,
-      records,
-    };
-
-    const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    triggerDownload(url, `${slugName}_${Date.now()}.srf.json`);
+  // ── SRF export — save to disk ─────────────────────────────────────────────
+  const exportSRF = async () => {
+    try {
+      const r = await fetch(`${API_URL}/export/save-srf`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildSavePayload()),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || r.status);
+      showExportToast(`✓ SRF bundle saved — ${d.row_count} records\n${d.path}`);
+    } catch (err) {
+      showExportToast(`✗ SRF export failed: ${err.message}`, false);
+    }
   };
 
   // ── SRF load — drop a .srf.json bundle into Reckoner ─────────────────────
@@ -2492,6 +2328,24 @@ export default function ReckonerSNF() {
                       ) : (
                         <button onClick={selectAll} className="hover:text-gray-600 underline">select all</button>
                       )}
+                    </div>
+                  )}
+
+                  {/* Export toast — shown after save-to-disk exports */}
+                  {exportMsg && (
+                    <div
+                      onClick={() => setExportMsg(null)}
+                      style={{
+                        position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
+                        background: exportMsg.ok ? '#166534' : '#991b1b',
+                        color: '#fff', borderRadius: 8, padding: '10px 16px',
+                        maxWidth: 420, fontSize: 13, lineHeight: 1.5,
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                        cursor: 'pointer', whiteSpace: 'pre-wrap', wordBreak: 'break-all',
+                      }}
+                      title="Click to dismiss"
+                    >
+                      {exportMsg.text}
                     </div>
                   )}
 
