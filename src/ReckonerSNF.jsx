@@ -374,6 +374,8 @@ export default function ReckonerSNF() {
   const [valuesError, setValuesError]   = useState(null);
   const [showResults, setShowResults]   = useState(false);
   const [results, setResults]           = useState([]);
+  const [entityMetaStore, setEntityMetaStore] = useState({}); // entity_id → meta row, for Plover substrates
+  const [displayContract, setDisplayContract] = useState(null); // display.json for active substrate
   const [selectedIds, setSelectedIds]   = useState(new Set());
   const [loading, setLoading]           = useState(false);
   const [queryStats, setQueryStats]     = useState(null); // { probe_ms, execution_ms, total_ms, row_count, trace }
@@ -465,6 +467,8 @@ export default function ReckonerSNF() {
     setActiveSchema(schema);
     setConstraints([]);
     setResults([]);
+    setEntityMetaStore({});   // clear entity meta when switching substrates
+    setDisplayContract(null);
     setShowResults(false);
     setValuesCache({});
     setAffordances(null);
@@ -477,6 +481,12 @@ export default function ReckonerSNF() {
     setHeaderPrefs(loadHeaderPrefs(schema));
     fetch(`${API_URL}/health?schema=${schema}`)
       .then(r => r.json()).then(setApiStatus).catch(() => {});
+    // Fetch display contract for this substrate — present only for Plover substrates.
+    // 404 for non-Plover substrates is expected and handled silently.
+    fetch(`${API_URL}/display-contract/${schema}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(contract => setDisplayContract(contract))
+      .catch(() => setDisplayContract(null));
     fetch(`${API_URL}/affordances?schema=${schema}`)
       .then((r) => r.json())
       .then((data) => {
@@ -535,6 +545,16 @@ export default function ReckonerSNF() {
   // Re-check health whenever activeSchema changes so statistics.total_entities
   // is populated with the correct substrate's entity count
   useEffect(() => { if (activeSchema) checkApiHealth(); }, [activeSchema]);
+
+  // Fetch display contract whenever activeSchema changes.
+  // 404 for non-Plover substrates is expected — sets null, no Plover display layer shown.
+  useEffect(() => {
+    if (!activeSchema) return;
+    fetch(`${API_URL}/display-contract/${activeSchema}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(contract => setDisplayContract(contract))
+      .catch(() => setDisplayContract(null));
+  }, [activeSchema]);
 
   const checkApiHealth = async () => {
     try { const r = await fetch(`${API_URL}/health?schema=${activeSchema}`); setApiStatus(await r.json()); }
@@ -722,6 +742,7 @@ export default function ReckonerSNF() {
       const d = await r.json();
       startTransition(() => {
         setResults(Array.isArray(d.results) ? d.results : []);
+        setEntityMetaStore({});  // clear stale meta before fetching new
         setSelectedIds(new Set());
         setQueryStats({
           probe_ms:       d.probe_ms,
@@ -744,6 +765,25 @@ export default function ReckonerSNF() {
         });
         setQueryVersion(v => v + 1); // signal TrieValuePanel instances to refetch
       });
+
+      // Fetch entity_meta for each result if this is a Plover substrate.
+      // displayContract being non-null is the signal that entity_meta is available.
+      // Non-Plover substrates skip this entirely — no extra network calls.
+      if (displayContract && Array.isArray(d.results) && d.results.length > 0) {
+        const schema = activeSchema;
+        Promise.all(
+          d.results.map(item =>
+            fetch(`${API_URL}/entity-meta/${schema}/${encodeURIComponent(item.id)}`)
+              .then(r => r.ok ? r.json() : null)
+              .then(meta => meta ? [item.id, meta] : null)
+              .catch(() => null)
+          )
+        ).then(pairs => {
+          const store = {};
+          pairs.forEach(pair => { if (pair) store[pair[0]] = pair[1]; });
+          setEntityMetaStore(store);
+        });
+      }
     } catch { console.error("Query failed"); alert("Query failed. Make sure the API server is running."); setResults([]); }
     finally { setLoading(false); }
   };
@@ -2574,6 +2614,7 @@ export default function ReckonerSNF() {
                                 onToggle={toggleSelected}
                                 headerPrefs={headerPrefs}
                                 onPinHeader={handlePinHeader}
+                                entityMeta={entityMetaStore[item.id] || null}
                               />
                             ))}
                           </div>
@@ -2596,6 +2637,7 @@ export default function ReckonerSNF() {
                       onToggle={toggleSelected}
                       headerPrefs={headerPrefs}
                       onPinHeader={handlePinHeader}
+                      entityMeta={entityMetaStore[item.id] || null}
                     />
                   ))}
                 </div>

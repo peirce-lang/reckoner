@@ -75,16 +75,19 @@ function extractPrimaryLabel(coordinates, entityId, headerPrefs) {
     if (match) return match.value;
   }
 
-  // 2. Default: WHO before WHAT
-  const who = coordinates?.WHO || [];
-  if (who.length > 0) return who[0].value;
-
+  // 2. Default: WHAT name/title first, then WHO
+  // WHO is typically a person or source — WHAT.name is usually the entity's own name.
+  // Checking WHAT first prevents source attribution from becoming the card title.
   const what = coordinates?.WHAT || [];
   const whatPriority = ['title', 'name', 'subject', 'description', 'matter_name', 'matter_id'];
   for (const p of whatPriority) {
     const found = what.find(f => f.field === p);
     if (found) return found.value;
   }
+
+  const who = coordinates?.WHO || [];
+  if (who.length > 0) return who[0].value;
+
   if (what.length > 0) return what[0].value;
 
   for (const dim of ['WHEN', 'WHERE', 'WHY', 'HOW']) {
@@ -106,17 +109,18 @@ function extractSecondaryLabel(coordinates, primaryLabel, headerPrefs) {
     if (match) return match.value;
   }
 
-  // Default: first WHAT title/name, then first non-primary WHO
+  // Default: WHO first (source/attribution), then other WHAT fields
+  // Since WHAT.name is now the primary label, WHO makes a natural subtitle.
   const who  = coordinates?.WHO  || [];
   const what = coordinates?.WHAT || [];
 
+  for (const f of who) {
+    if (f.value !== primaryLabel) return f.value;
+  }
   const whatPriority = ['title', 'name', 'subject', 'matter_name'];
   for (const p of whatPriority) {
     const found = what.find(f => f.field === p);
     if (found && found.value !== primaryLabel) return found.value;
-  }
-  for (const f of who) {
-    if (f.value !== primaryLabel) return f.value;
   }
   for (const f of what) {
     if (f.value !== primaryLabel) return f.value;
@@ -182,6 +186,61 @@ function MatchedOn({ matchedBecause }) {
   );
 }
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CorrelatedGroup — renders facts that share an correlation_id as a paired row
+// e.g. ingredient + amount side by side instead of separate lines
+// ─────────────────────────────────────────────────────────────────────────────
+
+function CorrelatedGroup({ facts, colors, onPinHeader, headerPrefs, dim, hoveredField, setHoveredField }) {
+  if (!facts || facts.length === 0) return null;
+
+  // Single fact in group — render normally
+  if (facts.length === 1) {
+    const fact = facts[0];
+    const isPrimary   = headerPrefs?.primary?.dim   === dim && headerPrefs?.primary?.field   === fact.field;
+    const isSecondary = headerPrefs?.secondary?.dim === dim && headerPrefs?.secondary?.field === fact.field;
+    return (
+      <div
+        className="text-xs text-gray-600 flex gap-1 min-w-0 items-start"
+        onMouseEnter={() => setHoveredField(fact.field)}
+        onMouseLeave={() => setHoveredField(null)}
+      >
+        <span className={`${colors.label} flex-shrink-0`}>{humanizeField(fact.field)}:</span>
+        <span className="text-gray-800 break-words flex-1">{clampStr(fact.value, 60)}</span>
+        {onPinHeader && hoveredField === fact.field && (
+          <span style={{display:'flex', gap:2, flexShrink:0, marginLeft:4}}>
+            <button onClick={() => onPinHeader('primary', dim, fact.field)} title="Pin as card title"
+              style={{ display:'flex', alignItems:'center', padding:'1px 3px', borderRadius:3, border:'1px solid', cursor:'pointer',
+                background: isPrimary ? '#dbeafe' : 'transparent', borderColor: isPrimary ? '#93c5fd' : 'transparent',
+                color: isPrimary ? '#1d4ed8' : '#9ca3af' }}
+            ><Heading1 size={12} /></button>
+            <button onClick={() => onPinHeader('secondary', dim, fact.field)} title="Pin as card subtitle"
+              style={{ display:'flex', alignItems:'center', padding:'1px 3px', borderRadius:3, border:'1px solid', cursor:'pointer',
+                background: isSecondary ? '#f3e8ff' : 'transparent', borderColor: isSecondary ? '#d8b4fe' : 'transparent',
+                color: isSecondary ? '#7c3aed' : '#9ca3af' }}
+            ><Heading2 size={12} /></button>
+          </span>
+        )}
+      </div>
+    );
+  }
+
+  // Multiple facts in group — render as inline pairs: "field: value · field: value"
+  // This is the correlated display: ingredient + amount on one line.
+  return (
+    <div className="text-xs text-gray-600 flex gap-1 min-w-0 items-start flex-wrap">
+      {facts.map((fact, i) => (
+        <span key={i} className="flex gap-1 items-baseline">
+          {i > 0 && <span className="text-gray-300 mx-0.5">·</span>}
+          <span className={`${colors.label} flex-shrink-0`}>{humanizeField(fact.field)}:</span>
+          <span className="text-gray-800">{clampStr(fact.value, 40)}</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // DimensionSection — one dimension's facts rendered as a row of field: value pairs
 // ─────────────────────────────────────────────────────────────────────────────
@@ -191,7 +250,7 @@ function DimensionSection({ dim, facts, projectedFields, onPinHeader, headerPref
 
   const visibleFacts = projectedFields
     ? facts.filter(f => projectedFields.has(f.field))
-    : facts;
+    : facts.filter(f => !SECONDARY_FIELDS.has(f.field));
 
   if (visibleFacts.length === 0) return null;
 
@@ -199,61 +258,40 @@ function DimensionSection({ dim, facts, projectedFields, onPinHeader, headerPref
     bg: 'bg-gray-50', border: 'border-gray-200', text: 'text-gray-800', label: 'text-gray-400'
   };
 
-  const sorted = [...visibleFacts].sort((a, b) => {
-    const aSecondary = SECONDARY_FIELDS.has(a.field) ? 1 : 0;
-    const bSecondary = SECONDARY_FIELDS.has(b.field) ? 1 : 0;
-    return aSecondary - bSecondary;
-  });
-
-  const isPrimary   = (fact) => headerPrefs?.primary?.dim   === dim && headerPrefs?.primary?.field   === fact.field;
-  const isSecondary = (fact) => headerPrefs?.secondary?.dim === dim && headerPrefs?.secondary?.field === fact.field;
-
   const [hoveredField, setHoveredField] = useState(null);
+
+  // Group facts by correlation_id — correlated facts (e.g. ingredient + amount) share an correlation_id
+  // and should render as paired rows. Facts without correlation_id each get their own group.
+  const groups = [];
+  const groupMap = {};
+  for (const fact of visibleFacts) {
+    if (fact.correlation_id) {
+      if (!groupMap[fact.correlation_id]) {
+        groupMap[fact.correlation_id] = [];
+        groups.push({ key: fact.correlation_id, facts: groupMap[fact.correlation_id] });
+      }
+      groupMap[fact.correlation_id].push(fact);
+    } else {
+      groups.push({ key: `solo_${groups.length}`, facts: [fact] });
+    }
+  }
 
   return (
     <div className={`rounded px-2 py-1.5 mb-1 ${colors.bg} ${colors.border} border`}>
       <div className="flex gap-2">
         <span className={`text-xs font-bold ${colors.text} w-10 flex-shrink-0 pt-0.5`}>{dim}</span>
         <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-          {sorted.map((fact, i) => (
-            !SECONDARY_FIELDS.has(fact.field) && (
-              <div
-                key={i}
-                className="text-xs text-gray-600 flex gap-1 min-w-0 items-start"
-                onMouseEnter={() => setHoveredField(fact.field)}
-                onMouseLeave={() => setHoveredField(null)}
-              >
-                <span className={`${colors.label} flex-shrink-0`}>{humanizeField(fact.field)}:</span>
-                <span className="text-gray-800 break-words flex-1">{clampStr(fact.value, 60)}</span>
-                {/* Pin affordance — only shown when onPinHeader is provided and row is hovered */}
-                {onPinHeader && hoveredField === fact.field && (
-                  <span style={{display:'flex', gap:2, flexShrink:0, marginLeft:4}}>
-                    <button
-                      onClick={() => onPinHeader('primary', dim, fact.field)}
-                      title="Pin as card title"
-                      style={{
-                        display:'flex', alignItems:'center', padding:'1px 3px', borderRadius:3,
-                        border:'1px solid', cursor:'pointer',
-                        background: isPrimary(fact) ? '#dbeafe' : 'transparent',
-                        borderColor: isPrimary(fact) ? '#93c5fd' : 'transparent',
-                        color: isPrimary(fact) ? '#1d4ed8' : '#9ca3af',
-                      }}
-                    ><Heading1 size={12} /></button>
-                    <button
-                      onClick={() => onPinHeader('secondary', dim, fact.field)}
-                      title="Pin as card subtitle"
-                      style={{
-                        display:'flex', alignItems:'center', padding:'1px 3px', borderRadius:3,
-                        border:'1px solid', cursor:'pointer',
-                        background: isSecondary(fact) ? '#f3e8ff' : 'transparent',
-                        borderColor: isSecondary(fact) ? '#d8b4fe' : 'transparent',
-                        color: isSecondary(fact) ? '#7c3aed' : '#9ca3af',
-                      }}
-                    ><Heading2 size={12} /></button>
-                  </span>
-                )}
-              </div>
-            )
+          {groups.map((group) => (
+            <CorrelatedGroup
+              key={group.key}
+              facts={group.facts}
+              colors={colors}
+              onPinHeader={onPinHeader}
+              headerPrefs={headerPrefs}
+              dim={dim}
+              hoveredField={hoveredField}
+              setHoveredField={setHoveredField}
+            />
           ))}
         </div>
       </div>
@@ -265,13 +303,67 @@ function DimensionSection({ dim, facts, projectedFields, onPinHeader, headerPref
 // CoordinateCard — the generic card
 // ─────────────────────────────────────────────────────────────────────────────
 
-function CoordinateCard({ item, projectedFields, selected, onToggle, headerPrefs, onPinHeader }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// PloverMeta — web display layer for Plover substrates
+// Renders only when entityMeta is present. Inert for all other substrates.
+// ─────────────────────────────────────────────────────────────────────────────
+
+function PloverMeta({ entityMeta }) {
+  if (!entityMeta) return null;
+  const { url, label, description, source_domain, thumbnail_url, provider, date } = entityMeta;
+  return (
+    <div className="flex gap-3 mb-3 pb-3 border-b border-gray-100">
+      {thumbnail_url && (
+        <img
+          src={thumbnail_url}
+          alt={label || ''}
+          className="flex-shrink-0 w-16 h-16 object-cover rounded border border-gray-200 bg-gray-100"
+          onError={e => { e.currentTarget.style.display = 'none'; }}
+        />
+      )}
+      <div className="flex-1 min-w-0">
+        {url ? (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-sm text-blue-700 hover:text-blue-900 hover:underline block truncate"
+          >
+            {label || source_domain || url}
+          </a>
+        ) : (
+          <div className="font-semibold text-sm text-gray-800 truncate">{label}</div>
+        )}
+        {source_domain && (
+          <div className="text-xs text-gray-400 mt-0.5 font-mono">
+            {source_domain}
+            {provider && provider !== source_domain && (
+              <span className="text-gray-300 mx-1">·</span>
+            )}
+            {provider && provider !== source_domain && <span>{provider}</span>}
+            {date && <span className="text-gray-300 mx-1">·</span>}
+            {date && <span>{date}</span>}
+          </div>
+        )}
+        {description && (
+          <div className="text-xs text-gray-500 mt-1 line-clamp-2">
+            {description.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)}
+            {description.length > 180 ? '…' : ''}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CoordinateCard({ item, projectedFields, selected, onToggle, headerPrefs, onPinHeader, entityMeta }) {
   const [expanded, setExpanded] = useState(false);
 
   const coordinates    = item.coordinates || {};
   const primaryLabel   = extractPrimaryLabel(coordinates, item.id, headerPrefs);
   const secondaryLabel = extractSecondaryLabel(coordinates, primaryLabel, headerPrefs);
-  const imageUrl       = extractImageUrl(coordinates);
+  // Use HOW.image_url for non-Plover substrates. Plover uses entityMeta.thumbnail_url via PloverMeta.
+  const imageUrl       = entityMeta ? null : extractImageUrl(coordinates);
 
   const presentDims   = DIM_ORDER.filter(d => coordinates[d] && coordinates[d].length > 0);
   const primaryDims   = presentDims.filter(d => ['WHO', 'WHAT', 'WHEN', 'WHERE'].includes(d));
@@ -280,6 +372,9 @@ function CoordinateCard({ item, projectedFields, selected, onToggle, headerPrefs
   return (
     <div className={`border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow
       ${selected ? 'ring-2 ring-blue-400 border-blue-300' : ''}`}>
+
+      {/* Plover web display layer — inert for non-Plover substrates */}
+      <PloverMeta entityMeta={entityMeta} />
 
       {/* Header — checkbox + thumbnail (if art) + primary label + entity ID */}
       <div className="flex items-start gap-3 mb-3">
@@ -355,7 +450,7 @@ function CoordinateCard({ item, projectedFields, selected, onToggle, headerPrefs
 // Main export
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function ResultCard({ item, schema, idx, projectedFields, selected, onToggle, headerPrefs, onPinHeader }) {
+export default function ResultCard({ item, schema, idx, projectedFields, selected, onToggle, headerPrefs, onPinHeader, entityMeta }) {
   if (item.coordinates) {
     return (
       <CoordinateCard
@@ -365,6 +460,7 @@ export default function ResultCard({ item, schema, idx, projectedFields, selecte
         onToggle={onToggle}
         headerPrefs={headerPrefs}
         onPinHeader={onPinHeader}
+        entityMeta={entityMeta}
       />
     );
   }
