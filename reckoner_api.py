@@ -177,6 +177,14 @@ def compute_query_hash(
 _registry: Dict[str, Substrate] = {}
 _registry_meta: Dict[str, dict] = {}
 
+# ── Entity meta sidecar registry ─────────────────────────────────────────────
+# Keyed by substrate_id. Loaded from snf_entity_meta.csv + display.json when
+# present in a substrate directory. Powers Plover result card display —
+# url, description, thumbnail, source_domain, provider, date.
+# Absent for non-Plover substrates — that is normal and expected.
+_entity_meta_store: Dict[str, Dict[str, dict]] = {}   # substrate_id → {entity_id → meta_row}
+_display_contract: Dict[str, dict] = {}                # substrate_id → display.json contents
+
 # ── Adapter registry (SubstrateAdapter-backed substrates) ────────────────────
 # Holds PostgresAdapter and other non-snf-peirce adapters.
 # Keyed by substrate_id, same namespace as _registry.
@@ -227,10 +235,18 @@ def substrate_from_spoke_dir(subdir: Path) -> Substrate:
     else:
         lens_id = subdir.name
 
-    # Concatenate all spoke CSVs
-    spoke_files = sorted(subdir.glob("snf_*.csv"))
+    # Concatenate dimension spoke CSVs only.
+    # Explicitly exclude snf_meta.csv and snf_entity_meta.csv — these are
+    # display/sidecar files with different schemas. Including them corrupts
+    # the spoke table with NaN dimension/semantic_key rows and breaks the
+    # affordances trie. They are loaded separately below.
+    SPOKE_DIMENSIONS = {"who", "what", "when", "where", "why", "how"}
+    spoke_files = sorted(
+        sf for sf in subdir.glob("snf_*.csv")
+        if sf.stem.replace("snf_", "") in SPOKE_DIMENSIONS
+    )
     if not spoke_files:
-        raise ValueError(f"No snf_*.csv files found in {subdir}")
+        raise ValueError(f"No dimension snf_*.csv files found in {subdir}")
 
     frames = []
     for sf in spoke_files:
@@ -265,12 +281,14 @@ def substrate_from_spoke_dir(subdir: Path) -> Substrate:
     conn = duckdb.connect(":memory:")
     conn.execute("""
         CREATE TABLE snf_spoke (
-            entity_id    VARCHAR,
-            dimension    VARCHAR,
-            semantic_key VARCHAR,
-            value        VARCHAR,
-            coordinate   VARCHAR,
-            lens_id      VARCHAR
+            entity_id      VARCHAR,
+            dimension      VARCHAR,
+            semantic_key   VARCHAR,
+            value          VARCHAR,
+            coordinate     VARCHAR,
+            lens_id        VARCHAR,
+            correlation_id VARCHAR,
+            group_type     VARCHAR
         )
     """)
     conn.register("_spokes_df", spokes)
@@ -282,7 +300,9 @@ def substrate_from_spoke_dir(subdir: Path) -> Substrate:
             CAST(semantic_key AS VARCHAR),
             CAST(value        AS VARCHAR),
             CAST(coordinate   AS VARCHAR),
-            CAST(lens_id      AS VARCHAR)
+            CAST(lens_id      AS VARCHAR),
+            NULL AS correlation_id,
+            NULL AS group_type
         FROM _spokes_df
     """)
     conn.unregister("_spokes_df")
@@ -434,7 +454,10 @@ def load_substrates_from_disk() -> None:
         if not entry.is_dir():
             continue
 
-        spoke_files = list(entry.glob("snf_*.csv"))
+        spoke_files = [
+            sf for sf in entry.glob("snf_*.csv")
+            if sf.stem.replace("snf_", "") in {"who", "what", "when", "where", "why", "how"}
+        ]
         if not spoke_files:
             continue
 
@@ -451,6 +474,24 @@ def load_substrates_from_disk() -> None:
             register_substrate(name, substrate, meta)
             print(f"[registry] Loaded {name}: {meta['entity_count']:,} entities, "
                   f"dimensions: {meta['dimensions']}")
+
+            # ── Load entity_meta sidecar if present (Plover substrates) ──────
+            entity_meta_path = entry / "snf_entity_meta.csv"
+            display_json_path = entry / "display.json"
+            if entity_meta_path.exists():
+                import csv as _csv
+                entity_meta_index: Dict[str, dict] = {}
+                with entity_meta_path.open(encoding="utf-8") as _f:
+                    for _row in _csv.DictReader(_f):
+                        entity_meta_index[_row["entity_id"]] = dict(_row)
+                _entity_meta_store[name] = entity_meta_index
+                print(f"[registry] Loaded entity_meta for {name}: "
+                      f"{len(entity_meta_index):,} entries")
+            if display_json_path.exists():
+                with display_json_path.open(encoding="utf-8") as _f:
+                    _display_contract[name] = json.load(_f)
+                print(f"[registry] Loaded display contract for {name}")
+
         except Exception as e:
             print(f"[registry] Failed to load {name}: {e}")
 
@@ -544,11 +585,25 @@ def hydrate_results(
         return []
 
     try:
-        # Pull spoke rows for matched entities
-        import pandas as pd
         placeholders = ", ".join("?" * len(entity_ids))
+
+        # Probe for correlation_id column — old substrates predate WS-1 and don't have it.
+        # Without this check the entire hydration falls through to the empty-coordinates
+        # fallback, producing result cards with entity IDs but no dimension data.
+        try:
+            substrate._conn.execute("SELECT correlation_id FROM snf_spoke LIMIT 0")
+            has_correlation_id = True
+        except Exception:
+            has_correlation_id = False
+
+        select_cols = (
+            "entity_id, dimension, semantic_key, value, coordinate, correlation_id"
+            if has_correlation_id else
+            "entity_id, dimension, semantic_key, value, coordinate"
+        )
+
         rows = substrate._conn.execute(
-            f"SELECT entity_id, dimension, semantic_key, value, coordinate "
+            f"SELECT {select_cols} "
             f"FROM snf_spoke "
             f"WHERE entity_id IN ({placeholders}) "
             f"AND lens_id = ? "
@@ -561,10 +616,11 @@ def hydrate_results(
         for entity_id in entity_ids:
             by_entity[entity_id] = {}
 
-        for entity_id, dimension, semantic_key, value, coordinate in rows:
+        for row in rows:
+            entity_id, dimension, semantic_key, value, coordinate = row[:5]
+            correlation_id = row[5] if has_correlation_id else None
             # Apply field filter if specified
             if fields:
-                # semantic_key is like "artist" — field name without dimension
                 key_part = semantic_key.split(".")[-1] if "." in semantic_key else semantic_key
                 if key_part not in fields and semantic_key not in fields:
                     continue
@@ -573,14 +629,17 @@ def hydrate_results(
             if dim_upper not in by_entity[entity_id]:
                 by_entity[entity_id][dim_upper] = []
 
-            # Extract field name from semantic_key
             field_name = semantic_key.split(".")[-1] if "." in semantic_key else semantic_key
 
-            by_entity[entity_id][dim_upper].append({
+            fact = {
                 "field":      field_name,
                 "value":      value,
                 "coordinate": coordinate,
-            })
+            }
+            if correlation_id is not None:
+                fact["correlation_id"] = correlation_id
+
+            by_entity[entity_id][dim_upper].append(fact)
 
         # Build result objects
         results = []
@@ -680,8 +739,16 @@ def _duckdb_query_with_trace(
     is_dnf = len(conjuncts) > 1
 
     # ── Group constraints: { dim_upper → { field → [values] } } ──────────────
+    # Same-field AND semantics: multiple eq constraints on the same dim.field
+    # are each given a unique occurrence key so they appear as separate groups
+    # in the stepdown probe — intersected, not unioned.
+    # e.g. WHAT.ingredient = "gin" AND WHAT.ingredient = "Aperol" produces
+    # two groups: {WHAT: {ingredient_0: ["gin"]}} and {WHAT: {ingredient_1: ["Aperol"]}}
+    # These are intersected in the stepdown probe, giving correct cardinality.
     def group_conjunct(conjunct):
+        from collections import defaultdict
         by_dim = {}
+        occurrence = defaultdict(int)
         for c in conjunct:
             if c.get("op") in ("contains", "prefix", "only", "between", "gt", "gte", "lt", "lte"):
                 continue  # not routable as coordinate eq — range ops need special handling
@@ -690,7 +757,11 @@ def _duckdb_query_with_trace(
             value = str(c.get("value", ""))
             if not dim or not field:
                 continue
-            by_dim.setdefault(dim, {}).setdefault(field, []).append(value)
+            # Use occurrence index to distinguish same-field AND constraints
+            occ       = occurrence[(dim, field)]
+            occurrence[(dim, field)] += 1
+            field_key = f"{field}_{occ}" if occ > 0 else field
+            by_dim.setdefault(dim, {}).setdefault(field_key, []).append(value)
         return by_dim
 
     first_conjunct = conjuncts[0]
@@ -702,23 +773,52 @@ def _duckdb_query_with_trace(
         return result.entity_ids, result.count, []
 
     # ── Cardinality probe — one COUNT per dimension ───────────────────────────
+    # Strip occurrence suffix from field keys (ingredient_1 → ingredient)
+    # before using them as semantic_key values in SQL.
+    import re as _re
+    def _strip_occ(field_key):
+        return _re.sub(r"_\d+$", "", field_key)
+
     dim_counts = {}
     for dim, fields in by_dim.items():
-        where_parts = []
-        probe_params = [lens_id]
-        for field, values in fields.items():
-            phs = ", ".join(["?" for _ in values])
-            where_parts.append(
-                f"(dimension = ? AND semantic_key = ? AND value IN ({phs}))"
-            )
-            probe_params += [dim.lower(), field] + values
-        where_sql = " OR ".join(where_parts)
-        row = conn.execute(
-            f"SELECT COUNT(DISTINCT entity_id) FROM snf_spoke "
-            f"WHERE lens_id = ? AND ({where_sql})",
-            probe_params
-        ).fetchone()
-        dim_counts[dim] = row[0] if row else 0
+        # Build one subquery per field group and intersect them.
+        # Multiple groups on the same field (ingredient_0, ingredient_1) must be
+        # intersected — not unioned — to reflect same-field AND semantics.
+        field_groups = list(fields.items())
+        if len(field_groups) == 1:
+            # Single group — simple COUNT
+            field_key, values = field_groups[0]
+            field = _strip_occ(field_key)
+            phs   = ", ".join(["?" for _ in values])
+            row = conn.execute(
+                f"SELECT COUNT(DISTINCT entity_id) FROM snf_spoke "
+                f"WHERE lens_id = ? AND dimension = ? AND semantic_key = ? AND value IN ({phs})",
+                [lens_id, dim.lower(), field] + values
+            ).fetchone()
+            dim_counts[dim] = row[0] if row else 0
+        else:
+            # Multiple groups — intersect with nested IN subqueries
+            first_key, first_values = field_groups[0]
+            first_field = _strip_occ(first_key)
+            first_phs   = ", ".join(["?" for _ in first_values])
+            nested_sql    = ""
+            nested_params = []
+            for field_key, values in field_groups[1:]:
+                field = _strip_occ(field_key)
+                phs   = ", ".join(["?" for _ in values])
+                nested_sql   += (
+                    f" AND entity_id IN ("
+                    f"SELECT entity_id FROM snf_spoke "
+                    f"WHERE lens_id = ? AND dimension = ? AND semantic_key = ? AND value IN ({phs}))"
+                )
+                nested_params += [lens_id, dim.lower(), field] + values
+            row = conn.execute(
+                f"SELECT COUNT(DISTINCT entity_id) FROM snf_spoke "
+                f"WHERE lens_id = ? AND dimension = ? AND semantic_key = ? AND value IN ({first_phs})"
+                f"{nested_sql}",
+                [lens_id, dim.lower(), first_field] + first_values + nested_params
+            ).fetchone()
+            dim_counts[dim] = row[0] if row else 0
 
     # ── I1 ordering — ascending cardinality ───────────────────────────────────
     ordered_dims = sorted(by_dim.keys(), key=lambda d: dim_counts[d])
@@ -746,30 +846,32 @@ def _duckdb_query_with_trace(
             anchor_fields = by_dim[anchor_dim]
             anchor_parts  = []
             anchor_params = [lens_id, anchor_dim.lower()]
-            for field, values in anchor_fields.items():
+            for field_key, values in anchor_fields.items():
+                field = _strip_occ(field_key)
                 phs = ", ".join(["?" for _ in values])
                 anchor_parts.append(f"(semantic_key = ? AND value IN ({phs}))")
                 anchor_params += [field] + values
             anchor_where = " OR ".join(anchor_parts)
 
             # Build nested IN subqueries for each additional dim
+            # Each dim may have multiple field groups (e.g. ingredient_0, ingredient_1)
+            # that must each be intersected separately.
             nested_sql    = ""
             nested_params = []
             for dim in dims_so_far[1:]:
                 dim_fields  = by_dim[dim]
-                dim_parts   = []
-                dim_params  = [lens_id, dim.lower()]
-                for field, values in dim_fields.items():
-                    phs = ", ".join(["?" for _ in values])
-                    dim_parts.append(f"(semantic_key = ? AND value IN ({phs}))")
+                for field_key, values in dim_fields.items():
+                    field      = _strip_occ(field_key)
+                    dim_params = [lens_id, dim.lower()]
+                    phs        = ", ".join(["?" for _ in values])
+                    dim_where  = f"(semantic_key = ? AND value IN ({phs}))"
                     dim_params += [field] + values
-                dim_where     = " OR ".join(dim_parts)
-                nested_sql   += (
-                    f" AND entity_id IN ("
-                    f"SELECT entity_id FROM snf_spoke "
-                    f"WHERE lens_id = ? AND dimension = ? AND ({dim_where}))"
-                )
-                nested_params += dim_params
+                    nested_sql   += (
+                        f" AND entity_id IN ("
+                        f"SELECT entity_id FROM snf_spoke "
+                        f"WHERE lens_id = ? AND dimension = ? AND ({dim_where}))"
+                    )
+                    nested_params += dim_params
 
             sql = (
                 f"SELECT COUNT(DISTINCT entity_id) FROM snf_spoke "
@@ -784,13 +886,23 @@ def _duckdb_query_with_trace(
     result = peirce_query(substrate, peirce_string, limit=limit)
 
     # ── Build trace ───────────────────────────────────────────────────────────
+    # Strip occurrence suffixes from field keys for display (ingredient_0 → ingredient)
+    # Merge same-field groups back together for the trace display — the trace
+    # shows what was queried, not the internal grouping structure.
+    def _merge_fields_for_display(fields_dict):
+        merged = {}
+        for field_key, values in fields_dict.items():
+            field = _strip_occ(field_key)
+            merged.setdefault(field, []).extend(values)
+        return merged
+
     trace = [
         {
             "dimension":   dim,
             "cardinality": stepdown_counts[i],
             "fields": [
                 {"field": f, "values": list(v)}
-                for f, v in by_dim[dim].items()
+                for f, v in _merge_fields_for_display(by_dim[dim]).items()
             ],
         }
         for i, dim in enumerate(ordered_dims)
@@ -1108,6 +1220,62 @@ async def affordances(schema: str = None):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/entity-meta/{substrate_id}/{entity_id:path}")
+async def entity_meta(substrate_id: str, entity_id: str):
+    """
+    Return entity_meta sidecar row for a specific entity in a Plover substrate.
+
+    Powers Plover result card display: url, description, thumbnail,
+    source_domain, provider, date, harvest_path.
+
+    Returns 404 for substrates without entity_meta (non-Plover substrates).
+    Returns 404 for unknown entity_id within a Plover substrate.
+
+    The frontend calls this after a query returns entity_ids to hydrate
+    the web-specific display layer without a second query to the spoke table.
+    """
+    store = _entity_meta_store.get(substrate_id)
+    if store is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No entity_meta sidecar for substrate '{substrate_id}'. "
+                   f"This is a non-Plover substrate — use /api/hydrate for coordinate display."
+        )
+    row = store.get(entity_id)
+    if row is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"entity_id '{entity_id}' not found in entity_meta for '{substrate_id}'"
+        )
+    return row
+
+
+@app.get("/api/display-contract/{substrate_id}")
+async def display_contract(substrate_id: str):
+    """
+    Return the display.json contract for a substrate if present.
+
+    Tells the frontend which fields to use for H1, H2, description,
+    link, and image in result cards. Absent for non-Plover substrates.
+
+    Example response:
+    {
+        "primary_label":   "entity_meta.label",
+        "secondary_label": "entity_meta.provider_date",
+        "description":     "entity_meta.description",
+        "link":            "entity_meta.url",
+        "image":           "entity_meta.thumbnail_url"
+    }
+    """
+    contract = _display_contract.get(substrate_id)
+    if contract is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No display contract for substrate '{substrate_id}'."
+        )
+    return contract
 
 
 @app.get("/api/values/{dimension}/{field}")
@@ -2274,7 +2442,7 @@ def load_srf_imports() -> None:
                 "VALUES (?, ?, ?, ?, ?, ?)",
                 [
                     (r["entity_id"], r["dimension"].lower(), r["semantic_key"],
-                     r["value"], r["coordinate"], substrate_key)
+                     r["value"], r["coordinate"], record.lens_id)
                     for r in rows["spoke_rows"]
                 ]
             )
@@ -2309,14 +2477,16 @@ def _get_or_create_srf_substrate(lens_id: str, substrate_key: str = None) -> Sub
             semantic_key      VARCHAR,
             value             VARCHAR,
             coordinate        VARCHAR,
-            lens_id           VARCHAR
+            lens_id           VARCHAR,
+            correlation_id    VARCHAR,
+            group_type        VARCHAR
         )
     """)
     conn.execute("CREATE INDEX idx_spoke_coord ON snf_spoke(coordinate)")
     conn.execute("CREATE INDEX idx_spoke_eid   ON snf_spoke(entity_id)")
     conn.execute("CREATE INDEX idx_spoke_dim   ON snf_spoke(dimension, semantic_key)")
 
-    substrate = Substrate(conn, key)
+    substrate = Substrate(conn, lens_id)  # lens_id is the semantic lens — not the collection key
     register_substrate(key, substrate, meta={
         "label":              key,
         "entity_count":       0,
@@ -2713,7 +2883,7 @@ async def load_srf_bundle(file: UploadFile = File(...)):
                     r["semantic_key"],
                     r["value"],
                     r["coordinate"],
-                    substrate_key,  # use substrate_key so affordances/values queries match
+                    record.lens_id,  # always the semantic lens — substrate_key is registry-only
                 )
                 for r in spoke_rows
             ]
@@ -2733,60 +2903,6 @@ async def load_srf_bundle(file: UploadFile = File(...)):
         "skipped":      skipped,
         "duplicate":    duplicate,
     }
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Static frontend — MUST be registered after all API routes
-# so the catch-all doesn't intercept /api/* requests.
-# ─────────────────────────────────────────────────────────────────────────────
-
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse as _FileResponse
-
-_DIST_DIR = Path(__file__).parent / "dist"
-
-if _DIST_DIR.exists():
-    app.mount(
-        "/assets",
-        StaticFiles(directory=str(_DIST_DIR / "assets")),
-        name="assets",
-    )
-
-    @app.get("/")
-    async def serve_frontend_root():
-        return _FileResponse(str(_DIST_DIR / "index.html"))
-
-    @app.get("/{full_path:path}")
-    async def serve_frontend_catchall(full_path: str):
-        return _FileResponse(str(_DIST_DIR / "index.html"))
-
-    print("[api] Serving React frontend from dist/")
-else:
-    print("[api] No dist/ folder — frontend not served. Run npm run build.")
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Standalone entry point
-# ─────────────────────────────────────────────────────────────────────────────
-
-if __name__ == "__main__":
-    print("=" * 60)
-    print("  Reckoner API — Python backend")
-    print("  Model Builder endpoints: /api/mb/*")
-    print("=" * 60)
-    print(f"  Port:       {PORT}")
-    print(f"  Substrates: {SUBSTRATES_DIR}")
-    print(f"  Debug:      {DEBUG}")
-    print(f"  Docs:       http://localhost:{PORT}/docs")
-    print("=" * 60)
-
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=PORT,
-        reload=DEBUG,
-        log_level="info" if DEBUG else "warning",
-    )
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -2821,3 +2937,58 @@ async def export_save_peirce_bundle(req: SavePeirceBundleRequest):
     path = EXPORT_DIR / (safe or filename)
     path.write_text(json.dumps(req.bundle, indent=2, default=str), encoding="utf-8")
     return {"saved": True, "path": str(path), "filename": path.name}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Static frontend — MUST be registered after all API routes
+# so the catch-all doesn't intercept /api/* requests.
+# ─────────────────────────────────────────────────────────────────────────────
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse as _FileResponse
+
+_DIST_DIR = Path(__file__).parent / "dist"
+
+if _DIST_DIR.exists():
+    app.mount(
+        "/assets",
+        StaticFiles(directory=str(_DIST_DIR / "assets")),
+        name="assets",
+    )
+
+    @app.get("/")
+    async def serve_frontend_root():
+        return _FileResponse(str(_DIST_DIR / "index.html"))
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend_catchall(full_path: str):
+        return _FileResponse(str(_DIST_DIR / "index.html"))
+
+    print("[api] Serving React frontend from dist/")
+else:
+    print("[api] No dist/ folder — frontend not served. Run npm run build.")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Standalone entry point — MUST be last. uvicorn.run() blocks; any route
+# definitions below it will never register when run as python reckoner_api.py.
+# ─────────────────────────────────────────────────────────────────────────────
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("  Reckoner API — Python backend")
+    print("  Model Builder endpoints: /api/mb/*")
+    print("=" * 60)
+    print(f"  Port:       {PORT}")
+    print(f"  Substrates: {SUBSTRATES_DIR}")
+    print(f"  Debug:      {DEBUG}")
+    print(f"  Docs:       http://localhost:{PORT}/docs")
+    print("=" * 60)
+
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=PORT,
+        reload=DEBUG,
+        log_level="info" if DEBUG else "warning",
+    )
