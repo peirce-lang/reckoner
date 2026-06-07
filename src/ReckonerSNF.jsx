@@ -28,33 +28,27 @@ function serializeValue(value) {
   return `"${String(value).replace(/"/g, '\\"')}"`;
 }
 
-function toPeirce(constraints) {
+function toPeirce(constraints, modeByField = {}) {
   if (!constraints || constraints.length === 0) return "";
 
-  // Group ONLY constraints by dim+field so multiple ONLY values on the same
-  // field serialize as set form: WHAT.color ONLY ("Blue", "Black")
-  const onlyGroups = {};
-  const nonOnly = [];
+  // Group by (dim, field) preserving insertion order.
+  // ONLY constraints are collected separately — they serialize as set form.
+  const groups  = new Map(); // key "DIM.field" → { dim, field, exprs: [], isOnly: bool }
+  const onlyMap = new Map(); // key "DIM.field" → { dim, field, values: [] }
 
   constraints.forEach(c => {
     const dim   = (c.category || c.dimension || "").toUpperCase();
     const field = (c.field || "").toLowerCase();
-    if (c.op === "only" && dim && field) {
-      const key = `${dim}.${field}`;
-      if (!onlyGroups[key]) onlyGroups[key] = { dim, field, values: [] };
-      onlyGroups[key].values.push(c.value);
-    } else {
-      nonOnly.push(c);
-    }
-  });
-
-  const parts = [];
-
-  // Non-ONLY constraints
-  nonOnly.forEach(c => {
-    const dim   = (c.category || c.dimension || "").toUpperCase();
-    const field = (c.field || "").toLowerCase();
     if (!dim || !field) return;
+
+    const key = `${dim}.${field}`;
+
+    if (c.op === "only") {
+      if (!onlyMap.has(key)) onlyMap.set(key, { dim, field, values: [] });
+      onlyMap.get(key).values.push(c.value);
+      return;
+    }
+
     let expr;
     if (c.op === "between") {
       expr = `${dim}.${field} BETWEEN ${serializeValue(c.value)} AND ${serializeValue(c.value2 ?? c.value)}`;
@@ -63,22 +57,35 @@ function toPeirce(constraints) {
       expr = `${dim}.${field} ${op} ${serializeValue(c.value)}`;
     }
     if (c.negated) expr = `NOT ${expr}`;
-    parts.push(expr);
+
+    if (!groups.has(key)) groups.set(key, { dim, field, exprs: [] });
+    groups.get(key).exprs.push(expr);
+  });
+
+  const andParts = [];
+
+  // Non-ONLY groups: join values by mode (any=OR, all=AND), wrap in parens if >1
+  groups.forEach(({ dim, field, exprs }, key) => {
+    if (exprs.length === 0) return;
+    if (exprs.length === 1) {
+      andParts.push(exprs[0]);
+    } else {
+      const mode   = modeByField[key] || "any";
+      const joinKw = mode === "all" ? "\nAND " : "\nOR ";
+      // No parens — OR at top level is valid Peirce; parens with OR inside are rejected by parser
+      andParts.push(exprs.join(joinKw));
+    }
   });
 
   // ONLY groups — set form if multiple values, scalar if one
-  Object.values(onlyGroups).forEach(({ dim, field, values }) => {
-    let expr;
-    if (values.length === 1) {
-      expr = `${dim}.${field} ONLY ${serializeValue(values[0])}`;
-    } else {
-      const valueList = values.map(serializeValue).join(", ");
-      expr = `${dim}.${field} ONLY (${valueList})`;
-    }
-    parts.push(expr);
+  onlyMap.forEach(({ dim, field, values }) => {
+    const expr = values.length === 1
+      ? `${dim}.${field} ONLY ${serializeValue(values[0])}`
+      : `${dim}.${field} ONLY (${values.map(serializeValue).join(", ")})`;
+    andParts.push(expr);
   });
 
-  return parts.join("\nAND ");
+  return andParts.join("\nAND ");
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -174,7 +181,7 @@ function chipLabel(c) {
        : String(c.value);
 }
 
-function DimRow({ dimKey, dimConstraints, onRemove }) {
+function DimRow({ dimKey, dimConstraints, onRemove, modeByField, onToggleMode }) {
   const totalChips = Object.values(dimConstraints).flat().length;
   const autoCollapse = totalChips > COLLAPSE_THRESHOLD;
   const [collapsed, setCollapsed] = useState(autoCollapse);
@@ -262,11 +269,34 @@ function DimRow({ dimKey, dimConstraints, onRemove }) {
                     </span>
                   );
                 }
-                // Default — individual chips with or between them
-                return fieldConstraints.map((c, ci) => (
+                // Default — individual chips with any/all toggle between them when >1
+                const modeKey  = `${dimKey}.${field}`;
+                const mode     = modeByField?.[modeKey] || "any";
+                const joinWord = mode === "all" ? "and" : "or";
+                return (
+                  <>
+                    {fieldConstraints.length > 1 && onToggleMode && (
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); onToggleMode(modeKey); }}
+                        title={mode === "any" ? "Match any — click to switch to match all" : "Match all — click to switch to match any"}
+                        style={{
+                          fontSize: 9, fontWeight: 600, letterSpacing: "0.04em",
+                          textTransform: "uppercase", cursor: "pointer",
+                          padding: "1px 5px", borderRadius: 3,
+                          border: `1px solid ${mode === "all" ? DIM_ACCENT[dimKey] : "#d1d5db"}`,
+                          background: mode === "all" ? DIM_ACCENT_LIGHT[dimKey] : "#f9fafb",
+                          color: mode === "all" ? DIM_ACCENT_TEXT[dimKey] : "#9ca3af",
+                          marginRight: 2,
+                        }}
+                      >
+                        {mode === "any" ? "any" : "all"}
+                      </button>
+                    )}
+                    {fieldConstraints.map((c, ci) => (
                   <span key={c.id} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
                     {ci > 0 && (
-                      <span style={{ color: "#9ca3af", fontSize: 10, padding: "0 3px", fontStyle: "italic" }}>or</span>
+                      <span style={{ color: "#9ca3af", fontSize: 10, padding: "0 3px", fontStyle: "italic" }}>{joinWord}</span>
                     )}
                     <span style={{
                       background: DIM_ACCENT_LIGHT[c.category] || "#f9fafb",
@@ -287,7 +317,9 @@ function DimRow({ dimKey, dimConstraints, onRemove }) {
                       >✕</button>
                     </span>
                   </span>
-                ));
+                ))}
+                  </>
+                );
               })()}
               {/* Collapse toggle when expanded and over threshold */}
               {fi === Object.entries(dimConstraints).length - 1 && totalChips > COLLAPSE_THRESHOLD && (
@@ -304,7 +336,7 @@ function DimRow({ dimKey, dimConstraints, onRemove }) {
   );
 }
 
-function QuerySummary({ constraints, DIMENSIONS, onRemove }) {
+function QuerySummary({ constraints, DIMENSIONS, onRemove, modeByField, onToggleMode }) {
   if (!constraints || constraints.length === 0) return null;
 
   // Group constraints: { DIM: { field: [constraint, ...] } }
@@ -334,7 +366,7 @@ function QuerySummary({ constraints, DIMENSIONS, onRemove }) {
           </div>
         );
         return (
-          <DimRow key={d.key} dimKey={d.key} dimConstraints={dimConstraints} onRemove={onRemove} />
+          <DimRow key={d.key} dimKey={d.key} dimConstraints={dimConstraints} onRemove={onRemove} modeByField={modeByField} onToggleMode={onToggleMode} />
         );
       })}
     </div>
@@ -366,6 +398,10 @@ function clampStr(s, n = 80) { const t = String(s ?? ""); return t.length > n ? 
 
 export default function ReckonerSNF() {
   const [constraints, setConstraints]   = useState([]);
+  // modeByField — keyed "DIM.field", value "any" | "all"
+  // "any"  → OR within field (default: show me things with any of these values)
+  // "all"  → AND within field (show me things with all of these values)
+  const [modeByField, setModeByField]   = useState({});
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [activeField, setActiveField]   = useState(null);
   const [affordances, setAffordances]   = useState(null);
@@ -466,6 +502,7 @@ export default function ReckonerSNF() {
     if (schema === activeSchema) return;
     setActiveSchema(schema);
     setConstraints([]);
+    setModeByField({});
     setResults([]);
     setEntityMetaStore({});   // clear entity meta when switching substrates
     setDisplayContract(null);
@@ -525,7 +562,7 @@ export default function ReckonerSNF() {
   useEffect(() => { persistSavedSets(savedSets); }, [savedSets]);
 
   // Current Peirce string — live derived from constraints
-  const currentPeirce = useMemo(() => toPeirce(constraints), [constraints]);
+  const currentPeirce = useMemo(() => toPeirce(constraints, modeByField), [constraints, modeByField]);
 
   const DIMENSIONS = useMemo(() => [
     { key: "WHO",   icon: Users,       color: "blue"   },
@@ -669,8 +706,18 @@ export default function ReckonerSNF() {
 
   const removeConstraint = (id) => { setConstraints((prev) => prev.filter((c) => c.id !== id)); setShowResults(false); };
 
+  // Toggle mode for a (dim, field) group between "any" (OR) and "all" (AND).
+  // Key format: "DIM.field" — e.g. "WHAT.ingredient"
+  const handleToggleMode = (modeKey) => {
+    setModeByField(prev => ({
+      ...prev,
+      [modeKey]: (prev[modeKey] || "any") === "any" ? "all" : "any",
+    }));
+    setShowResults(false);
+  };
+
   const resetQuery = () => {
-    setConstraints([]); setSearchTerm(""); setSearchTerm2(""); setSelectedOp(null);
+    setConstraints([]); setModeByField({}); setSearchTerm(""); setSearchTerm2(""); setSelectedOp(null);
     setShowResults(false); setResults([]); setValuesError(null); setQueryStats(null);
     setShowSaveDialog(false); setShowLoadPanel(false);
     setProjectedFields(new Set()); setShowFieldPicker(false);
@@ -730,7 +777,38 @@ export default function ReckonerSNF() {
 
     setLoading(true); setShowResults(true); setShowLoadPanel(false); setDiffInspectLabel(null); setPageOffset(0);
     try {
-      const body = { constraints, schema: activeSchema };
+      // Convert flat constraints to clause objects, grouping by (dim, field) and
+      // attaching mode from modeByField. Server needs clause format for alias expansion.
+      const clauseConstraints = (() => {
+        const groups = new Map(); // key "DIM.field" → clause object
+        for (const c of constraints) {
+          const dim   = (c.category || c.dimension || "").toUpperCase();
+          const field = (c.field || "").toLowerCase();
+          if (!dim || !field) continue;
+          const key  = `${dim}.${field}`;
+          const mode = modeByField[key] || "any";
+          if (!groups.has(key)) {
+            groups.set(key, { dimension: dim, field, mode, include: [], exclude: [] });
+          }
+          const clause = groups.get(key);
+          if (c.op === "not_eq") {
+            clause.exclude.push(c.value);
+          } else if (c.op === "eq") {
+            clause.include.push(c.value);
+          } else {
+            // Non-eq ops (between, gt, lt, contains, etc.) can't be clause-grouped —
+            // pass through as flat constraint for Peirce serialization
+            groups.delete(key);
+            groups.set(key + "__flat__" + clause.include.length, { __flat__: c });
+          }
+        }
+        return [...groups.values()].map(g => g.__flat__ ? g.__flat__ : g);
+      })();
+
+      const body = {
+        constraints: clauseConstraints,
+        schema: activeSchema,
+      };
       // Pass projected fields to backend when user has selected a subset
       if (projectedFields.size > 0) {
         body.fields = Array.from(projectedFields);
@@ -757,7 +835,7 @@ export default function ReckonerSNF() {
           translator_version: d.query_identity?.translator_version || '',
           query_hash:     d.query_identity?.query_hash || null,
           executed_at:    d.query_identity?.executed_at || new Date().toISOString(),
-          peirce:         toPeirce(constraints),
+          peirce:         toPeirce(constraints, modeByField),
           constraints:    constraints.map(({ id, ...rest }) => rest),
           projected_fields: projectedFields.size > 0 ? Array.from(projectedFields) : null,
           sort_field:     sortField,
@@ -853,7 +931,7 @@ export default function ReckonerSNF() {
         constraints:         queryStats.constraints || constraints.map(({ id, ...rest }) => rest),
         query_hash:          queryStats.query_hash || null,
         executed_at:         queryStats.executed_at || new Date().toISOString(),
-        peirce:              queryStats.peirce || toPeirce(constraints),
+        peirce:              queryStats.peirce || toPeirce(constraints, modeByField),
       },
       results: {
         entity_ids:  results.map(r => r.id),
@@ -1430,7 +1508,7 @@ export default function ReckonerSNF() {
     lens_id:             queryStats?.lens_id || '',
     translator_version:  queryStats?.translator_version || '',
     query_hash:          queryStats?.query_hash || '',
-    peirce:              queryStats?.peirce || toPeirce(constraints),
+    peirce:              queryStats?.peirce || toPeirce(constraints, modeByField),
     executed_at:         queryStats?.executed_at || new Date().toISOString(),
     result_count:        queryStats?.row_count ?? sortedResults.length,
     projected_fields:    queryStats?.projected_fields ? queryStats.projected_fields.join(', ') : '(all)',
@@ -1656,6 +1734,8 @@ export default function ReckonerSNF() {
                 constraints={constraints}
                 DIMENSIONS={DIMENSIONS}
                 onRemove={removeConstraint}
+                modeByField={modeByField}
+                onToggleMode={handleToggleMode}
               />
               {/* Peirce display — toggleable, lives with constraints */}
               <div className="mt-1">
@@ -2045,8 +2125,32 @@ export default function ReckonerSNF() {
                             ))}
                           </select>
                           {selected && (
-                            <div className="mt-1 text-xs text-gray-400 font-mono truncate">
-                              {selected.query.peirce}
+                            <div className="mt-1.5 flex flex-wrap gap-1">
+                              {(() => {
+                                const cs = selected.query.constraints || [];
+                                if (cs.length === 0) return (
+                                  <span className="text-xs text-gray-400 italic">All records</span>
+                                );
+                                // Group by DIM.field, count values per group
+                                const groups = new Map();
+                                cs.forEach(c => {
+                                  const dim   = (c.category || c.dimension || '').toUpperCase();
+                                  const field = (c.field || '').toLowerCase();
+                                  if (!dim || !field) return;
+                                  const key = `${dim}.${field}`;
+                                  groups.set(key, (groups.get(key) || 0) + 1);
+                                });
+                                return [...groups.entries()].map(([key, count]) => (
+                                  <span key={key}
+                                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded
+                                      bg-gray-100 border border-gray-200 text-xs font-mono text-gray-600">
+                                    {key}
+                                    {count > 1 && (
+                                      <span className="text-gray-400">({count})</span>
+                                    )}
+                                  </span>
+                                ));
+                              })()}
                             </div>
                           )}
                         </div>

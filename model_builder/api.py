@@ -18,6 +18,7 @@ cleanse, or assert identity. Crosswalk owns identity assertion.
 from __future__ import annotations
 
 import io
+import json
 import os
 import shutil
 from datetime import datetime
@@ -31,8 +32,8 @@ from pydantic import BaseModel
 
 from .config   import OUTPUT_DIR, SAMPLE_ROWS
 from .models   import (
-    BuildSpec, IntrospectRequest, MappingRow,
-    ReviewRequest,
+    BuildSpec, FacetAlias, IntrospectRequest, MappingRow,
+    ReviewRequest, StemProjection,
 )
 from .sessions import (
     SessionData, get_session, new_token, put_session, purge_expired,
@@ -40,6 +41,7 @@ from .sessions import (
 from .inference  import build_columns
 from .review     import run_review
 from .compiler   import compile_artifact
+from .adapters   import structural_to_correlation
 
 try:
     from .parsers.osi import parse_osi_upload, export_osi_model
@@ -70,6 +72,71 @@ try:
     MB8_AVAILABLE = True
 except ImportError:
     MB8_AVAILABLE = False
+
+try:
+    import jc
+    JC_AVAILABLE = True
+except ImportError:
+    JC_AVAILABLE = False
+
+
+# ── WS-3B — Stem projection / facet alias derivation ─────────────────────────
+
+# Stems excluded from default facet_alias promotion.
+# amount: qualifier/display field, not a primary browse surface.
+# Other stems are deferred pending explicit promotion rule or UI toggle.
+_EXCLUDED_FROM_FACET_ALIAS = {"amount"}
+
+
+def _derive_stem_projections(spec: BuildSpec):
+    """
+    Derive StemProjection and FacetAlias lists from confirmed structural_groups.
+
+    Called in compile_job() after structural_groups → correlations adaptation.
+    Results are stored on spec for inclusion in the manifest sidecar.
+
+    Algorithm:
+      1. Collect all members across all structural groups.
+      2. Parse each member column name for a stem (_N suffix pattern).
+      3. Group columns by stem → StemProjection per unique stem.
+      4. Promote stems to FacetAlias unless in _EXCLUDED_FROM_FACET_ALIAS.
+    """
+    import re
+    _INDEXED = re.compile(r'^(.+?)_(\d+)$')
+
+    groups = spec.structural_groups or []
+    if not groups:
+        spec.stem_projections = []
+        spec.facet_aliases    = []
+        return
+
+    # Collect all members across all groups
+    stem_to_cols: dict = {}
+    for sg in groups:
+        for col in sg.members:
+            m = _INDEXED.match(col)
+            if m:
+                stem = m.group(1)
+                stem_to_cols.setdefault(stem, [])
+                if col not in stem_to_cols[stem]:
+                    stem_to_cols[stem].append(col)
+
+    # Sort columns within each stem for determinism
+    for stem in stem_to_cols:
+        stem_to_cols[stem].sort()
+
+    # Emit StemProjection per stem (all stems, including excluded ones)
+    spec.stem_projections = [
+        StemProjection(stem=stem, expands_to=cols)
+        for stem, cols in sorted(stem_to_cols.items())
+    ]
+
+    # Emit FacetAlias for promoted stems only
+    spec.facet_aliases = [
+        FacetAlias(name=stem, source_stem=stem)
+        for stem in sorted(stem_to_cols.keys())
+        if stem not in _EXCLUDED_FROM_FACET_ALIAS
+    ]
 
 
 # ── Router ────────────────────────────────────────────────────────────────────
@@ -187,6 +254,122 @@ async def upload_path(req: UploadPathRequest):
     return {"upload_token": token, "columns": columns, "row_count": len(df)}
 
 
+
+# ── POST /api/mb/command ─────────────────────────────────────────────────────
+
+class CommandRequest(BaseModel):
+    command: str
+
+
+@router.post("/command")
+async def ingest_command(req: CommandRequest):
+    """
+    Run a shell command, normalize its output through JC, and return columns
+    with sample values ready for the mapping wizard.
+
+    The command is executed in a restricted subprocess — no shell expansion,
+    no pipes, no redirection. Pass a single command with arguments only.
+
+    Returns the same shape as /upload so the wizard continues unchanged.
+    Source type recorded as 'command_output' in session and provenance.
+    """
+    purge_expired()
+
+    if not JC_AVAILABLE:
+        raise HTTPException(
+            status_code=501,
+            detail="jc is required for command ingestion. pip install jc"
+        )
+
+    cmd = req.command.strip()
+    if any(c in cmd for c in ("|", ";", "&", ">", "<", "`", "$")):
+        raise HTTPException(
+            status_code=400,
+            detail="Command must be a single command with arguments only. "
+                   "Pipes, redirects, and shell operators are not permitted."
+        )
+
+    import subprocess
+    parts = cmd.split()
+    if not parts:
+        raise HTTPException(status_code=400, detail="Command must not be empty.")
+
+    try:
+        proc = subprocess.run(
+            parts,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+    except FileNotFoundError:
+        raise HTTPException(status_code=422, detail=f"Command not found: '{parts[0]}'")
+    except subprocess.TimeoutExpired:
+        raise HTTPException(status_code=422, detail=f"Command timed out after 15 seconds: '{cmd}'")
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Command execution failed: {e}")
+
+    output = proc.stdout
+    if not output.strip():
+        detail = "Command produced no output."
+        if proc.stderr.strip():
+            detail += f" stderr: {proc.stderr.strip()[:200]}"
+        raise HTTPException(status_code=422, detail=detail)
+
+    parser_name = parts[0].replace("-", "_")
+    try:
+        records = jc.parse(parser_name, output)
+    except Exception:
+        raise HTTPException(
+            status_code=422,
+            detail=f"jc could not parse output of '{parts[0]}'. "
+                   f"Supported parsers: run `jc --list` to see available commands."
+        )
+
+    if not records:
+        raise HTTPException(status_code=422, detail="jc parsed the output but produced no records.")
+
+    if isinstance(records, dict):
+        records = [records]
+
+    try:
+        # Flatten one level of nesting so fields like ipconfig adapter details
+        # become individual columns rather than opaque object columns.
+        df = pd.json_normalize(records, max_level=1, sep="_").astype(str)
+
+        # Drop columns still containing list/object values after normalization.
+        object_cols = [
+            col for col in df.columns
+            if df[col].str.startswith("[").any() or df[col].str.startswith("{").any()
+        ]
+        if object_cols and len(df.columns) > len(object_cols):
+            df = df.drop(columns=object_cols)
+
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Could not build DataFrame from records: {e}")
+
+    if df.empty:
+        raise HTTPException(status_code=422, detail="Parsed records produced an empty table.")
+
+    columns = build_columns(df)
+    token   = new_token()
+    put_session(token, SessionData(
+        df          = df,
+        source_info = {
+            "type":    "command_output",
+            "command": cmd,
+            "parser":  parser_name,
+        },
+        columns     = columns,
+    ))
+
+    return {
+        "upload_token": token,
+        "columns":      columns,
+        "row_count":    len(df),
+        "parser":       parser_name,
+        "source_type":  "command_output",
+    }
+
 # ── POST /api/mb/introspect ───────────────────────────────────────────────────
 
 @router.post("/introspect")
@@ -289,7 +472,7 @@ async def compile_job(spec: BuildSpec):
 
     token = (
         spec.source.upload_token
-        if spec.source.type in ("file", "osi", "json")
+        if spec.source.type in ("file", "osi", "json", "command_output")
         else spec.source.introspect_token
     )
     if not token:
@@ -305,7 +488,55 @@ async def compile_job(spec: BuildSpec):
             )
 
     try:
+        # Transitional compatibility layer.
+        # If structural_groups are present, they are adapted into the legacy
+        # correlations shape expected by the current emitter.
+        #
+        # NOTE:
+        # This mutates spec in-place. Safe because compile_job() owns the
+        # BuildSpec instance. If BuildSpec becomes cached, shared, or reused
+        # across requests, replace with a copy.
+        if getattr(spec, "structural_groups", None):
+            spec.correlations = structural_to_correlation(spec.structural_groups)
+        elif getattr(spec, "correlations", None):
+            pass
+        else:
+            spec.correlations = []
+
         result = compile_artifact(session.df, spec.dict())
+
+        # WS-3B — derive stem_projections and facet_aliases from structural_groups.
+        # Must run after structural_groups → correlations adaptation so groups are confirmed.
+        _derive_stem_projections(spec)
+
+        # WS-3A — write manifest sidecar alongside the compiled artifact.
+        # The sidecar carries semantic metadata (mappings, structural groups)
+        # so Portolan can access projection metadata at query time without
+        # reading it from the substrate.
+        # File: <output_name>.manifest.json next to <output_name>.duckdb
+        try:
+            manifest_payload = {
+                "lens_id":           spec.lens.lens_id,
+                "lens_version":      spec.lens.version,
+                "mapping":           [m.dict() for m in spec.mapping],
+                "nucleus":           spec.nucleus.dict(),
+                "structural_groups": [sg.dict() for sg in (spec.structural_groups or [])],
+                "correlations":      [c.dict() for c in (spec.correlations or [])],
+                "stem_projections":  [sp.dict() for sp in (spec.stem_projections or [])],
+                "facet_aliases":     [fa.dict() for fa in (spec.facet_aliases or [])],
+                "generated_at":      datetime.utcnow().isoformat() + "Z",
+            }
+            manifest_path = OUTPUT_DIR / f"{spec.target.output_name}.manifest.json"
+            manifest_path.write_text(
+                json.dumps(manifest_payload, indent=2, ensure_ascii=False),
+                encoding="utf-8",
+            )
+        except Exception as manifest_err:
+            # Manifest write failure is non-fatal — substrate is already compiled.
+            # Log and continue. Portolan degrades gracefully without projection
+            # metadata until the manifest is present.
+            print(f"[manifest] Warning: could not write manifest sidecar: {manifest_err}")
+
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -482,5 +713,20 @@ async def save_to_substrates(filename: str):
             )
 
     shutil.copy2(src, dest)
+
+    # WS-3A — copy manifest sidecar alongside the .duckdb.
+    # OUTPUT_DIR and SNF_SUBSTRATES_DIR are different paths; the manifest
+    # is written to OUTPUT_DIR at compile time and must travel with the
+    # substrate when it is saved. Non-fatal if absent (pre-WS-3A substrates).
+    stem          = Path(safe_name).stem
+    manifest_src  = OUTPUT_DIR / f"{stem}.manifest.json"
+    manifest_dest = substrates_dir / f"{stem}.manifest.json"
+    if manifest_src.exists():
+        try:
+            shutil.copy2(manifest_src, manifest_dest)
+        except Exception as manifest_err:
+            # Non-fatal — substrate is saved, manifest copy failed.
+            print(f"[manifest] Warning: could not copy manifest sidecar "
+                  f"for {stem}: {manifest_err}")
 
     return {"saved": True, "filename": safe_name, "destination": str(dest)}

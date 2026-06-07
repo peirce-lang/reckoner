@@ -11,7 +11,7 @@ FIRST, before writing any translator code. The enum is the contract.
 from __future__ import annotations
 
 from enum import Enum
-from typing import List, Optional
+from typing import List, Literal, Optional
 from pydantic import BaseModel
 
 
@@ -114,18 +114,88 @@ class CorrelationGroup(BaseModel):
     members: List[CorrelationMember]
 
 
+class StructuralGroup(BaseModel):
+    """
+    A group of source columns that appear to travel together structurally.
+
+    Produced by MB during the wizard's structural confirmation step (4b).
+    Carries no semantic meaning — that is Crosswalk's concern.
+
+    detection:
+        'indexed_stems' — auto-detected via _N suffix pattern in column names
+        'manual'        — declared by the human in the wizard
+
+    members:
+        Source column names, lossless. e.g. ['ingredient_1', 'amount_1']
+        For indexed_stems groups, all columns sharing the same index are members.
+
+    index_pattern:
+        The suffix pattern that triggered detection. '_{n}' for _1/_2/_3 style.
+        None for manually declared groups.
+
+    detection_certainty:
+        Categorical signal about how cleanly the pattern matched.
+        'exact_pattern'   — all stems present at every index, no gaps.
+        'partial_pattern' — some stems missing at some indices.
+        None              — manual group, no detection signal applies.
+
+        Not a numeric score. Numeric confidence implies precision MB does not have.
+        No numeric confidence scores are emitted in WS-3 or carried in this model.
+    """
+    id:                  str
+    detection:           Literal["indexed_stems", "manual"]
+    members:             List[str]
+    index_pattern:       Optional[str]                                         = None
+    detection_certainty: Optional[Literal["exact_pattern", "partial_pattern"]] = None
+
+
+class StemProjection(BaseModel):
+    """
+    Structural metadata: a set of indexed columns sharing a common stem.
+    Recorded by MB from confirmed structural groups.
+    Not user-facing — Portolan uses this to expand facet alias predicates.
+
+    stem:        The shared column name prefix. e.g. 'ingredient'
+    expands_to:  All indexed columns for this stem. e.g. ['ingredient_1', ..., 'ingredient_8']
+    """
+    stem:        str
+    expands_to:  List[str]
+
+
+class FacetAlias(BaseModel):
+    """
+    User-facing query surface over a stem projection.
+    Selected by MB (default) or Crosswalk (long term).
+
+    name:         The alias exposed to the user. e.g. 'ingredient'
+    source_stem:  The StemProjection this alias expands through.
+
+    Default promotion: primary index stems only.
+    amount excluded by default (qualifier, not browse surface).
+    Other stems deferred pending explicit promotion rule or UI toggle.
+    """
+    name:        str
+    source_stem: str
+
+
 class BuildSpec(BaseModel):
-    source:       SourceSpec
-    mapping:      List[MappingRow]
-    nucleus:      NucleusSpec
-    lens:         LensSpec
-    target:       TargetSpec
-    provenance:   Optional[ProvenanceSpec]         = None
-    options:      Optional[BuildOptions]           = None
-    correlations: Optional[List[CorrelationGroup]] = None
-    # correlations — optional. When present, facts from member columns on the
-    # same source row are stamped with a shared correlation_id: group_name_NNN.
-    # correlation_id is a passenger column — not indexed, not routed, display-only.
+    source:           SourceSpec
+    mapping:          List[MappingRow]
+    nucleus:          NucleusSpec
+    lens:             LensSpec
+    target:           TargetSpec
+    provenance:       Optional[ProvenanceSpec]          = None
+    options:          Optional[BuildOptions]            = None
+    correlations:     Optional[List[CorrelationGroup]]  = None
+    structural_groups:  Optional[List[StructuralGroup]]  = None
+    stem_projections:   Optional[List[StemProjection]]   = None
+    facet_aliases:      Optional[List[FacetAlias]]        = None
+    # correlations — legacy emitter shape. Used directly for hand-authored specs.
+    # structural_groups — MB IR shape (WS-3). When present, the compile route
+    # adapts structural_groups → correlations via adapters.structural_to_correlation().
+    # structural_groups takes precedence; correlations is the fallback.
+    # stem_projections — derived from structural_groups at compile time.
+    # facet_aliases — promoted stems for user-facing query. Written to manifest sidecar.
 
 
 class BuildResult(BaseModel):

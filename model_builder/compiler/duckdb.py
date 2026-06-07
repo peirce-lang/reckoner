@@ -78,6 +78,12 @@ def emit_duckdb(
     meta_rows: List[Dict]           = []
     warnings:  List[str]            = []
     entity_ids_seen: Set[str]       = set()
+    # Fact deduplication: keyed on (entity_id, dimension, semantic_key, value).
+    # Prevents duplicate facts when multiple source rows share the same nucleus
+    # (e.g. one row per attendee for the same session ID).
+    # Dedup is on content only — correlation_id is excluded from the key
+    # because it carries row provenance, not semantic identity.
+    facts_seen: Set[tuple]          = set()
 
     for row_idx, (_, row) in enumerate(df.iterrows()):
         eid = make_entity_id(row)
@@ -148,6 +154,10 @@ def emit_duckdb(
                                 # (e.g. watch_date and release_year) don't collide
                                 # on the same bare "year" / "month" coordinate.
                                 prefixed_key = f"{skey_clean}_{gran_key}"
+                                _fact_key = (eid, dim, prefixed_key, gran_val)
+                                if _fact_key in facts_seen:
+                                    continue
+                                facts_seen.add(_fact_key)
                                 dim_rows[dim].append({
                                     "entity_id":          eid,
                                     "dimension":          dim,
@@ -164,6 +174,10 @@ def emit_duckdb(
                             pass
 
                 # ── Default single fact ───────────────────────────────────────
+                _fact_key = (eid, dim, skey, val)
+                if _fact_key in facts_seen:
+                    continue
+                facts_seen.add(_fact_key)
                 if col in col_to_group:
                     grp_name, grp_idx, grp_type = col_to_group[col]
                     correlation_id = f"{grp_name}_{row_idx:03d}_{grp_idx:02d}"

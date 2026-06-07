@@ -88,6 +88,7 @@ from snf_peirce.peirce import PeirceParseError, PeirceDiscoveryError
 PORT            = int(os.environ.get("PORT", 8000))
 SUBSTRATES_DIR  = os.environ.get("SNF_SUBSTRATES_DIR", "./substrates")
 SRF_IMPORTS_DIR = os.environ.get("SNF_SRF_IMPORTS_DIR", os.path.join(SUBSTRATES_DIR, "srf_imports"))
+REGISTRY_CACHE  = os.path.join(SUBSTRATES_DIR, ".registry_cache.json")
 DEBUG           = os.environ.get("DEBUG", "false").lower() == "true"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -196,6 +197,150 @@ _adapter_registry: Dict[str, Any] = {}
 # served from memory thereafter. Avoids repeated expensive aggregation
 # queries on large substrates (especially Shape B coordinate-only schemas).
 _affordances_cache: Dict[str, Any] = {}
+
+# ── Manifest registry (WS-3A) ─────────────────────────────────────────────────
+# Keyed by lens_id. Loaded from <name>.manifest.json sidecar alongside each
+# .duckdb at startup. Carries semantic metadata (mappings, structural_groups,
+# stem_projections) for Portolan to access at query time.
+# Absent for pre-WS-3A substrates — that is normal and expected.
+_manifest_registry: Dict[str, dict] = {}
+
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# WS-3B — Stem projection / facet alias expansion
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+
+
+
+def _resolve_alias_fields(field: str, lens_id: str) -> list | None:
+    """If field is a facet alias, return the concrete fields it expands to. Returns None if not an alias."""
+    try:
+        manifest = _manifest_registry.get(lens_id)
+        if not manifest:
+            return None
+        facet_aliases    = manifest.get("facet_aliases")    or []
+        stem_projections = manifest.get("stem_projections") or []
+        if not facet_aliases:
+            return None
+        stem_lookup = {sp["stem"]: sp["expands_to"] for sp in stem_projections}
+        for fa in facet_aliases:
+            if fa.get("name", "").lower() == field.lower():
+                source_stem = fa.get("source_stem")
+                if source_stem and source_stem in stem_lookup:
+                    return stem_lookup[source_stem]
+        return None
+    except Exception:
+        return None
+
+
+def _execute_alias_clause(clause: dict, concrete_fields: list, substrate) -> set:
+    """
+    Execute one alias clause as posting-list set operations.
+    Returns set of entity IDs.
+
+    mode=any:  union all (value × concrete_field) posting lists
+    mode=all:  for each value, union its slots → intersect across values
+    """
+    def serialize(v):
+        if isinstance(v, bool): return "true" if v else "false"
+        if isinstance(v, (int, float)): return str(v)
+        return f'"{str(v)}"'
+
+    dim          = (clause.get("dimension") or clause.get("category") or "").upper()
+    mode         = clause.get("mode", "any")
+    include_vals = clause.get("include") or []
+
+    if not include_vals:
+        return set()
+
+    if mode == "any":
+        exprs  = [f'{dim}.{cf} = {serialize(v)}' for v in include_vals for cf in concrete_fields]
+        result = peirce_query(substrate, " OR ".join(exprs), limit=None)
+        return set(result.entity_ids)
+    else:
+        # mode=all: intersect per-value OR sets
+        result_set = None
+        for v in include_vals:
+            exprs     = [f'{dim}.{cf} = {serialize(v)}' for cf in concrete_fields]
+            qr        = peirce_query(substrate, " OR ".join(exprs), limit=None)
+            value_set = set(qr.entity_ids)
+            result_set = value_set if result_set is None else result_set & value_set
+        return result_set or set()
+
+
+def plan_alias_constraints(
+    constraints: list,
+    substrate,
+    lens_id: str,
+) -> dict:
+    """
+    WS-3B alias-aware set planner.
+
+    Separates alias clauses from concrete clauses.
+    Alias clauses are executed as direct posting-list set operations.
+    Concrete clauses are returned for normal Peirce serialization.
+
+    Returns:
+    {
+        "entity_set":            set | None,   # intersection of all alias clause sets
+        "remaining_constraints": list,         # concrete clauses for Peirce
+        "used_alias_plan":       bool,
+    }
+
+    Alias exclude-without-include is deferred — treated as concrete for now.
+    Non-fatal: exceptions fall back to all constraints as concrete.
+    """
+    try:
+        alias_sets  = []
+        remaining   = []
+
+        for clause in constraints:
+            field           = (clause.get("field") or "").lower()
+            concrete_fields = _resolve_alias_fields(field, lens_id)
+            include_vals    = clause.get("include") or []
+            exclude_vals    = clause.get("exclude") or []
+            is_clause       = "include" in clause or "exclude" in clause
+
+            if not is_clause or not concrete_fields or (not include_vals and exclude_vals):
+                # Not a clause, not an alias, or exclude-only (deferred) → concrete
+                remaining.append(clause)
+                continue
+
+            alias_set = _execute_alias_clause(clause, concrete_fields, substrate)
+            alias_sets.append(alias_set)
+
+            # Exclude handling: subtract entities matching excluded values
+            if exclude_vals:
+                dim = (clause.get("dimension") or clause.get("category") or "").upper()
+                def serialize(v):
+                    if isinstance(v, bool): return "true" if v else "false"
+                    if isinstance(v, (int, float)): return str(v)
+                    return f'"{str(v)}"'
+                for v in exclude_vals:
+                    exprs   = [f'{dim}.{cf} = {serialize(v)}' for cf in concrete_fields]
+                    ex_qr   = peirce_query(substrate, " OR ".join(exprs), limit=None)
+                    alias_set -= set(ex_qr.entity_ids)
+
+        if not alias_sets:
+            return {"entity_set": None, "remaining_constraints": constraints, "used_alias_plan": False}
+
+        # Intersect all alias sets
+        entity_set = alias_sets[0]
+        for s in alias_sets[1:]:
+            entity_set = entity_set & s
+
+        if DEBUG:
+            print(f"[alias_plan] {len(alias_sets)} alias clause(s) → {len(entity_set)} entities")
+
+        return {"entity_set": entity_set, "remaining_constraints": remaining, "used_alias_plan": True}
+
+    except Exception as e:
+        if DEBUG:
+            print(f"[alias_plan] Warning: plan failed, falling back to concrete: {e}")
+        return {"entity_set": None, "remaining_constraints": constraints, "used_alias_plan": False}
 
 
 def register_substrate(name: str, substrate: Substrate, meta: dict = None) -> None:
@@ -402,6 +547,39 @@ def load_postgres_adapters() -> None:
         print(f"[registry] Error loading Postgres adapters: {e}")
 
 
+# ── Substrate metadata cache ──────────────────────────────────────────────────
+# Caches entity_count, dimensions, and lens_id keyed by filename + mtime.
+# Avoids full DuckDB scans on startup for already-seen substrates.
+# Cache file: <SUBSTRATES_DIR>/.registry_cache.json  (hidden, auto-managed)
+
+def _load_meta_cache() -> dict:
+    """Load the metadata cache from disk. Returns {} on any failure."""
+    try:
+        p = Path(REGISTRY_CACHE)
+        if p.exists():
+            return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    return {}
+
+def _save_meta_cache(cache: dict) -> None:
+    """Persist the metadata cache to disk. Non-fatal on failure."""
+    try:
+        Path(REGISTRY_CACHE).write_text(
+            json.dumps(cache, indent=2), encoding="utf-8"
+        )
+    except Exception as e:
+        print(f"[registry] Warning: could not write metadata cache: {e}")
+
+def _cache_key(entry: Path) -> str:
+    """Cache key = filename stem + mtime. Changes when file is replaced."""
+    try:
+        mtime = int(entry.stat().st_mtime)
+    except OSError:
+        mtime = 0
+    return f"{entry.stem}:{mtime}"
+
+
 def load_substrates_from_disk() -> None:
     """
     Scan SUBSTRATES_DIR for spoke directories and .duckdb files and load them.
@@ -422,6 +600,9 @@ def load_substrates_from_disk() -> None:
         print(f"[registry] Create it and add spoke directories or .duckdb files to load substrates automatically.")
         return
 
+    meta_cache = _load_meta_cache()
+    cache_dirty = False
+
     for entry in sorted(base.iterdir()):
 
         # ── .duckdb file — model_builder.py output ───────────────────────────
@@ -430,22 +611,65 @@ def load_substrates_from_disk() -> None:
             if name in _registry or name in _adapter_registry:
                 continue  # already loaded — skip on refresh
             try:
-                conn      = duckdb.connect(str(entry), read_only=True)
-                # Read lens_id from first row — stamped by model_builder
-                row       = conn.execute("SELECT lens_id FROM snf_spoke LIMIT 1").fetchone()
-                lens_id   = row[0] if row else name
-                substrate = Substrate(conn, lens_id)
-                meta = {
-                    "path":         str(entry),
-                    "entity_count": substrate.entity_count(),
-                    "dimensions":   substrate.dimensions(),
-                    "lens_id":      lens_id,
-                    "label":        name,
-                    "backend":      "duckdb_file",
-                }
+                conn = duckdb.connect(str(entry), read_only=True)
+
+                # Check metadata cache before running full scans.
+                # Cache hit: skip entity_count() and dimensions() scans.
+                # Cache miss or stale (mtime changed): run scans and update cache.
+                ckey = _cache_key(entry)
+                if ckey in meta_cache:
+                    cached = meta_cache[ckey]
+                    lens_id = cached["lens_id"]
+                    substrate = Substrate(conn, lens_id)
+                    meta = {
+                        "path":         str(entry),
+                        "entity_count": cached["entity_count"],
+                        "dimensions":   cached["dimensions"],
+                        "lens_id":      lens_id,
+                        "label":        name,
+                        "backend":      "duckdb_file",
+                    }
+                    print(f"[registry] Loaded {name}: {meta['entity_count']:,} entities "
+                          f"(cached, duckdb)")
+                else:
+                    row       = conn.execute("SELECT lens_id FROM snf_spoke LIMIT 1").fetchone()
+                    lens_id   = row[0] if row else name
+                    substrate = Substrate(conn, lens_id)
+                    meta = {
+                        "path":         str(entry),
+                        "entity_count": substrate.entity_count(),
+                        "dimensions":   substrate.dimensions(),
+                        "lens_id":      lens_id,
+                        "label":        name,
+                        "backend":      "duckdb_file",
+                    }
+                    meta_cache[ckey] = {
+                        "lens_id":      lens_id,
+                        "entity_count": meta["entity_count"],
+                        "dimensions":   meta["dimensions"],
+                    }
+                    cache_dirty = True
+                    print(f"[registry] Loaded {name}: {meta['entity_count']:,} entities, "
+                          f"dimensions: {meta['dimensions']} (duckdb)")
+
                 register_substrate(name, substrate, meta)
-                print(f"[registry] Loaded {name}: {meta['entity_count']:,} entities, "
-                      f"dimensions: {meta['dimensions']} (duckdb)")
+
+                # WS-3A — probe for manifest sidecar alongside .duckdb.
+                # <name>.manifest.json is written by compile_job() at ingest time.
+                # Absent for pre-WS-3A substrates — skip silently.
+                manifest_sidecar = entry.with_suffix(".manifest.json")
+                if manifest_sidecar.exists():
+                    try:
+                        manifest_data = json.loads(
+                            manifest_sidecar.read_text(encoding="utf-8")
+                        )
+                        _manifest_registry[lens_id] = manifest_data
+                        print(f"[registry] Loaded manifest for {name} "
+                              f"(lens_id: {lens_id})")
+                    except Exception as manifest_err:
+                        print(f"[registry] Warning: could not load manifest "
+                              f"for {name}: {manifest_err}")
+
             except Exception as e:
                 print(f"[registry] Failed to load {name}.duckdb: {e}")
             continue
@@ -495,6 +719,11 @@ def load_substrates_from_disk() -> None:
         except Exception as e:
             print(f"[registry] Failed to load {name}: {e}")
 
+    # Persist any new cache entries accumulated during this scan
+    if cache_dirty:
+        _save_meta_cache(meta_cache)
+        print(f"[registry] Metadata cache updated ({len(meta_cache)} entries)")
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Constraint → Peirce conversion
@@ -508,37 +737,105 @@ OP_TO_PEIRCE = {
 }
 
 def constraints_to_peirce(constraints: List[dict]) -> str:
-    """Convert legacy constraint array to Peirce string."""
-    parts = []
+    """Convert constraint array to Peirce string.
+
+    Accepts two input shapes — both are handled transparently:
+
+    1. Legacy flat constraint (existing chip format):
+       {"category": "WHAT", "field": "ingredient", "op": "eq", "value": "gin"}
+
+       Same-field flat constraints are grouped and OR'd — preserving the
+       pre-clause behavior that multiple chips on the same field mean ANY.
+
+    2. Clause object (new format):
+       {
+         "dimension": "WHAT",
+         "field":     "ingredient",
+         "mode":      "any",          # "any" → OR, "all" → AND
+         "include":   ["gin", "Aperol"],
+         "exclude":   ["egg white"]   # → AND NOT each value
+       }
+
+    Clauses are AND'd together across fields/dimensions.
+
+    Serialization contract:
+      include + mode:any  →  WHAT.field = "v1" OR WHAT.field = "v2"
+      include + mode:all  →  WHAT.field = "v1" AND WHAT.field = "v2"
+      exclude             →  AND NOT WHAT.field = "v"  (always, independent of mode)
+      between             →  WHAT.field BETWEEN v1 AND v2
+      single include      →  WHAT.field = "v"  (no parens, no join keyword)
+    """
+    from collections import OrderedDict
+
+    def serialize(v):
+        if isinstance(v, bool):
+            return "true" if v else "false"
+        if isinstance(v, (int, float)):
+            return str(v)
+        return f'"{str(v)}"'
+
+    and_parts     = []
+    legacy_groups = OrderedDict()
+
     for c in constraints:
-        dim   = (c.get("category") or c.get("dimension") or "").upper()
-        field = (c.get("field") or "").lower()
-        op    = c.get("op", "eq")
-        value = c.get("value", "")
-        value2 = c.get("value2")
+        if "include" in c or "exclude" in c:
+            # Clause object — serialize directly
+            dim   = (c.get("dimension") or c.get("category") or "").upper()
+            field = (c.get("field") or "").lower()
+            mode  = c.get("mode", "any")
 
-        if not dim or not field:
-            continue
+            if not dim or not field:
+                continue
 
-        def serialize(v):
-            if isinstance(v, bool):
-                return "true" if v else "false"
-            if isinstance(v, (int, float)):
-                return str(v)
-            return f'"{str(v)}"'
+            include_vals = c.get("include") or []
+            exclude_vals = c.get("exclude") or []
 
-        if op == "between" and value2 is not None:
-            expr = f'{dim}.{field} BETWEEN {serialize(value)} AND {serialize(value2)}'
+            if include_vals:
+                join_kw = " OR " if mode == "any" else " AND "
+                exprs = [f'{dim}.{field} = {serialize(v)}' for v in include_vals]
+                if len(exprs) == 1:
+                    and_parts.append(exprs[0])
+                else:
+                    # No parens — Peirce parser rejects OR inside parentheses.
+                    and_parts.append(join_kw.join(exprs))
+
+            for v in exclude_vals:
+                and_parts.append(f'NOT {dim}.{field} = {serialize(v)}')
+
         else:
-            peirce_op = OP_TO_PEIRCE.get(op, "=")
-            expr = f'{dim}.{field} {peirce_op} {serialize(value)}'
+            # Legacy flat constraint — collect into groups for OR-within-field
+            dim    = (c.get("category") or c.get("dimension") or "").upper()
+            field  = (c.get("field") or "").lower()
+            op     = c.get("op", "eq")
+            value  = c.get("value", "")
+            value2 = c.get("value2")
 
-        if c.get("negated"):
-            expr = f"NOT {expr}"
+            if not dim or not field:
+                continue
 
-        parts.append(expr)
+            if op == "between" and value2 is not None:
+                expr = f'{dim}.{field} BETWEEN {serialize(value)} AND {serialize(value2)}'
+            else:
+                peirce_op = OP_TO_PEIRCE.get(op, "=")
+                expr = f'{dim}.{field} {peirce_op} {serialize(value)}'
 
-    return " AND ".join(parts)
+            if c.get("negated"):
+                expr = f"NOT {expr}"
+
+            key = (dim, field)
+            if key not in legacy_groups:
+                legacy_groups[key] = []
+            legacy_groups[key].append(expr)
+
+    # Flush legacy groups — OR within field, AND across fields.
+    # No parens — Peirce parser rejects OR inside parentheses.
+    for exprs in legacy_groups.values():
+        if len(exprs) == 1:
+            and_parts.append(exprs[0])
+        else:
+            and_parts.append(" OR ".join(exprs))
+
+    return " AND ".join(and_parts)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -644,10 +941,16 @@ def hydrate_results(
         # Build result objects
         results = []
         for entity_id in entity_ids:
-            # Build matched_because from coordinates that triggered the match
+            entity_coords_present = set()
+            for dim_facts in by_entity[entity_id].values():
+                for fact in dim_facts:
+                    if fact.get("coordinate"):
+                        entity_coords_present.add(fact["coordinate"].lower())
+
             matched = []
             for coord in matched_coordinates.get(entity_id, []):
-                # Parse coordinate string: "WHO|artist|Miles Davis"
+                if coord.lower() not in entity_coords_present:
+                    continue
                 parts = coord.split("|")
                 if len(parts) >= 3:
                     matched.append({
@@ -1215,6 +1518,44 @@ async def affordances(schema: str = None):
                         "value_type":      value_type,
                     }
 
+            manifest = _manifest_registry.get(substrate.lens_id)
+            if manifest:
+                facet_aliases    = manifest.get("facet_aliases")    or []
+                stem_projections = manifest.get("stem_projections") or []
+                if facet_aliases or stem_projections:
+                    stem_lookup = {sp["stem"]: set(sp["expands_to"]) for sp in stem_projections}
+                    promoted_stems = {fa.get("source_stem") for fa in facet_aliases if fa.get("source_stem")}
+                    for fa in facet_aliases:
+                        alias_name  = fa.get("name")
+                        source_stem = fa.get("source_stem")
+                        if not alias_name or not source_stem:
+                            continue
+                        concrete_cols = stem_lookup.get(source_stem, set())
+                        if not concrete_cols:
+                            continue
+                        for dim_upper, fields in result.items():
+                            matching = {k: v for k, v in fields.items() if k in concrete_cols}
+                            if not matching:
+                                continue
+                            agg_fact_count      = sum(m["fact_count"]      for m in matching.values())
+                            agg_distinct_values = max(m["distinct_values"] for m in matching.values())
+                            agg_value_type      = next(iter(matching.values()))["value_type"]
+                            for k in matching:
+                                del result[dim_upper][k]
+                            result[dim_upper][alias_name] = {
+                                "fact_count":      agg_fact_count,
+                                "distinct_values": agg_distinct_values,
+                                "value_type":      agg_value_type,
+                                "is_alias":        True,
+                            }
+                    unpromoted_stems = {stem for stem in stem_lookup if stem not in promoted_stems}
+                    for stem in unpromoted_stems:
+                        concrete_cols = stem_lookup.get(stem, set())
+                        for dim_upper, fields in result.items():
+                            for k in list(fields.keys()):
+                                if k in concrete_cols:
+                                    del result[dim_upper][k]
+
             _affordances_cache[substrate_id] = result
             return result
 
@@ -1349,26 +1690,49 @@ async def query(req: QueryRequest):
         list(_registry.keys())[0] if _registry else list(_adapter_registry.keys())[0]
     )
 
-    # Resolve Peirce string
-    peirce_string = req.peirce
+    # ── Query resolution ──────────────────────────────────────────────────────
+    #
+    # Two paths, cleanly separated:
+    #
+    # Constraint path (frontend sends constraints array — normal UI path):
+    #   1. Run alias clauses through set algebra planner (DuckDB only)
+    #   2. Serialize remaining concrete clauses to Peirce
+    #   3. Intersect alias set with concrete routing result
+    #
+    # Raw Peirce path (peirce only, no constraints):
+    #   No alias expansion — pass through as-is.
+    #   Alias fields in raw Peirce are the caller's responsibility.
+    #
+    # No alias expansion happens at the Peirce string level.
 
-    if not peirce_string and req.constraints:
+    lens_id       = getattr(substrate_or_adapter, "lens_id", None) or substrate_id
+    alias_plan    = {"entity_set": None, "remaining_constraints": [], "used_alias_plan": False}
+    peirce_string = None
+
+    if req.constraints and not is_adapter:
+        # DuckDB + constraints: run alias set planner first
+        alias_plan    = plan_alias_constraints(req.constraints, substrate_or_adapter, lens_id)
+        remaining     = alias_plan["remaining_constraints"]
+        peirce_string = constraints_to_peirce(remaining) if remaining else None
+    elif req.constraints and is_adapter:
         peirce_string = constraints_to_peirce(req.constraints)
+    elif req.peirce:
+        peirce_string = req.peirce
 
-    if not peirce_string:
+    alias_set = alias_plan["entity_set"]
+
+    # Need at least one of: a Peirce string or an alias set result
+    if not peirce_string and alias_set is None:
         raise HTTPException(status_code=400, detail="peirce or constraints required")
 
-    if DEBUG:
+    if DEBUG and peirce_string:
         print(f"[query] substrate={substrate_id} adapter={is_adapter} peirce={peirce_string!r}")
+    if DEBUG and alias_plan["used_alias_plan"]:
+        print(f"[alias_plan] entity_set size={len(alias_set) if alias_set is not None else 0}")
 
     # ── Adaptive limit ────────────────────────────────────────────────────────
-    # If the caller sends an explicit limit, honour it.
-    # If not, use a large number to get the full routing result first,
-    # then apply a display cap based on the actual result count.
-    # This ensures row_count always reflects the true total while hydration
-    # is capped to a sensible page size.
-    DISPLAY_CAP      = 200   # max entities to hydrate and send per request
-    SMALL_RESULT_CAP = 500   # results under this are shown in full
+    DISPLAY_CAP      = 200
+    SMALL_RESULT_CAP = 500
 
     probe_start = time.perf_counter()
 
@@ -1376,7 +1740,6 @@ async def query(req: QueryRequest):
         # ── Adapter path (PostgresAdapter etc.) ───────────────────────────────
         try:
             adapter = substrate_or_adapter
-            # Route without limit to get true count, then cap hydration
             result  = adapter.query(peirce_string, limit=req.limit or 100000)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
@@ -1386,12 +1749,11 @@ async def query(req: QueryRequest):
         probe_ms   = (time.perf_counter() - probe_start) * 1000
         exec_start = time.perf_counter()
 
-        # Apply adaptive display cap and offset for pagination
-        offset       = req.offset or 0
-        display_cap  = req.limit if req.limit is not None else (
+        offset      = req.offset or 0
+        display_cap = req.limit if req.limit is not None else (
             result.count if result.count <= SMALL_RESULT_CAP else DISPLAY_CAP
         )
-        page_ids     = result.entity_ids[offset : offset + display_cap]
+        page_ids = result.entity_ids[offset : offset + display_cap]
 
         matched_coords = extract_matched_coordinates(peirce_string, page_ids)
         hydrated       = adapter.hydrate(
@@ -1404,11 +1766,22 @@ async def query(req: QueryRequest):
         # ── snf-peirce path (DuckDB Substrate) ────────────────────────────────
         substrate = substrate_or_adapter
         try:
-            entity_ids, total_count, duckdb_trace = _duckdb_query_with_trace(
-                substrate     = substrate,
-                peirce_string = peirce_string,
-                limit         = req.limit or 100000,
-            )
+            if peirce_string:
+                entity_ids, total_count, duckdb_trace = _duckdb_query_with_trace(
+                    substrate     = substrate,
+                    peirce_string = peirce_string,
+                    limit         = req.limit or 100000,
+                )
+                # Intersect with alias set plan if present
+                if alias_set is not None:
+                    entity_ids  = [e for e in entity_ids if e in alias_set]
+                    total_count = len(entity_ids)
+            else:
+                # Alias set plan only — no concrete Peirce constraints
+                entity_ids   = list(alias_set)
+                total_count  = len(entity_ids)
+                duckdb_trace = []
+
         except PeirceParseError as e:
             raise HTTPException(status_code=400, detail={
                 "error":    str(e),
@@ -1425,8 +1798,6 @@ async def query(req: QueryRequest):
         probe_ms   = (time.perf_counter() - probe_start) * 1000
         exec_start = time.perf_counter()
 
-        # Wrap into a lightweight result-like object so the rest of the handler
-        # can stay the same (result.count, result.entity_ids)
         class _DuckDBResult:
             def __init__(self, ids, count, trace):
                 self.entity_ids = ids
@@ -1435,14 +1806,13 @@ async def query(req: QueryRequest):
 
         result = _DuckDBResult(entity_ids, total_count, duckdb_trace)
 
-        # Apply adaptive display cap and offset for pagination
         offset      = req.offset or 0
         display_cap = req.limit if req.limit is not None else (
             result.count if result.count <= SMALL_RESULT_CAP else DISPLAY_CAP
         )
-        page_ids    = result.entity_ids[offset : offset + display_cap]
+        page_ids = result.entity_ids[offset : offset + display_cap]
 
-        matched_coords = extract_matched_coordinates(peirce_string, page_ids)
+        matched_coords = extract_matched_coordinates(peirce_string or "", page_ids)
         hydrated       = hydrate_results(
             entity_ids          = page_ids,
             substrate           = substrate,
@@ -1529,16 +1899,30 @@ async def discover_endpoint(req: DiscoverRequest):
     try:
         if is_adapter:
             result = substrate_or_adapter.discover(req.expression, limit=req.limit)
+            return {"scope": result.scope, "dimension": result.dimension,
+                    "field": result.field, "rows": result.rows, "substrate": substrate_id}
         else:
-            result = discover(substrate_or_adapter, req.expression, limit=req.limit)
-
-        return {
-            "scope":     result.scope,
-            "dimension": result.dimension,
-            "field":     result.field,
-            "rows":      result.rows,
-            "substrate": substrate_id,
-        }
+            substrate = substrate_or_adapter
+            parts = req.expression.strip().split("|")
+            if len(parts) == 3 and parts[2] == "*":
+                dim   = parts[0].upper()
+                field = parts[1]
+                concrete_fields = _resolve_alias_fields(field, substrate.lens_id)
+                if concrete_fields:
+                    limit = req.limit or 500
+                    phs   = ", ".join(["?" for _ in concrete_fields])
+                    db_rows = substrate._conn.execute(
+                        f"SELECT value, COUNT(DISTINCT entity_id) AS cnt FROM snf_spoke "
+                        f"WHERE dimension = ? AND lens_id = ? AND semantic_key IN ({phs}) "
+                        f"GROUP BY value ORDER BY cnt DESC LIMIT ?",
+                        [dim.lower(), substrate.lens_id] + concrete_fields + [limit]
+                    ).fetchall()
+                    return {"scope": "values", "dimension": dim, "field": field,
+                            "rows": [{"value": r[0], "count": r[1]} for r in db_rows],
+                            "substrate": substrate_id}
+            result = discover(substrate, req.expression, limit=req.limit)
+            return {"scope": result.scope, "dimension": result.dimension,
+                    "field": result.field, "rows": result.rows, "substrate": substrate_id}
     except PeirceParseError as e:
         raise HTTPException(status_code=400, detail={"error": str(e)})
     except Exception as e:
@@ -1873,22 +2257,40 @@ async def discover_conditional(req: ConditionalDiscoverRequest):
 
         if is_adapter:
             rows = substrate_or_adapter.values_conditional(
-                dimension=dimension,
-                field=field,
-                entity_ids=entity_ids,
-                limit=limit,
-            )
+                dimension=dimension, field=field, entity_ids=entity_ids, limit=limit)
         else:
-            substrate    = substrate_or_adapter
-            placeholders = ", ".join(["?" for _ in entity_ids])
-            db_rows = substrate._conn.execute(
-                f"SELECT value, COUNT(DISTINCT entity_id) AS cnt "
-                f"FROM snf_spoke "
-                f"WHERE dimension = ? AND semantic_key = ? AND lens_id = ? "
-                f"AND entity_id IN ({placeholders}) "
-                f"GROUP BY value ORDER BY cnt DESC LIMIT ?",
-                [dimension.lower(), field, substrate.lens_id] + entity_ids + [limit]
-            ).fetchall()
+            substrate = substrate_or_adapter
+            concrete_fields = _resolve_alias_fields(field, substrate.lens_id)
+
+            # Use a temp table for the entity ID set rather than a large IN clause.
+            # DuckDB joins against a temp table significantly faster than filtering
+            # against a long IN list of strings, especially for large result sets.
+            substrate._conn.execute(
+                "CREATE OR REPLACE TEMP TABLE _trie_ids (entity_id VARCHAR)"
+            )
+            if entity_ids:
+                substrate._conn.executemany(
+                    "INSERT INTO _trie_ids VALUES (?)",
+                    [[eid] for eid in entity_ids]
+                )
+
+            if concrete_fields:
+                field_phs = ", ".join(["?" for _ in concrete_fields])
+                db_rows = substrate._conn.execute(
+                    f"SELECT s.value, COUNT(DISTINCT s.entity_id) AS cnt "
+                    f"FROM snf_spoke s JOIN _trie_ids t ON s.entity_id = t.entity_id "
+                    f"WHERE s.dimension = ? AND s.lens_id = ? AND s.semantic_key IN ({field_phs}) "
+                    f"GROUP BY s.value ORDER BY cnt DESC LIMIT ?",
+                    [dimension.lower(), substrate.lens_id] + concrete_fields + [limit]
+                ).fetchall()
+            else:
+                db_rows = substrate._conn.execute(
+                    "SELECT s.value, COUNT(DISTINCT s.entity_id) AS cnt "
+                    "FROM snf_spoke s JOIN _trie_ids t ON s.entity_id = t.entity_id "
+                    "WHERE s.dimension = ? AND s.semantic_key = ? AND s.lens_id = ? "
+                    "GROUP BY s.value ORDER BY cnt DESC LIMIT ?",
+                    [dimension.lower(), field, substrate.lens_id, limit]
+                ).fetchall()
             rows = [{"value": row[0], "count": row[1]} for row in db_rows]
 
         return {
@@ -2989,6 +3391,6 @@ if __name__ == "__main__":
         app,
         host="0.0.0.0",
         port=PORT,
-        reload=DEBUG,
+        reload=False,
         log_level="info" if DEBUG else "warning",
     )

@@ -54,7 +54,10 @@ const SECONDARY_FIELDS = new Set(['release_id', 'collection_folder', 'rating']);
 // ─────────────────────────────────────────────────────────────────────────────
 
 function humanizeField(field) {
-  return String(field)
+  // Strip trailing _N index suffix for display (ingredient_1 → Ingredient, amount_3 → Amount).
+  // Preserves the stem label in correlated grid headers without exposing the index.
+  const stripped = String(field).replace(/_\d+$/, '');
+  return stripped
     .replace(/_/g, ' ')
     .replace(/\b\w/g, c => c.toUpperCase());
 }
@@ -276,12 +279,75 @@ function DimensionSection({ dim, facts, projectedFields, onPinHeader, headerPref
     }
   }
 
+  // Check if any groups are correlated (more than 1 fact sharing correlation_id)
+  const correlatedGroups = groups.filter(g => g.facts.length > 1);
+  const hasGrid = correlatedGroups.length > 0;
+
+  // fieldStem strips the _N index suffix for column derivation and cell lookup.
+  // Grouping is by correlation_id (preserves index relationship).
+  // Columns and cell matching use stems so ingredient_1/2/3 all map to "ingredient".
+  // _N is stripped only at label render time via humanizeField.
+  function fieldStem(field) {
+    return String(field).replace(/_\d+$/, '');
+  }
+
+  const gridColumns = hasGrid
+    ? [...new Set(correlatedGroups.flatMap(g => g.facts.map(f => fieldStem(f.field))))].sort((a, b) => {
+        const aIsAmount = a === 'amount';
+        const bIsAmount = b === 'amount';
+        if (aIsAmount && !bIsAmount) return 1;
+        if (!aIsAmount && bIsAmount) return -1;
+        return 0;
+      })
+    : [];
+
+  // Separate solo facts (no correlation_id) from grid rows
+  const soloGroups = groups.filter(g => g.facts.length === 1 && !g.facts[0].correlation_id);
+
   return (
     <div className={`rounded px-2 py-1.5 mb-1 ${colors.bg} ${colors.border} border`}>
       <div className="flex gap-2">
         <span className={`text-xs font-bold ${colors.text} w-10 flex-shrink-0 pt-0.5`}>{dim}</span>
         <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-          {groups.map((group) => (
+          {/* Grid rendering for correlated groups */}
+          {hasGrid && (
+            <div style={{ display: 'inline-block' }}>
+              <table style={{ borderCollapse: 'collapse', fontSize: '11px', marginBottom: '2px', tableLayout: 'auto' }}>
+                <thead>
+                  <tr>
+                    {gridColumns.map(col => (
+                      <th key={col} style={{
+                        textAlign: 'left', paddingRight: '16px', paddingBottom: '2px',
+                        borderBottom: '1px solid #e5e7eb', color: '#9ca3af', fontWeight: 500,
+                        fontSize: '10px', textTransform: 'none', letterSpacing: 0
+                      }}>
+                        {humanizeField(col)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {correlatedGroups.map((group) => (
+                    <tr key={group.key}>
+                      {gridColumns.map(col => {
+                        const fact = group.facts.find(f => fieldStem(f.field) === col);
+                        return (
+                          <td key={col} style={{
+                            paddingRight: '16px', paddingTop: '1px', paddingBottom: '1px',
+                            color: '#1f2937', whiteSpace: 'nowrap'
+                          }}>
+                            {fact && String(fact.value ?? '').trim() !== '' ? clampStr(fact.value, 30) : '—'}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {/* Solo facts (no correlation_id) rendered as normal field: value lines */}
+          {soloGroups.map((group) => (
             <CorrelatedGroup
               key={group.key}
               facts={group.facts}
