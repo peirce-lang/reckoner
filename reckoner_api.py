@@ -75,21 +75,54 @@ from snf_peirce.peirce import PeirceParseError, PeirceDiscoveryError
 from snf_peirce.srf import SRFRecord, SRFValidationError
 import duckdb
 
-# Force reload to ensure latest peirce.py is used
-import importlib
-import snf_peirce.peirce
-importlib.reload(snf_peirce.peirce)
-from snf_peirce.peirce import PeirceParseError, PeirceDiscoveryError
+# C-1 — the importlib.reload() of snf_peirce.peirce that used to sit here has
+# been removed. It was a development convenience with a real cost: reloading a
+# module creates a SECOND set of exception classes, so a PeirceParseError raised
+# by the pre-reload module object is not caught by a handler that closed over
+# the post-reload class. The parse error then escapes as a 500 instead of a
+# useful message, intermittently, depending on import order.
+#
+# It also interacts badly with PyInstaller, which resolves modules at build
+# time. If a dev-time reload is ever wanted again, put it behind an explicit
+# flag rather than running it on every import.
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Config
 # ─────────────────────────────────────────────────────────────────────────────
 
-PORT            = int(os.environ.get("PORT", 8000))
-SUBSTRATES_DIR  = os.environ.get("SNF_SUBSTRATES_DIR", "./substrates")
-SRF_IMPORTS_DIR = os.environ.get("SNF_SRF_IMPORTS_DIR", os.path.join(SUBSTRATES_DIR, "srf_imports"))
-REGISTRY_CACHE  = os.path.join(SUBSTRATES_DIR, ".registry_cache.json")
-DEBUG           = os.environ.get("DEBUG", "false").lower() == "true"
+# Shared with Model Builder — see model_builder/settings.py.
+#
+# SUBSTRATES_DIR now defaults to the directory Model Builder writes to, so a
+# freshly built substrate is queryable with no copy step. It was previously
+# "./substrates", resolved against whatever the working directory happened to
+# be, which for a packaged application is unpredictable.
+try:
+    from model_builder.settings import (
+        CORS_ORIGINS,
+        DEBUG,
+        EXPORT_DIR,
+        HOST,
+        PORT,
+        REGISTRY_CACHE,
+        SRF_IMPORTS_DIR,
+        SUBSTRATES_DIR,
+        describe as describe_settings,
+    )
+except ImportError as exc:
+    raise SystemExit(
+        "Could not import model_builder.settings.\n"
+        f"  {exc}\n\n"
+        "The model_builder package must be importable from the directory\n"
+        "containing reckoner_api.py, and must contain settings.py and paths.py.\n"
+        "Refusing to start rather than falling back to old defaults, which\n"
+        "would silently write substrates where the API does not look."
+    )
+
+# Downstream code wraps these in Path(...) and os.path.join(...); both accept
+# strings, so converting here means nothing else has to change.
+SUBSTRATES_DIR  = str(SUBSTRATES_DIR)
+SRF_IMPORTS_DIR = str(SRF_IMPORTS_DIR)
+REGISTRY_CACHE  = str(REGISTRY_CACHE)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Query hash
@@ -422,6 +455,13 @@ def substrate_from_spoke_dir(subdir: Path) -> Substrate:
     if "lens_id" not in spokes.columns:
         spokes["lens_id"] = lens_id
 
+    # Add nucleus columns if absent — CSVs produced by snf-peirce >= 0.2.7
+    # include them; older CSVs do not. NULL for old CSVs is correct —
+    # queryable but not SRF-exportable without recompile.
+    for col in ("nucleus_field", "nucleus_value", "nucleus_prefix"):
+        if col not in spokes.columns:
+            spokes[col] = None
+
     # Build in-memory DuckDB and create snf_spoke table
     conn = duckdb.connect(":memory:")
     conn.execute("""
@@ -433,21 +473,27 @@ def substrate_from_spoke_dir(subdir: Path) -> Substrate:
             coordinate     VARCHAR,
             lens_id        VARCHAR,
             correlation_id VARCHAR,
-            group_type     VARCHAR
+            group_type     VARCHAR,
+            nucleus_field  VARCHAR,
+            nucleus_value  VARCHAR,
+            nucleus_prefix VARCHAR
         )
     """)
     conn.register("_spokes_df", spokes)
     conn.execute("""
         INSERT INTO snf_spoke
         SELECT
-            CAST(entity_id    AS VARCHAR),
-            CAST(dimension    AS VARCHAR),
-            CAST(semantic_key AS VARCHAR),
-            CAST(value        AS VARCHAR),
-            CAST(coordinate   AS VARCHAR),
-            CAST(lens_id      AS VARCHAR),
+            CAST(entity_id     AS VARCHAR),
+            CAST(dimension     AS VARCHAR),
+            CAST(semantic_key  AS VARCHAR),
+            CAST(value         AS VARCHAR),
+            CAST(coordinate    AS VARCHAR),
+            CAST(lens_id       AS VARCHAR),
             NULL AS correlation_id,
-            NULL AS group_type
+            NULL AS group_type,
+            CAST(nucleus_field  AS VARCHAR),
+            CAST(nucleus_value  AS VARCHAR),
+            CAST(nucleus_prefix AS VARCHAR)
         FROM _spokes_df
     """)
     conn.unregister("_spokes_df")
@@ -1277,7 +1323,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],       # Tighten for production
+    allow_origins=CORS_ORIGINS,   # Set CORS_ORIGINS in .env to tighten
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -1445,7 +1491,7 @@ async def affordances(schema: str = None):
 
                 rows = substrate._conn.execute(
                     "SELECT semantic_key, "
-                    "COUNT(DISTINCT entity_id) as distinct_entities, "
+                    "COUNT(DISTINCT value) as distinct_value_count, "
                     "COUNT(*) as fact_count "
                     "FROM snf_spoke "
                     "WHERE dimension = ? AND lens_id = ? "
@@ -1467,7 +1513,7 @@ async def affordances(schema: str = None):
                 except Exception:
                     pass  # table absent — older substrate, heuristic handles it
 
-                for semantic_key, distinct_entities, fact_count in rows:
+                for semantic_key, distinct_value_count, fact_count in rows:
                     field_name = semantic_key.split(".")[-1] if "." in semantic_key else semantic_key
 
                     compiled_key = f"{dim}|{semantic_key}"
@@ -1503,18 +1549,18 @@ async def affordances(schema: str = None):
                                 )
                                 if numeric_hits == len(sample):
                                     value_type = "number"
-                                elif distinct_entities <= 25:
+                                elif distinct_value_count <= 25:
                                     value_type = "enum"
                                 else:
                                     value_type = "text"
                             else:
                                 value_type = "text"
                         except Exception:
-                            value_type = "enum" if distinct_entities <= 25 else "text"
+                            value_type = "enum" if distinct_value_count <= 25 else "text"
 
                     result[dim_upper][field_name] = {
                         "fact_count":      fact_count,
-                        "distinct_values": distinct_entities,
+                        "distinct_values": distinct_value_count,
                         "value_type":      value_type,
                     }
 
@@ -2525,8 +2571,9 @@ async def export_parquet(req: ParquetExportRequest):
 
 from datetime import datetime
 
-EXPORT_DIR = Path.home() / "Documents" / "Reckoner Exports"
-EXPORT_DIR.mkdir(parents=True, exist_ok=True)
+# EXPORT_DIR now comes from model_builder.settings (imported above), which
+# creates it. Default is unchanged — Documents is right for files the user
+# asked for — but it is overridable via RECKONER_EXPORT_DIR without a rebuild.
 
 
 class SaveExportRequest(BaseModel):
@@ -2840,11 +2887,13 @@ def load_srf_imports() -> None:
             rows = record.to_snf_rows()
             substrate._conn.executemany(
                 "INSERT INTO snf_spoke "
-                "(entity_id, dimension, semantic_key, value, coordinate, lens_id) "
-                "VALUES (?, ?, ?, ?, ?, ?)",
+                "(entity_id, dimension, semantic_key, value, coordinate, lens_id, "
+                "nucleus_field, nucleus_value, nucleus_prefix) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
                     (r["entity_id"], r["dimension"].lower(), r["semantic_key"],
-                     r["value"], r["coordinate"], record.lens_id)
+                     r["value"], r["coordinate"], record.lens_id,
+                     r.get("nucleus_field"), r.get("nucleus_value"), r.get("nucleus_prefix"))
                     for r in rows["spoke_rows"]
                 ]
             )
@@ -2881,7 +2930,10 @@ def _get_or_create_srf_substrate(lens_id: str, substrate_key: str = None) -> Sub
             coordinate        VARCHAR,
             lens_id           VARCHAR,
             correlation_id    VARCHAR,
-            group_type        VARCHAR
+            group_type        VARCHAR,
+            nucleus_field     VARCHAR,
+            nucleus_value     VARCHAR,
+            nucleus_prefix    VARCHAR
         )
     """)
     conn.execute("CREATE INDEX idx_spoke_coord ON snf_spoke(coordinate)")
@@ -2973,8 +3025,9 @@ async def import_srf(req: SRFImportRequest):
 
     substrate._conn.executemany(
         "INSERT INTO snf_spoke "
-        "(entity_id, dimension, semantic_key, value, coordinate, lens_id) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
+        "(entity_id, dimension, semantic_key, value, coordinate, lens_id, "
+        "nucleus_field, nucleus_value, nucleus_prefix) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
             (
                 r["entity_id"],
@@ -2983,6 +3036,9 @@ async def import_srf(req: SRFImportRequest):
                 r["value"],
                 r["coordinate"],
                 r["lens_id"],
+                r.get("nucleus_field"),
+                r.get("nucleus_value"),
+                r.get("nucleus_prefix"),
             )
             for r in spoke_rows
         ]
@@ -3105,8 +3161,9 @@ async def import_srf_bulk(req: SRFBulkImportRequest):
 
         substrate._conn.executemany(
             "INSERT INTO snf_spoke "
-            "(entity_id, dimension, semantic_key, value, coordinate, lens_id) "
-            "VALUES (?, ?, ?, ?, ?, ?)",
+            "(entity_id, dimension, semantic_key, value, coordinate, lens_id, "
+            "nucleus_field, nucleus_value, nucleus_prefix) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 (
                     r["entity_id"],
@@ -3115,6 +3172,9 @@ async def import_srf_bulk(req: SRFBulkImportRequest):
                     r["value"],
                     r["coordinate"],
                     r["lens_id"],
+                    r.get("nucleus_field"),
+                    r.get("nucleus_value"),
+                    r.get("nucleus_prefix"),
                 )
                 for r in spoke_rows
             ]
@@ -3276,8 +3336,9 @@ async def load_srf_bundle(file: UploadFile = File(...)):
 
         substrate._conn.executemany(
             "INSERT INTO snf_spoke "
-            "(entity_id, dimension, semantic_key, value, coordinate, lens_id) "
-            "VALUES (?, ?, ?, ?, ?, ?)",
+            "(entity_id, dimension, semantic_key, value, coordinate, lens_id, "
+            "nucleus_field, nucleus_value, nucleus_prefix) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 (
                     r["entity_id"],
@@ -3286,6 +3347,9 @@ async def load_srf_bundle(file: UploadFile = File(...)):
                     r["value"],
                     r["coordinate"],
                     record.lens_id,  # always the semantic lens — substrate_key is registry-only
+                    r.get("nucleus_field"),
+                    r.get("nucleus_value"),
+                    r.get("nucleus_prefix"),
                 )
                 for r in spoke_rows
             ]
@@ -3342,6 +3406,702 @@ async def export_save_peirce_bundle(req: SavePeirceBundleRequest):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Crosswalk
+#
+# The continuity layer. Two modes:
+#
+#   pre-ingest  — raw CSV/TSV/XLSX files not yet in Model Builder.
+#                 Output: merged file ready for MB ingest as one source.
+#
+#   post-ingest — substrates already in Reckoner/SNF.
+#                 Output: SRF assertion record; set ops work immediately.
+#
+# Machine suggests. Human authorizes. Always.
+#
+# Endpoints:
+#   POST /api/crosswalk/upload              — upload a raw file, get a source_id
+#   POST /api/crosswalk/session             — start session (files or substrates)
+#   GET  /api/crosswalk/session/{id}        — get session state
+#   GET  /api/crosswalk/sessions            — list active sessions
+#   POST /api/crosswalk/assign-ids          — declare match fields, load entities
+#   POST /api/crosswalk/candidates          — run tantivy-py matching
+#   POST /api/crosswalk/assert              — record accept / reject / provisional
+#   GET  /api/crosswalk/unmatched/{id}      — entities with no candidate
+#   POST /api/crosswalk/export              — emit merged file (pre) or SRF (post)
+# ─────────────────────────────────────────────────────────────────────────────
+
+import uuid
+import sqlite3
+import csv as _csv_module
+import tempfile
+from datetime import timezone
+from typing import Literal
+
+# ── tantivy-py ────────────────────────────────────────────────────────────────
+try:
+    import tantivy as _tantivy
+    _TANTIVY_AVAILABLE = True
+except ImportError:
+    _TANTIVY_AVAILABLE = False
+    print("[crosswalk] tantivy-py not available — manual matching only")
+
+# ── Assertion store ───────────────────────────────────────────────────────────
+CROSSWALK_DB_PATH = os.path.join(SUBSTRATES_DIR, ".crosswalk_assertions.db")
+CROSSWALK_UPLOAD_DIR = os.path.join(SUBSTRATES_DIR, ".crosswalk_uploads")
+os.makedirs(CROSSWALK_UPLOAD_DIR, exist_ok=True)
+
+
+def _cw_db() -> sqlite3.Connection:
+    conn = sqlite3.connect(CROSSWALK_DB_PATH)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS cw_sessions (
+            session_id    TEXT PRIMARY KEY,
+            created_at    TEXT NOT NULL,
+            source_a_id   TEXT NOT NULL,
+            source_b_id   TEXT NOT NULL,
+            source_a_mode TEXT NOT NULL DEFAULT 'substrate',
+            source_b_mode TEXT NOT NULL DEFAULT 'substrate',
+            prefix        TEXT NOT NULL DEFAULT 'entity',
+            match_fields  TEXT,
+            status        TEXT NOT NULL DEFAULT 'active'
+        );
+        CREATE TABLE IF NOT EXISTS cw_assertions (
+            assertion_id TEXT PRIMARY KEY,
+            session_id   TEXT NOT NULL,
+            a_id         TEXT NOT NULL,
+            b_id         TEXT NOT NULL,
+            composite_id TEXT NOT NULL,
+            status       TEXT NOT NULL,
+            asserted_at  TEXT NOT NULL,
+            confidence   REAL,
+            manual       INTEGER NOT NULL DEFAULT 0
+        );
+        CREATE TABLE IF NOT EXISTS cw_raw_sources (
+            source_id   TEXT PRIMARY KEY,
+            filename    TEXT NOT NULL,
+            filepath    TEXT NOT NULL,
+            uploaded_at TEXT NOT NULL,
+            row_count   INTEGER
+        );
+    """)
+    conn.commit()
+    return conn
+
+
+# ── In-memory session store ───────────────────────────────────────────────────
+_cw_sessions: Dict[str, dict] = {}
+_cw_raw_sources: Dict[str, dict] = {}
+
+
+# ── Pydantic models ───────────────────────────────────────────────────────────
+
+class CWMatchField(BaseModel):
+    field_a: str          # column name in source A
+    field_b: str          # column name in source B (may differ)
+    weight:  float = 1.0
+
+
+class CWSessionRequest(BaseModel):
+    source_a:      str
+    source_b:      str
+    source_a_mode: Literal["substrate", "file"] = "substrate"
+    source_b_mode: Literal["substrate", "file"] = "substrate"
+    prefix:        Optional[str] = None
+
+
+class CWAssignIdsRequest(BaseModel):
+    session_id:   str
+    match_fields: List[CWMatchField]
+
+
+class CWCandidatesRequest(BaseModel):
+    session_id:       str
+    confidence_floor: float = 0.40
+    confidence_auto:  float = 0.90
+
+
+class CWAssertRequest(BaseModel):
+    session_id: str
+    a_id:       str
+    b_id:       str
+    status:     Literal["accepted", "rejected", "provisional"]
+    manual:     bool = False
+
+
+class CWExportRequest(BaseModel):
+    session_id: str
+    format:     Literal["srf", "csv", "merged_csv", "merged_xlsx"] = "srf"
+
+
+# ── Raw file loader ───────────────────────────────────────────────────────────
+
+def _cw_read_raw_file(filepath: str):
+    import pandas as pd
+    ext = filepath.rsplit(".", 1)[-1].lower()
+    if ext in ("xlsx", "xls"):
+        return pd.read_excel(filepath, engine="openpyxl")
+    return pd.read_csv(filepath, sep=None, engine="python", dtype=str)
+
+
+def _cw_load_raw_entities(source_id: str, field_names: List[str]) -> List[dict]:
+    raw = _cw_raw_sources.get(source_id)
+    if not raw:
+        raise HTTPException(status_code=404, detail=f"Raw source not found: {source_id}")
+    import pandas as pd
+    df = raw["df_cache"] if raw.get("df_cache") is not None else _cw_read_raw_file(raw["filepath"])
+    raw["df_cache"] = df
+    entities = []
+    for idx, row in df.iterrows():
+        # Load ALL columns — match fields are used for matching,
+        # but the full row carries through to the export
+        facts = {}
+        for col in df.columns:
+            if pd.notna(row[col]) and str(row[col]).strip():
+                facts[col] = str(row[col])
+        display_label = next(
+            (facts[f] for f in field_names if f in facts and facts[f]),
+            f"row_{idx}"
+        ) if field_names else f"row_{idx}"
+        entities.append({
+            "local_id":      f"row_{idx}",
+            "display_label": display_label,
+            "facts":         facts,
+            "row_index":     idx,
+        })
+    return entities
+
+
+def _cw_load_substrate_entities(substrate_id: str, field_names: List[str]) -> List[dict]:
+    substrate = _registry.get(substrate_id)
+    if not substrate:
+        raise HTTPException(status_code=404, detail=f"Substrate not found: {substrate_id}")
+    conn    = substrate._conn
+    lens_id = substrate.lens_id
+    id_rows = conn.execute(
+        "SELECT DISTINCT entity_id FROM snf_spoke WHERE lens_id = ?", [lens_id]
+    ).fetchall()
+    all_ids = [r[0] for r in id_rows]
+    if not all_ids:
+        return []
+    facts_by_entity: Dict[str, Dict[str, str]] = {eid: {} for eid in all_ids}
+    if field_names:
+        placeholders = ", ".join("?" * len(field_names))
+        fact_rows = conn.execute(
+            f"SELECT entity_id, semantic_key, value FROM snf_spoke "
+            f"WHERE lens_id = ? AND semantic_key IN ({placeholders}) "
+            f"ORDER BY entity_id, semantic_key",
+            [lens_id] + field_names
+        ).fetchall()
+        for row in fact_rows:
+            eid, key, val = row[0], row[1], row[2]
+            if eid in facts_by_entity and key not in facts_by_entity[eid]:
+                facts_by_entity[eid][key] = str(val)
+    entities = []
+    for eid in all_ids:
+        facts = facts_by_entity[eid]
+        display_label = next(
+            (facts[f] for f in field_names if f in facts and facts[f]), eid
+        ) if field_names else eid
+        entities.append({"local_id": eid, "display_label": display_label, "facts": facts})
+    return entities
+
+
+def _cw_load_entities(source_id: str, mode: str, field_names: List[str]) -> List[dict]:
+    if mode == "file":
+        return _cw_load_raw_entities(source_id, field_names)
+    return _cw_load_substrate_entities(source_id, field_names)
+
+
+def _cw_assign_synthetic_ids(entities: List[dict], prefix: str, source: str) -> List[dict]:
+    for i, e in enumerate(entities, start=1):
+        e["synthetic_id"] = f"{prefix}_{source}_{i:03d}"
+    return entities
+
+
+# ── Tantivy matching ──────────────────────────────────────────────────────────
+
+def _cw_run_tantivy(entities_a, entities_b, match_fields, confidence_floor, confidence_auto):
+    if not _TANTIVY_AVAILABLE or not match_fields:
+        return []
+    try:
+        # Build schema — one search field per match pair using field_b names for the index
+        sb = _tantivy.SchemaBuilder()
+        sb.add_text_field("entity_key", stored=True)
+        seen_fields = set()
+        for mf in match_fields:
+            if mf.field_b not in seen_fields:
+                sb.add_text_field(mf.field_b, stored=True)
+                seen_fields.add(mf.field_b)
+        schema = sb.build()
+        _cw_idx_dir = tempfile.mkdtemp(prefix="cw_tantivy_")
+        index  = _tantivy.Index(schema, path=_cw_idx_dir)
+        writer = index.writer(heap_size=50_000_000)
+        # Index source B using field_b column names
+        for e in entities_b:
+            bid = e.get("synthetic_id") or e["local_id"]
+            doc = _tantivy.Document()
+            doc.add_text("entity_key", bid)
+            for mf in match_fields:
+                val = e["facts"].get(mf.field_b, "")
+                if val:
+                    doc.add_text(mf.field_b, str(val))
+            writer.add_document(doc)
+        writer.commit()
+        index.reload()
+        searcher = index.searcher()
+        total_w  = sum(mf.weight for mf in match_fields) or 1.0
+        norm     = {mf.field_b: mf.weight / total_w for mf in match_fields}
+        best_per_b: Dict[str, dict] = {}
+        for e_a in entities_a:
+            aid          = e_a.get("synthetic_id") or e_a["local_id"]
+            field_scores: Dict[str, float] = {}
+            best_bid     = None
+            best_score   = 0.0
+            # Query using field_a value from source A against field_b index
+            for mf in match_fields:
+                val = e_a["facts"].get(mf.field_a, "")
+                if not val:
+                    continue
+                try:
+                    q    = index.parse_query(str(val), [mf.field_b])
+                    hits = searcher.search(q, limit=5).hits
+                except Exception as qex:
+                    print(f"[crosswalk] query error for field {mf.field_b}: {qex}")
+                    continue
+                if hits:
+                    top_score, top_addr = hits[0]
+                    doc      = searcher.doc(top_addr)
+                    bid      = doc.get_first("entity_key")
+                    weighted = top_score * norm[mf.field_b]
+                    field_scores[mf.field_b] = round(top_score, 3)
+                    if weighted > best_score:
+                        best_score = weighted
+                        best_bid   = bid
+            if best_bid and best_score >= confidence_floor:
+                candidate = {
+                    "a_id":         aid,
+                    "b_id":         best_bid,
+                    "confidence":   round(best_score, 3),
+                    "auto_suggest": best_score >= confidence_auto,
+                    "field_scores": field_scores,
+                }
+                existing = best_per_b.get(best_bid)
+                if not existing or candidate["confidence"] > existing["confidence"]:
+                    best_per_b[best_bid] = candidate
+        results = sorted(best_per_b.values(), key=lambda c: c["confidence"], reverse=True)
+        print(f"[crosswalk] tantivy: {len(entities_a)} A / {len(entities_b)} B -> {len(results)} candidates")
+        if entities_a:
+            print(f"[crosswalk] sample A entity facts: {entities_a[0].get('facts')}")
+        if not results:
+            print("[crosswalk] zero candidates — check field names exactly match column headers in both files")
+        return results
+    except Exception as ex:
+        print(f"[crosswalk] Tantivy error: {ex}")
+        return []
+
+
+# ── Done signal ───────────────────────────────────────────────────────────────
+
+def _cw_done_signal(s: dict, accepted: list, provisional: list) -> dict:
+    ua, ub = len(s.get("unmatched_a", [])), len(s.get("unmatched_b", []))
+    na, nb = s["source_a_id"], s["source_b_id"]
+    is_pre = s["source_a_mode"] == "file" or s["source_b_mode"] == "file"
+    next_step = ("Download the merged file and ingest it in Model Builder."
+                 if is_pre else
+                 "These substrates can now be compared in Reckoner.")
+    msg = (
+        f"{len(accepted)} assertion{'s' if len(accepted) != 1 else ''} confirmed."
+        + (f" {len(provisional)} marked provisional." if provisional else "")
+        + f" {ua} unmatched in {na}. {ub} unmatched in {nb}. {next_step}"
+    )
+    return {
+        "accepted_count":     len(accepted),
+        "provisional_count":  len(provisional),
+        "unmatched_a_count":  ua,
+        "unmatched_b_count":  ub,
+        "source_a_id":        na,
+        "source_b_id":        nb,
+        "mode":               "pre_ingest" if is_pre else "post_ingest",
+        "ready_for_reckoner": bool(accepted) and not is_pre,
+        "ready_for_mb":       bool(accepted) and is_pre,
+        "message":            msg,
+    }
+
+
+# ── Routes ────────────────────────────────────────────────────────────────────
+
+@app.post("/api/crosswalk/upload")
+async def cw_upload_file(file: UploadFile = File(...)):
+    """Upload a raw CSV, TSV, or XLSX file as a Crosswalk source."""
+    filename = file.filename or "upload"
+    ext      = filename.rsplit(".", 1)[-1].lower() if "." in filename else "csv"
+    if ext not in ("csv", "tsv", "xlsx", "xls"):
+        raise HTTPException(status_code=400, detail=f"Unsupported file type: .{ext}. Use CSV, TSV, or XLSX.")
+    source_id = str(uuid.uuid4())
+    filepath  = os.path.join(CROSSWALK_UPLOAD_DIR, f"{source_id}.{ext}")
+    content   = await file.read()
+    with open(filepath, "wb") as f:
+        f.write(content)
+    try:
+        import pandas as pd
+        df        = _cw_read_raw_file(filepath)
+        columns   = list(df.columns)
+        row_count = len(df)
+    except Exception as e:
+        os.unlink(filepath)
+        raise HTTPException(status_code=400, detail=f"Could not read file: {e}")
+    now = datetime.now(timezone.utc).isoformat()
+    _cw_raw_sources[source_id] = {
+        "source_id":   source_id,
+        "filename":    filename,
+        "filepath":    filepath,
+        "uploaded_at": now,
+        "row_count":   row_count,
+        "columns":     columns,
+        "df_cache":    df,
+    }
+    db = _cw_db()
+    db.execute(
+        "INSERT INTO cw_raw_sources (source_id, filename, filepath, uploaded_at, row_count) VALUES (?,?,?,?,?)",
+        (source_id, filename, filepath, now, row_count)
+    )
+    db.commit()
+    db.close()
+    return {"source_id": source_id, "filename": filename,
+            "row_count": row_count, "columns": columns, "mode": "file"}
+
+
+@app.post("/api/crosswalk/session")
+async def cw_start_session(req: CWSessionRequest):
+    """Start a Crosswalk session. Sources can be substrates or uploaded files, mixed freely."""
+    if req.source_a_mode == "substrate" and req.source_a not in _registry:
+        raise HTTPException(status_code=404,
+            detail=f"Substrate not found: {req.source_a}. Available: {list(_registry.keys())}")
+    if req.source_a_mode == "file" and req.source_a not in _cw_raw_sources:
+        raise HTTPException(status_code=404,
+            detail=f"Raw source not found: {req.source_a}. Upload via /api/crosswalk/upload first.")
+    if req.source_b_mode == "substrate" and req.source_b not in _registry:
+        raise HTTPException(status_code=404,
+            detail=f"Substrate not found: {req.source_b}. Available: {list(_registry.keys())}")
+    if req.source_b_mode == "file" and req.source_b not in _cw_raw_sources:
+        raise HTTPException(status_code=404,
+            detail=f"Raw source not found: {req.source_b}. Upload via /api/crosswalk/upload first.")
+    session_id = str(uuid.uuid4())
+    now        = datetime.now(timezone.utc).isoformat()
+    prefix     = req.prefix or "entity"
+    s = {
+        "session_id":       session_id,
+        "created_at":       now,
+        "source_a_id":      req.source_a,
+        "source_b_id":      req.source_b,
+        "source_a_mode":    req.source_a_mode,
+        "source_b_mode":    req.source_b_mode,
+        "prefix":           prefix,
+        "status":           "pending_id_assignment",
+        "match_fields":     [],
+        "entities_a":       [],
+        "entities_b":       [],
+        "candidates":       [],
+        "unmatched_a":      [],
+        "unmatched_b":      [],
+        "assertion_counts": {"accepted": 0, "rejected": 0, "provisional": 0},
+    }
+    _cw_sessions[session_id] = s
+    db = _cw_db()
+    db.execute(
+        "INSERT INTO cw_sessions (session_id, created_at, source_a_id, source_b_id, source_a_mode, source_b_mode, prefix) VALUES (?,?,?,?,?,?,?)",
+        (session_id, now, req.source_a, req.source_b, req.source_a_mode, req.source_b_mode, prefix)
+    )
+    db.commit()
+    db.close()
+    def _display(sid, mode):
+        if mode == "file":
+            return _cw_raw_sources.get(sid, {}).get("filename", sid)
+        return sid
+    return {
+        "session_id":       session_id,
+        "status":           "pending_id_assignment",
+        "source_a_id":      req.source_a,
+        "source_a_mode":    req.source_a_mode,
+        "source_a_display": _display(req.source_a, req.source_a_mode),
+        "source_b_id":      req.source_b,
+        "source_b_mode":    req.source_b_mode,
+        "source_b_display": _display(req.source_b, req.source_b_mode),
+        "prefix":           prefix,
+        "next_step":        "POST /api/crosswalk/assign-ids",
+    }
+
+
+@app.get("/api/crosswalk/sessions")
+async def cw_list_sessions():
+    return {"sessions": [
+        {"session_id": s["session_id"], "source_a_id": s["source_a_id"],
+         "source_b_id": s["source_b_id"], "status": s["status"],
+         "created_at": s["created_at"], "assertion_counts": s["assertion_counts"],
+         "source_a_mode": s["source_a_mode"], "source_b_mode": s["source_b_mode"]}
+        for s in _cw_sessions.values()
+    ]}
+
+
+@app.get("/api/crosswalk/session/{session_id}")
+async def cw_get_session(session_id: str):
+    s = _cw_sessions.get(session_id)
+    if not s:
+        raise HTTPException(status_code=404, detail=f"Session not found: {session_id}")
+    return {
+        "session_id": s["session_id"], "status": s["status"],
+        "source_a_id": s["source_a_id"], "source_a_mode": s["source_a_mode"],
+        "source_b_id": s["source_b_id"], "source_b_mode": s["source_b_mode"],
+        "prefix": s["prefix"], "match_fields": s["match_fields"],
+        "entity_count_a": len(s["entities_a"]), "entity_count_b": len(s["entities_b"]),
+        "candidate_count": len(s["candidates"]), "assertion_counts": s["assertion_counts"],
+    }
+
+
+@app.post("/api/crosswalk/assign-ids")
+async def cw_assign_ids(req: CWAssignIdsRequest):
+    s = _cw_sessions.get(req.session_id)
+    if not s:
+        raise HTTPException(status_code=404, detail=f"Session not found: {req.session_id}")
+    fields_a = list({mf.field_a for mf in req.match_fields})
+    fields_b = list({mf.field_b for mf in req.match_fields})
+    entities_a    = _cw_load_entities(s["source_a_id"], s["source_a_mode"], fields_a)
+    entities_b    = _cw_load_entities(s["source_b_id"], s["source_b_mode"], fields_b)
+    entities_a    = _cw_assign_synthetic_ids(entities_a, s["prefix"], "a")
+    entities_b    = _cw_assign_synthetic_ids(entities_b, s["prefix"], "b")
+    s["entities_a"]   = entities_a
+    s["entities_b"]   = entities_b
+    s["match_fields"] = [mf.model_dump() for mf in req.match_fields]
+    s["status"]       = "ready_for_candidates"
+    db = _cw_db()
+    db.execute(
+        "UPDATE cw_sessions SET match_fields=?, status='ready_for_candidates' WHERE session_id=?",
+        (json.dumps(s["match_fields"]), req.session_id)
+    )
+    db.commit()
+    db.close()
+    return {
+        "session_id": req.session_id, "status": "ready_for_candidates",
+        "entity_count_a": len(entities_a), "entity_count_b": len(entities_b),
+        "match_fields": s["match_fields"],
+        "sample_a": [{"synthetic_id": e["synthetic_id"], "display_label": e["display_label"], "facts": e["facts"]} for e in entities_a[:3]],
+        "sample_b": [{"synthetic_id": e["synthetic_id"], "display_label": e["display_label"], "facts": e["facts"]} for e in entities_b[:3]],
+        "next_step": "POST /api/crosswalk/candidates",
+    }
+
+
+@app.post("/api/crosswalk/candidates")
+async def cw_candidates(req: CWCandidatesRequest):
+    s = _cw_sessions.get(req.session_id)
+    if not s:
+        raise HTTPException(status_code=404, detail=f"Session not found: {req.session_id}")
+    if s["status"] not in ("ready_for_candidates", "review_in_progress"):
+        raise HTTPException(status_code=400, detail=f"Session not ready. Status: {s['status']}")
+    mfs        = [CWMatchField(**mf) for mf in s["match_fields"]]
+    candidates = _cw_run_tantivy(s["entities_a"], s["entities_b"], mfs,
+                                  req.confidence_floor, req.confidence_auto)
+    matched_a  = {c["a_id"] for c in candidates}
+    matched_b  = {c["b_id"] for c in candidates}
+    unmatched_a = [
+        {"id": e.get("synthetic_id") or e["local_id"], "display_label": e["display_label"], "facts": e["facts"]}
+        for e in s["entities_a"] if (e.get("synthetic_id") or e["local_id"]) not in matched_a
+    ]
+    unmatched_b = [
+        {"id": e.get("synthetic_id") or e["local_id"], "display_label": e["display_label"], "facts": e["facts"]}
+        for e in s["entities_b"] if (e.get("synthetic_id") or e["local_id"]) not in matched_b
+    ]
+    s["candidates"]  = candidates
+    s["unmatched_a"] = unmatched_a
+    s["unmatched_b"] = unmatched_b
+    s["status"]      = "review_in_progress"
+    a_map = {(e.get("synthetic_id") or e["local_id"]): e for e in s["entities_a"]}
+    b_map = {(e.get("synthetic_id") or e["local_id"]): e for e in s["entities_b"]}
+    enriched = [{
+        **c,
+        "a_label": a_map.get(c["a_id"], {}).get("display_label", c["a_id"]),
+        "a_facts": a_map.get(c["a_id"], {}).get("facts", {}),
+        "b_label": b_map.get(c["b_id"], {}).get("display_label", c["b_id"]),
+        "b_facts": b_map.get(c["b_id"], {}).get("facts", {}),
+    } for c in candidates]
+    return {
+        "session_id": req.session_id, "status": "review_in_progress",
+        "tantivy_available": _TANTIVY_AVAILABLE,
+        "candidate_count": len(candidates),
+        "auto_suggest_count": sum(1 for c in candidates if c["auto_suggest"]),
+        "unmatched_a_count": len(unmatched_a), "unmatched_b_count": len(unmatched_b),
+        "candidates": enriched,
+    }
+
+
+@app.get("/api/crosswalk/unmatched/{session_id}")
+async def cw_unmatched(session_id: str):
+    s = _cw_sessions.get(session_id)
+    if not s:
+        raise HTTPException(status_code=404, detail=f"Session not found: {session_id}")
+    return {"session_id": session_id,
+            "unmatched_a": s.get("unmatched_a", []),
+            "unmatched_b": s.get("unmatched_b", [])}
+
+
+@app.post("/api/crosswalk/assert")
+async def cw_assert(req: CWAssertRequest):
+    s = _cw_sessions.get(req.session_id)
+    if not s:
+        raise HTTPException(status_code=404, detail=f"Session not found: {req.session_id}")
+    confidence = next(
+        (c["confidence"] for c in s.get("candidates", [])
+         if c["a_id"] == req.a_id and c["b_id"] == req.b_id), None
+    )
+    s["assertion_counts"][req.status] += 1
+    if req.status == "rejected":
+        return {"session_id": req.session_id, "status": "rejected",
+                "a_id": req.a_id, "b_id": req.b_id,
+                "message": "Rejected. No assertion record created."}
+    a_entity     = next((e for e in s["entities_a"] if e.get("synthetic_id") == req.a_id or e["local_id"] == req.a_id), None)
+    b_entity     = next((e for e in s["entities_b"] if e.get("synthetic_id") == req.b_id or e["local_id"] == req.b_id), None)
+    a_nucleus    = a_entity["local_id"] if a_entity else req.a_id
+    b_nucleus    = b_entity["local_id"] if b_entity else req.b_id
+    composite_id = f"{a_nucleus}:{b_nucleus}"
+    assertion_id = str(uuid.uuid4())
+    asserted_at  = datetime.now(timezone.utc).isoformat()
+    db = _cw_db()
+    db.execute(
+        "INSERT INTO cw_assertions (assertion_id,session_id,a_id,b_id,composite_id,status,asserted_at,confidence,manual) VALUES (?,?,?,?,?,?,?,?,?)",
+        (assertion_id, req.session_id, a_nucleus, b_nucleus, composite_id,
+         req.status, asserted_at, confidence, 1 if req.manual else 0)
+    )
+    db.commit()
+    db.close()
+    return {"assertion_id": assertion_id, "session_id": req.session_id,
+            "a_id": a_nucleus, "b_id": b_nucleus, "composite_id": composite_id,
+            "status": req.status, "asserted_at": asserted_at,
+            "confidence": confidence, "manual": req.manual}
+
+
+@app.post("/api/crosswalk/export")
+async def cw_export(req: CWExportRequest):
+    """
+    Export session results.
+
+    Post-ingest (substrates): srf or csv
+    Pre-ingest (files):       merged_csv, merged_xlsx, or srf for audit trail
+
+    merged_csv / merged_xlsx: all rows from both sources combined,
+    _composite_id column added. Ready for Model Builder as a single source.
+    """
+    s = _cw_sessions.get(req.session_id)
+    if not s:
+        raise HTTPException(status_code=404, detail=f"Session not found: {req.session_id}")
+    db = _cw_db()
+    rows = db.execute(
+        "SELECT * FROM cw_assertions WHERE session_id=? AND status IN ('accepted','provisional') ORDER BY asserted_at",
+        (req.session_id,)
+    ).fetchall()
+    db.close()
+    assertions  = [dict(r) for r in rows]
+    accepted    = [a for a in assertions if a["status"] == "accepted"]
+    provisional = [a for a in assertions if a["status"] == "provisional"]
+    done        = _cw_done_signal(s, accepted, provisional)
+
+    if req.format in ("merged_csv", "merged_xlsx"):
+        import pandas as pd
+
+        # Build lookup: local_id -> entity for fast access
+        a_by_id = {e["local_id"]: e for e in s["entities_a"]}
+        b_by_id = {e["local_id"]: e for e in s["entities_b"]}
+
+        # Prefix columns so same-named columns from A and B don't collide
+        # Use filename (without extension) for file sources, substrate name for substrate sources
+        def _src_label(source_id, mode):
+            if mode == "file":
+                raw = _cw_raw_sources.get(source_id, {})
+                name = raw.get("filename", source_id)
+                name = name.rsplit(".", 1)[0] if "." in name else name
+            else:
+                name = source_id
+            return name.replace(" ", "_").replace("-", "_")[:24]
+
+        src_a = _src_label(s["source_a_id"], s["source_a_mode"])
+        src_b = _src_label(s["source_b_id"], s["source_b_mode"])
+
+        records = []
+        counter = 1
+        prefix  = s["prefix"] or "entity"
+
+        # Matched pairs — one row per assertion, columns from both sources
+        matched_a_ids = set()
+        matched_b_ids = set()
+        for a in accepted + provisional:
+            e_a = a_by_id.get(a["a_id"], {})
+            e_b = b_by_id.get(a["b_id"], {})
+            matched_a_ids.add(a["a_id"])
+            matched_b_ids.add(a["b_id"])
+            composite_id = f"{prefix}_{counter:03d}"
+            counter += 1
+            row = {"_composite_id": composite_id, "_match_status": a["status"]}
+            for k, v in e_a.get("facts", {}).items():
+                row[f"{src_a}__{k}"] = v
+            for k, v in e_b.get("facts", {}).items():
+                row[f"{src_b}__{k}"] = v
+            records.append(row)
+
+        # Unmatched from A — their own columns only
+        for e in s["entities_a"]:
+            if e["local_id"] not in matched_a_ids:
+                composite_id = f"{prefix}_{counter:03d}"
+                counter += 1
+                row = {"_composite_id": composite_id, "_match_status": "unmatched"}
+                for k, v in e.get("facts", {}).items():
+                    row[f"{src_a}__{k}"] = v
+                records.append(row)
+
+        # Unmatched from B — their own columns only
+        for e in s["entities_b"]:
+            if e["local_id"] not in matched_b_ids:
+                composite_id = f"{prefix}_{counter:03d}"
+                counter += 1
+                row = {"_composite_id": composite_id, "_match_status": "unmatched"}
+                for k, v in e.get("facts", {}).items():
+                    row[f"{src_b}__{k}"] = v
+                records.append(row)
+
+        merged = pd.DataFrame(records)
+
+        if req.format == "merged_csv":
+            return {"format": "merged_csv", "session_id": req.session_id,
+                    "csv": merged.to_csv(index=False), "row_count": len(merged), "done_signal": done}
+        with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp:
+            merged.to_excel(tmp.name, index=False, engine="openpyxl")
+            import base64
+            xlsx_b64 = base64.b64encode(open(tmp.name, "rb").read()).decode()
+        return {"format": "merged_xlsx", "session_id": req.session_id,
+                "xlsx_b64": xlsx_b64, "row_count": len(merged), "done_signal": done}
+
+    if req.format == "srf":
+        srf = {
+            "srf_version": "1.0", "record_type": "crosswalk_assertion_set",
+            "session_id": req.session_id,
+            "exported_at": datetime.now(timezone.utc).isoformat(),
+            "source_a": s["source_a_id"], "source_a_mode": s["source_a_mode"],
+            "source_b": s["source_b_id"], "source_b_mode": s["source_b_mode"],
+            "prefix": s["prefix"], "match_fields": s["match_fields"],
+            "assertions": assertions, "summary": done,
+        }
+        return {"format": "srf", "session_id": req.session_id, "srf": srf, "done_signal": done}
+
+    out = io.StringIO()
+    w   = _csv_module.writer(out)
+    w.writerow(["composite_id", "a_id", "b_id", "status", "confidence", "manual", "asserted_at"])
+    for a in assertions:
+        w.writerow([a["composite_id"], a["a_id"], a["b_id"],
+                    a["status"], a["confidence"], a["manual"], a["asserted_at"]])
+    return {"format": "csv", "session_id": req.session_id,
+            "csv": out.getvalue(), "done_signal": done}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Static frontend — MUST be registered after all API routes
 # so the catch-all doesn't intercept /api/* requests.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -3381,15 +4141,17 @@ if __name__ == "__main__":
     print("  Reckoner API — Python backend")
     print("  Model Builder endpoints: /api/mb/*")
     print("=" * 60)
-    print(f"  Port:       {PORT}")
-    print(f"  Substrates: {SUBSTRATES_DIR}")
-    print(f"  Debug:      {DEBUG}")
-    print(f"  Docs:       http://localhost:{PORT}/docs")
+    print(describe_settings())
+    print(f"  Docs:         http://localhost:{PORT}/docs")
     print("=" * 60)
 
+    # HOST defaults to 127.0.0.1 — loopback only. It was "0.0.0.0", which
+    # binds every network interface and makes the substrate readable by
+    # anything on the same network. A desktop application does not need that.
+    # Set HOST=0.0.0.0 in .env if you deliberately want remote access.
     uvicorn.run(
         app,
-        host="0.0.0.0",
+        host=HOST,
         port=PORT,
         reload=False,
         log_level="info" if DEBUG else "warning",

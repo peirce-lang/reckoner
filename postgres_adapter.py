@@ -863,22 +863,22 @@ class PostgresAdapter(SubstrateAdapter):
     def _affordances_from_view(self) -> Dict[str, Dict]:
         """
         Read affordances from snf_affordances materialized view.
-        Expected columns: dimension, field, distinct_entities, fact_count.
+        Expected columns: dimension, field, distinct_value_count, fact_count.
         """
         rows = self._execute(
-            f"SELECT dimension, field, distinct_entities, fact_count "
+            f"SELECT dimension, field, distinct_value_count, fact_count "
             f"FROM {self._schema}.snf_affordances "
             f"ORDER BY dimension, fact_count DESC"
         )
         result: Dict[str, Dict] = {}
-        for dimension, field, distinct_entities, fact_count in rows:
+        for dimension, field, distinct_value_count, fact_count in rows:
             dim_upper = dimension.upper()
             if dim_upper not in result:
                 result[dim_upper] = {}
             result[dim_upper][field] = {
                 "fact_count":      fact_count,
-                "distinct_values": distinct_entities,
-                "value_type":      self._infer_value_type(field, distinct_entities),
+                "distinct_values": distinct_value_count,
+                "value_type":      self._infer_value_type(field, distinct_value_count),
             }
         return result
 
@@ -902,26 +902,26 @@ class PostgresAdapter(SubstrateAdapter):
             if self._shape == "split":
                 rows = self._execute(
                     f"SELECT semantic_key, "
-                    f"COUNT(DISTINCT {eid}) AS distinct_entities, "
+                    f"COUNT(DISTINCT value) AS distinct_value_count, "
                     f"COUNT(*) AS fact_count "
                     f"FROM {fq} GROUP BY semantic_key ORDER BY fact_count DESC"
                 )
             else:
                 rows = self._execute(
                     f"SELECT SPLIT_PART(coordinate, '|', 2) AS semantic_key, "
-                    f"COUNT(DISTINCT {eid}) AS distinct_entities, "
+                    f"COUNT(DISTINCT SPLIT_PART(coordinate, '|', 3)) AS distinct_value_count, "
                     f"COUNT(*) AS fact_count "
                     f"FROM {fq} WHERE coordinate LIKE %s "
                     f"GROUP BY SPLIT_PART(coordinate, '|', 2) ORDER BY fact_count DESC",
                     (f"{dim_upper}|%",)
                 )
 
-            for semantic_key, distinct_entities, fact_count in rows:
+            for semantic_key, distinct_value_count, fact_count in rows:
                 result[dim_upper][semantic_key] = {
                     "fact_count":      fact_count,
-                    "distinct_values": distinct_entities,
+                    "distinct_values": distinct_value_count,
                     "value_type":      self._infer_value_type(
-                        semantic_key, distinct_entities
+                        semantic_key, distinct_value_count
                     ),
                 }
 
@@ -948,7 +948,7 @@ class PostgresAdapter(SubstrateAdapter):
                 f"SELECT SPLIT_PART(coordinate, '|', 3) AS value, "
                 f"COUNT(DISTINCT {eid}) AS cnt "
                 f"FROM {table} WHERE coordinate LIKE %s "
-                f"GROUP BY value ORDER BY cnt DESC LIMIT %s",
+                f"GROUP BY SPLIT_PART(coordinate, '|', 3) ORDER BY cnt DESC LIMIT %s",
                 (f"{dimension.upper()}|{field}|%", limit)
             )
 

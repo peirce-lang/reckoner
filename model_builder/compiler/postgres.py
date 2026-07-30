@@ -146,7 +146,7 @@ def emit_postgres_views(
             q_col = _quote_ident(col)
             aff_parts.append(
                 f"    SELECT '{dim.lower()}' AS dimension, '{skey}' AS field,\n"
-                f"           COUNT(DISTINCT {nucleus_expr}) AS distinct_entities,\n"
+                f"           COUNT(DISTINCT {q_col}) AS distinct_value_count,\n"
                 f"           COUNT(*) AS fact_count\n"
                 f"    FROM {q_schema}.{q_table} WHERE {q_col} IS NOT NULL"
             )

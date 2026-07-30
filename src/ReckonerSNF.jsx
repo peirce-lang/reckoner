@@ -149,17 +149,24 @@ function saveHeaderPrefs(prefs, substrateId) {
 // 5W1H Query Summary helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Neutral palette — all dimensions share the same warm treatment.
+// Dimensions are axes through the same territory, not separate colored departments.
+const _NEUTRAL_ACCENT      = "#252525";
+const _NEUTRAL_ACCENT_LIGHT = "#EEEEE9";
+const _NEUTRAL_ACCENT_TEXT  = "#252525";
+const _NEUTRAL_BORDER       = "#C8C7C0";
+
 const DIM_ACCENT = {
-  WHO:   "#3b82f6", WHAT:  "#8b5cf6", WHEN:  "#22c55e",
-  WHERE: "#f59e0b", WHY:   "#f43f5e", HOW:   "#64748b",
+  WHO: _NEUTRAL_ACCENT, WHAT: _NEUTRAL_ACCENT, WHEN: _NEUTRAL_ACCENT,
+  WHERE: _NEUTRAL_ACCENT, WHY: _NEUTRAL_ACCENT, HOW: _NEUTRAL_ACCENT,
 };
 const DIM_ACCENT_LIGHT = {
-  WHO:   "#eff6ff", WHAT:  "#f5f3ff", WHEN:  "#f0fdf4",
-  WHERE: "#fffbeb", WHY:   "#fff1f2", HOW:   "#f8fafc",
+  WHO: _NEUTRAL_ACCENT_LIGHT, WHAT: _NEUTRAL_ACCENT_LIGHT, WHEN: _NEUTRAL_ACCENT_LIGHT,
+  WHERE: _NEUTRAL_ACCENT_LIGHT, WHY: _NEUTRAL_ACCENT_LIGHT, HOW: _NEUTRAL_ACCENT_LIGHT,
 };
 const DIM_ACCENT_TEXT = {
-  WHO:   "#1d4ed8", WHAT:  "#6d28d9", WHEN:  "#15803d",
-  WHERE: "#b45309", WHY:   "#be123c", HOW:   "#475569",
+  WHO: _NEUTRAL_ACCENT_TEXT, WHAT: _NEUTRAL_ACCENT_TEXT, WHEN: _NEUTRAL_ACCENT_TEXT,
+  WHERE: _NEUTRAL_ACCENT_TEXT, WHY: _NEUTRAL_ACCENT_TEXT, HOW: _NEUTRAL_ACCENT_TEXT,
 };
 
 function humanizeField(field) {
@@ -197,10 +204,10 @@ function DimRow({ dimKey, dimConstraints, onRemove, modeByField, onToggleMode })
       <div
         onClick={() => autoCollapse || totalChips > COLLAPSE_THRESHOLD ? setCollapsed(v => !v) : null}
         style={{
-          width: 56, flexShrink: 0, fontSize: 11, fontWeight: 700,
-          letterSpacing: "0.05em", textTransform: "uppercase",
-          color: DIM_ACCENT[dimKey],
-          paddingTop: 3, userSelect: "none",
+          width: 56, flexShrink: 0, fontSize: 9, fontWeight: 500,
+          letterSpacing: "0.14em", textTransform: "uppercase",
+          color: "#252525",
+          paddingTop: 4, userSelect: "none",
           cursor: totalChips > COLLAPSE_THRESHOLD ? "pointer" : "default",
         }}
       >
@@ -214,11 +221,11 @@ function DimRow({ dimKey, dimConstraints, onRemove, modeByField, onToggleMode })
           <span
             onClick={() => setCollapsed(false)}
             style={{
-              background: DIM_ACCENT_LIGHT[dimKey] || "#f9fafb",
-              color: DIM_ACCENT_TEXT[dimKey] || "#374151",
-              borderLeft: `2px solid ${DIM_ACCENT[dimKey] || "#6b7280"}`,
-              padding: "1px 8px 1px 6px",
-              borderRadius: "2px",
+              background: "#EEEEE9",
+              color: "#252525",
+              border: "0.5px solid #C8C7C0",
+              padding: "2px 8px",
+              borderRadius: "0",
               fontSize: 11,
               cursor: "pointer",
               userSelect: "none",
@@ -246,12 +253,12 @@ function DimRow({ dimKey, dimConstraints, onRemove, modeByField, onToggleMode })
                   return (
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
                       <span style={{
-                        background: DIM_ACCENT_LIGHT[first.category] || "#f9fafb",
-                        color: DIM_ACCENT_TEXT[first.category] || "#374151",
-                        borderLeft: `2px solid ${DIM_ACCENT[first.category] || "#6b7280"}`,
-                        padding: "1px 7px 1px 5px",
-                        borderRadius: "2px",
-                        fontSize: 12,
+                        background: "#FAFAF8",
+                        color: "#252525",
+                        border: "0.5px solid #C8C7C0",
+                        padding: "2px 7px",
+                        borderRadius: "0",
+                        fontSize: 11,
                         display: "inline-flex", alignItems: "center", gap: 5,
                       }}>
                         only ({valueList})
@@ -281,12 +288,12 @@ function DimRow({ dimKey, dimConstraints, onRemove, modeByField, onToggleMode })
                         onClick={(e) => { e.stopPropagation(); onToggleMode(modeKey); }}
                         title={mode === "any" ? "Match any — click to switch to match all" : "Match all — click to switch to match any"}
                         style={{
-                          fontSize: 9, fontWeight: 600, letterSpacing: "0.04em",
+                          fontSize: 9, fontWeight: 500, letterSpacing: "0.08em",
                           textTransform: "uppercase", cursor: "pointer",
-                          padding: "1px 5px", borderRadius: 3,
-                          border: `1px solid ${mode === "all" ? DIM_ACCENT[dimKey] : "#d1d5db"}`,
-                          background: mode === "all" ? DIM_ACCENT_LIGHT[dimKey] : "#f9fafb",
-                          color: mode === "all" ? DIM_ACCENT_TEXT[dimKey] : "#9ca3af",
+                          padding: "1px 5px", borderRadius: 0,
+                          border: `0.5px solid ${mode === "all" ? "#252525" : "#C8C7C0"}`,
+                          background: mode === "all" ? "#252525" : "#FAFAF8",
+                          color: mode === "all" ? "#F5F4F0" : "#9A9A94",
                           marginRight: 2,
                         }}
                       >
@@ -299,12 +306,12 @@ function DimRow({ dimKey, dimConstraints, onRemove, modeByField, onToggleMode })
                       <span style={{ color: "#9ca3af", fontSize: 10, padding: "0 3px", fontStyle: "italic" }}>{joinWord}</span>
                     )}
                     <span style={{
-                      background: DIM_ACCENT_LIGHT[c.category] || "#f9fafb",
-                      color: DIM_ACCENT_TEXT[c.category] || "#374151",
-                      borderLeft: `2px solid ${DIM_ACCENT[c.category] || "#6b7280"}`,
-                      padding: "1px 7px 1px 5px",
-                      borderRadius: "2px",
-                      fontSize: 12,
+                      background: "#FAFAF8",
+                      color: "#252525",
+                      border: "0.5px solid #C8C7C0",
+                      padding: "2px 7px",
+                      borderRadius: "0",
+                      fontSize: 11,
                       display: "inline-flex", alignItems: "center", gap: 5,
                     }}>
                       {chipLabel(c)}
@@ -1183,7 +1190,7 @@ export default function ReckonerSNF() {
               <button key={fieldKey}
                 onClick={() => setActiveField(activeField === fieldKey ? null : fieldKey)}
                 className={`w-full text-left px-2 py-2 rounded transition-all ${isConstrained ? "underline underline-offset-4 decoration-white font-semibold" : ""} ${activeField === fieldKey ? "opacity-90 bg-white/10" : "hover:bg-white/10"}`}
-                title={`${meta?.fact_count?.toLocaleString?.() || ""} facts • ${meta?.distinct_values?.toLocaleString?.() || ""} distinct`}
+                title={`${meta?.fact_count?.toLocaleString?.() || ""} facts • ${meta?.distinct_values?.toLocaleString?.() || ""} distinct values`}
               >
                 <div className="flex justify-between items-center">
                   <span className="text-sm">{fieldKey}</span>
@@ -1192,7 +1199,7 @@ export default function ReckonerSNF() {
                       meta?.distinct_values >= 1000
                         ? `${Math.round(meta.distinct_values / 1000)}k`
                         : meta?.distinct_values
-                    }d
+                    } vals
                   </span>
                 </div>
               </button>
@@ -1249,7 +1256,7 @@ export default function ReckonerSNF() {
           </div>
           {meta && (
             <div className="text-xs opacity-60 mb-3">
-              {meta.fact_count?.toLocaleString?.() || meta.fact_count} facts · {meta.distinct_values?.toLocaleString?.() || meta.distinct_values} distinct · {inferValueType(meta).toUpperCase()}
+              {meta.fact_count?.toLocaleString?.() || meta.fact_count} facts · {meta.distinct_values?.toLocaleString?.() || meta.distinct_values} distinct values · {inferValueType(meta).toUpperCase()}
             </div>
           )}
 
@@ -1445,16 +1452,16 @@ export default function ReckonerSNF() {
           {availableFields.map(({ dim, field }) => {
             const selected = projectedFields.size === 0 || projectedFields.has(field);
             const active   = projectedFields.has(field);
-            const accent   = DIM_ACCENT[dim] || "#6b7280";
-            const accentLight = DIM_ACCENT_LIGHT[dim] || "#f9fafb";
+            const accent   = "#252525";
+            const accentLight = "#EEEEE9";
             return (
               <button
                 key={`${dim}:${field}`}
                 onClick={() => toggleField(field)}
                 style={{
-                  borderColor: active ? accent : "#e5e7eb",
-                  background:  active ? accentLight : "#ffffff",
-                  color:       active ? DIM_ACCENT_TEXT[dim] || "#374151" : "#6b7280",
+                  borderColor: active ? "#252525" : "#DDDDD8",
+                  background:  active ? "#252525" : "#FAFAF8",
+                  color:       active ? "#F5F4F0" : "#7A7A74",
                 }}
                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded border text-xs transition-colors cursor-pointer`}
                 title={`${dim}.${field}`}
@@ -2610,7 +2617,7 @@ export default function ReckonerSNF() {
                             {/* Step index */}
                             <span className="text-gray-300 w-3 text-right flex-shrink-0">{i + 1}</span>
                             {/* Dimension */}
-                            <span className="font-bold w-10 flex-shrink-0" style={{ color: DIM_ACCENT[t.dimension] || '#6b7280' }}>
+                            <span className="font-bold w-10 flex-shrink-0" style={{ color: '#A07D2A' }}>
                               {t.dimension}
                             </span>
                             {/* Fields + values */}
