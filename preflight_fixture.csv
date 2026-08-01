@@ -1,0 +1,25 @@
+cocktail_name,base_spirit,glass,is_classic,ingredient_count,first_published_date
+Old Fashioned,whiskey,rocks,True,4,1806-05-13
+Manhattan,whiskey,coupe,True,4,1882-09-01
+Whiskey Sour,whiskey,rocks,True,4,1862-03-20
+Boulevardier,whiskey,coupe,True,3,1927-06-11
+Sazerac,whiskey,rocks,True,5,1838-04-02
+Paper Plane,whiskey,coupe,False,4,2007-08-15
+Negroni,gin,rocks,True,3,1919-07-01
+Martini,gin,coupe,True,3,1888-02-14
+Gimlet,gin,coupe,True,3,1867-11-05
+Last Word,gin,coupe,True,4,1921-05-30
+Aviation,gin,coupe,True,4,1916-01-22
+Bees Knees,gin,coupe,False,3,1929-10-08
+Daiquiri,rum,coupe,True,3,1898-07-04
+Mojito,rum,highball,True,5,1586-09-12
+Dark and Stormy,rum,highball,False,3,1980-06-18
+Mai Tai,rum,rocks,True,6,1944-08-23
+Margarita,tequila,rocks,True,3,1938-10-01
+Paloma,tequila,highball,False,4,1959-03-16
+Tommys Margarita,tequila,rocks,False,3,1990-05-09
+Oaxaca Old Fashioned,tequila,rocks,False,4,2007-02-27
+Moscow Mule,vodka,highball,True,3,1941-11-30
+Espresso Martini,vodka,coupe,False,4,1983-04-19
+Bloody Mary,vodka,highball,True,7,1921-09-25
+Cosmopolitan,vodka,coupe,True,4,1987-12-03

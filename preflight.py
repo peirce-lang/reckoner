@@ -6,7 +6,7 @@ seconds. The point is to discover breakage BEFORE spending twenty minutes on a
 Tauri build, not after.
 
 Usage:
-    python preflight.py                    (uses cocktails_test.csv beside it)
+    python preflight.py                    (uses preflight_fixture.csv beside it)
     python preflight.py path\\to\\some.csv
 
 Exit code is 0 when everything passes, 1 otherwise, so it can gate a build
@@ -231,7 +231,7 @@ def _():
 # ── 5, 6, 7. Build a real substrate and interrogate it ───────────────────────
 section("5. Build a substrate")
 
-CSV = Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "cocktails_test.csv"
+CSV = Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "preflight_fixture.csv"
 _state: dict = {}
 
 
